@@ -13,9 +13,9 @@ import Link from "next/link";
 import React from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import logo from "../../../public/images/seraphic-voices.png";
-import { menus } from "@/utils/misc";
 import MenuItem from "@/components/container/SingleMenu";
 import CustomButton from "@/components/shared/CustomButton";
+import { menus } from "@/utils/misc";
 
 const MenuDrawer = ({
   isOpen,

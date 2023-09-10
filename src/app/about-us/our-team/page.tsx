@@ -1,11 +1,15 @@
-import React from 'react'
+"use client"
+import Hero from "@/components/about/Hero";
+import TeamMembers from "@/components/about/TeamMembers";
+import React from "react";
 
 const OurTeam = () => {
   return (
-    <div>
-      heeey
-    </div>
-  )
-}
+    <>
+      <Hero />
+      <TeamMembers />
+    </>
+  );
+};
 
-export default OurTeam
+export default OurTeam;

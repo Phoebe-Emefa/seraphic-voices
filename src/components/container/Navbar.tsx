@@ -12,10 +12,10 @@ import React from 'react';
 import { CgMenuRight } from 'react-icons/cg';
 
 import logo from '../../../public/images/seraphic-voices.png';
-import { menus } from '@/utils/misc';
 import CustomButton from '@/components/shared/CustomButton';
 import MenuDrawer from '@/components/container/MenuDrawer';
 import SingleMenu from '@/components/container/SingleMenu';
+import { menus } from '@/utils/misc';
 
 
 
