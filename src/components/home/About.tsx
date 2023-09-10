@@ -8,10 +8,12 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import React from "react";
-import {BsArrowRightShort} from "react-icons/bs"
+import { BsArrowRightShort } from "react-icons/bs";
 
 const About = () => {
+  const router = useRouter();
   return (
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} my={20}>
       <Flex justify="space-between" align="center">
@@ -46,7 +48,12 @@ const About = () => {
             26-member ensemble celebrates cultural diversity and fosters
             cross-cultural understanding within Toronto and beyond
           </Text>
-          <Button color="secondary.700" variant="link"  rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}>
+          <Button
+            color="secondary.700"
+            variant="link"
+            rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}
+            onClick={() => router?.push("/about-us")}
+          >
             Learn More
           </Button>
         </Box>

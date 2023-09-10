@@ -1,7 +1,7 @@
-import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Heading, Image, Text } from "@chakra-ui/react";
 import React from "react";
 
-const Hero = () => {
+const Hero = ({heading,description }: {heading: string; description: string}) => {
   return (
     <Box width="full" height="26rem" position="relative">
       <Image
@@ -18,24 +18,22 @@ const Hero = () => {
         left="50%"
         transform="translate(-50%, -50%)"
         textAlign="center"
-        background="rgba(0, 0, 0, 0.7)" /* Adjust the alpha value to control transparency */
+        background="rgba(0, 0, 0, 0.7)" 
         rounded="sm"
-        color="white" /* Text color */
-        padding="20px" /* Add padding */
+        color="white" 
+        padding="20px" 
       >
         <Heading
           as="h4"
           fontSize={{ base: "3xl", xl: "4xl" }}
           color="secondary.700"
           mt={{ base: 20, md: "inherit" }}
-          fontWeight="bold" /* Increase font weight */
+          fontWeight="bold" 
         >
-          Meet the Team
+         {heading}
         </Heading>
-        <Text fontWeight="semibold" fontSize="lg" mt={3}> {/* Increase font weight */}
-          Meet the extraordinary voices behind Seraphic Voices of Toronto! This
-          remarkable choir is a powerhouse of passionate musicians dedicated to
-          crafting soul-stirring music that transcends boundaries
+        <Text fontWeight="semibold" fontSize="lg" mt={3}> 
+        {description}
         </Text>
       </Box>
     </Box>
