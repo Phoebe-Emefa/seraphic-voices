@@ -13,18 +13,26 @@ import { BsArrowRightShort } from "react-icons/bs";
 
 const Repettoire = () => {
   return (
-    <Box backgroundColor="bg.100" py={20}>
+    <Box backgroundColor="bg.100" py={{base: 12, md:20}}>
       <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}>
         <VStack>
           <Heading
             as="h4"
             fontSize={{ base: "2xl", xl: "3xl" }}
             color="secondary.700"
-            mt={{ base: 20, md: "inherit" }}
           >
             Repettoire
           </Heading>
-          <Grid templateColumns="repeat(3, 1fr)" gap={6} mt={6} mb={4}>
+          <Grid
+            templateColumns={{
+              base: "repeat(1, 1fr)",
+              md: "repeat(2, 1fr)",
+              xl: "repeat(3, 1fr)",
+            }}
+            gap={6}
+            mt={6}
+            mb={4}
+          >
             <VideoCard
               title="All Hail the Power"
               image="/images/choir-3.jpg"

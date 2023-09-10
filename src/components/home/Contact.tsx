@@ -11,7 +11,7 @@ const Contact = () => {
           as="h4"
           fontSize={{ base: "2xl", xl: "3xl" }}
           color="secondary.700"
-          mt={{ base: 20, md: "inherit" }}
+          textAlign="center"
         >
        Have any enquiries or interested joining us?
         </Heading>

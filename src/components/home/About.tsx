@@ -15,9 +15,9 @@ import { BsArrowRightShort } from "react-icons/bs";
 const About = () => {
   const router = useRouter();
   return (
-    <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} my={20}>
-      <Flex justify="space-between" align="center">
-        <Box height={{ md: "14rem", xl: "25rem" }}>
+    <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} mt={{base: 36, md: 20}} mb={{base: 16, md: 20}}>
+      <Flex direction={{base: "column-reverse", md: "row"}} justify="space-between" align="center">
+        <Box height={{ md: "14rem", xl: "25rem" }} display={{base: "none", md: "block"}}>
           <Image
             src="/images/choir-2.jpg"
             alt="The seraphic voices"
