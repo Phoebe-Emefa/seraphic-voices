@@ -14,8 +14,8 @@ import { CgMenuRight } from 'react-icons/cg';
 import logo from '../../../public/images/seraphic-voices.png';
 import { menus } from '@/utils/misc';
 import CustomButton from '@/components/shared/CustomButton';
-import MenuItem from '@/components/container/MenuItem';
 import MenuDrawer from '@/components/container/MenuDrawer';
+import SingleMenu from '@/components/container/SingleMenu';
 
 
 
@@ -67,7 +67,7 @@ const NavBar = () => {
         ) : (
           <Flex align="center" justify="space-between" width="60%">
             {menus?.map(menu => (
-              <MenuItem
+              <SingleMenu
                 key={menu?.path}
                menu={menu}
               />

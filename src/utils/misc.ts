@@ -5,7 +5,17 @@ export const menus = [
   },
   {
     label: "About Us",
-    path: "/about-us",
+    subMenus: [
+      {
+        label: "Who We Are",
+        path: "/about-us",
+      },
+      {
+        label: "Our Team",
+        path: "/about-us/our-team",
+      },
+    ],
+    // path: "/about-us",
   },
   {
     label: "Events",
