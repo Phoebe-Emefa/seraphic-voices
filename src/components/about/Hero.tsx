@@ -3,7 +3,7 @@ import React from "react";
 
 const Hero = ({heading,description }: {heading: string; description: string}) => {
   return (
-    <Box width="full" height="26rem" position="relative">
+    <Box width="full" height={{base: "100%", xl: "26rem"}} position="relative">
       <Image
         src="/images/choir-2.jpg"
         alt="The seraphic voices"
@@ -22,12 +22,12 @@ const Hero = ({heading,description }: {heading: string; description: string}) =>
         rounded="sm"
         color="white" 
         padding="20px" 
+        width={{base: "100%", md: "inherit"}}
       >
         <Heading
           as="h4"
           fontSize={{ base: "3xl", xl: "4xl" }}
           color="secondary.700"
-          mt={{ base: 20, md: "inherit" }}
           fontWeight="bold" 
         >
          {heading}

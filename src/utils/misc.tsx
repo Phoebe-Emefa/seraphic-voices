@@ -160,7 +160,7 @@ export const teamTabs = [
     label: "Soprano",
     comp: (
       <Grid
-        templateColumns="repeat(5, 1fr)"
+        templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
         gap={5}
         justifyItems="center"
         alignItems="center"
@@ -175,7 +175,7 @@ export const teamTabs = [
     label: "Alto",
     comp: (
       <Grid
-        templateColumns="repeat(5, 1fr)"
+        templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
         gap={5}
         justifyItems="center"
         alignItems="center"
@@ -190,7 +190,7 @@ export const teamTabs = [
     label: "Tenor",
     comp: (
       <Grid
-        templateColumns="repeat(5, 1fr)"
+        templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
         gap={5}
         justifyItems="center"
         alignItems="center"
@@ -205,7 +205,7 @@ export const teamTabs = [
     label: "Bass",
     comp: (
       <Grid
-        templateColumns="repeat(5, 1fr)"
+        templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
         gap={5}
         justifyItems="center"
         alignItems="center"
@@ -220,7 +220,7 @@ export const teamTabs = [
     label: "Organists",
     comp: (
       <Grid
-        templateColumns="repeat(5, 1fr)"
+        templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
         gap={5}
         justifyItems="center"
         alignItems="center"
@@ -235,7 +235,7 @@ export const teamTabs = [
     label: "Trumpeters",
     comp: (
       <Grid
-        templateColumns="repeat(5, 1fr)"
+        templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
         gap={5}
         justifyItems="center"
         alignItems="center"

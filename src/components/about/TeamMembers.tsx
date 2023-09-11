@@ -13,7 +13,7 @@ const TeamMembers = () => {
   return (
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} py={20}>
       <Tabs isFitted>
-        <TabList>
+        <TabList overflowX="auto"> 
           {teamTabs?.map((teamTab) => (
             <Tab
               key={teamTab?.label}
@@ -25,9 +25,10 @@ const TeamMembers = () => {
             </Tab>
           ))}
         </TabList>
-        <TabPanels>
-              {teamTabs?.map((teamTab) => (
+        <TabPanels >
+          {teamTabs?.map((teamTab) => (
             <TabPanel
+              px={0}
               key={teamTab?.label}
               _selected={{ color: "white", bg: "primary", borderRadius: "sm" }}
               fontSize="xl"
@@ -36,9 +37,7 @@ const TeamMembers = () => {
               {teamTab?.comp}
             </TabPanel>
           ))}
-          </TabPanels>
-         
-       
+        </TabPanels>
       </Tabs>
     </Container>
   );

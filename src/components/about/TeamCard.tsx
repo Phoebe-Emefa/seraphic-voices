@@ -11,7 +11,7 @@ const TeamCard = ({
 }) => {
   return (
     <VStack>
-      <Box width="12rem" height="12rem">
+      <Box width={{base: "8rem", md: "12rem"}} height={{base: "8rem", md: "12rem"}}>
         <Image
           src={item?.image}
           alt="team mate name"
