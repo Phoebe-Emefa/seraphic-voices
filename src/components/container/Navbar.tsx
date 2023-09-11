@@ -72,7 +72,7 @@ const NavBar = () => {
                menu={menu}
               />
             ))}
-            <CustomButton title="Contact"  />
+            <CustomButton title="Donate"  />
           </Flex>
         )}
       </Container>
