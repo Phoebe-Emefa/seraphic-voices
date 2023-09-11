@@ -53,7 +53,7 @@ const NavBar = () => {
         {isMobileOrTablet ? (
           <Flex align="center">
             <CustomButton
-              title="Donate"
+              title="Contact"
               width="6rem"
               height={10}
             />
@@ -72,7 +72,7 @@ const NavBar = () => {
                menu={menu}
               />
             ))}
-            <CustomButton title="Donate"  />
+            <CustomButton title="Contact"  />
           </Flex>
         )}
       </Container>
