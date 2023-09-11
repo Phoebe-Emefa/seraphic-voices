@@ -13,7 +13,7 @@ import React from "react";
 const Story = () => {
   return (
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} py={16}>
-      <Flex justify="space-between" align="center">
+      <Flex direction={{base: "column", md: "row"}} justify="space-between" align="center" gap={6}>
         <Box height={{ md: "14rem", xl: "25rem" }}>
           <Image
             src="/images/choir-2.jpg"
@@ -30,7 +30,6 @@ const Story = () => {
             as="h4"
             fontSize={{ base: "2xl", xl: "3xl" }}
             color="secondary.700"
-            mt={{ base: 20, md: "inherit" }}
           >
             Our Story
           </Heading>

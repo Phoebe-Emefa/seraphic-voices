@@ -4,18 +4,17 @@ import React from "react";
 
 const MissionAndVision = () => {
   return (
-    <Box backgroundColor="bg.100" py={20}>
+    <Box backgroundColor="bg.100" py={{base: 12, md:20}}>
       <Container
         maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}
         py={16}
       >
-        <Grid templateColumns="repeat(2, 1fr)" gap={6} >
+        <Grid templateColumns={{base: "repeat(1, 1fr)", xl: "repeat(2, 1fr)"}} gap={6} >
           <VStack align="left" pl={4} borderLeft="10px solid #04235c" backgroundColor="white" p={4} boxShadow="rgba(17, 12, 46, 0.15) 0px 48px 100px 0px" >
             <Heading
               as="h4"
               fontSize={{ base: "2xl", xl: "3xl" }}
               color="secondary.700"
-              mt={{ base: 20, md: "inherit" }}
             >
               Mission Statement
             </Heading>
@@ -33,7 +32,6 @@ const MissionAndVision = () => {
               as="h4"
               fontSize={{ base: "2xl", xl: "3xl" }}
               color="secondary.700"
-              mt={{ base: 20, md: "inherit" }}
             >
               Vision Statement
             </Heading>
