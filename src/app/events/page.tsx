@@ -15,7 +15,7 @@ const Events = () => {
         maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}
         py={16}
       >
-        <Grid templateColumns="repeat(3, 1fr)" gap={6} mt={6} mb={4}>
+        <Grid templateColumns={{base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", xl: "repeat(3, 1fr)"}} gap={6} mt={6} mb={4}>
           <EventCard />
           <EventCard />
           <EventCard />

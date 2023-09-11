@@ -13,7 +13,7 @@ const TeamMembers = () => {
   return (
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} py={20}>
       <Tabs isFitted>
-        <TabList overflowX="auto"> 
+        <TabList overflow={{base: "auto", md: "visible "}}> 
           {teamTabs?.map((teamTab) => (
             <Tab
               key={teamTab?.label}

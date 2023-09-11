@@ -22,7 +22,7 @@ const Hero = ({heading,description }: {heading: string; description: string}) =>
         rounded="sm"
         color="white" 
         padding="20px" 
-        width={{base: "100%", md: "inherit"}}
+        width={{base: "100%", md: "60%"}}
       >
         <Heading
           as="h4"
