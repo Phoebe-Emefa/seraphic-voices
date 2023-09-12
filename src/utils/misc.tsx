@@ -1,6 +1,9 @@
 "use client";
 import TeamCard from "@/components/about/TeamCard";
 import { Grid } from "@chakra-ui/react";
+import { FaLocationDot } from "react-icons/fa6";
+import {FaPhoneAlt} from "react-icons/fa"
+import {MdEmail} from "react-icons/md"
 
 export const menus = [
   {
@@ -247,3 +250,23 @@ export const teamTabs = [
     ),
   },
 ];
+
+
+export const contactInfo = [
+  {
+    name: "Address",
+    value: "House Number, Street Name, Town, Country",
+    icon: FaLocationDot
+  },
+    {
+    name: "Phone Number",
+    value: "+233 232 333 333",
+    icon: FaPhoneAlt
+  },
+    {
+    name: "Email",
+    value: "seraphicvoicestoronto@gmail.com",
+    icon: MdEmail,
+    isLink: true
+  }
+]
