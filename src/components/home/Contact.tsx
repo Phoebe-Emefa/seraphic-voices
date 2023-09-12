@@ -1,5 +1,6 @@
 import CustomButton from '@/components/shared/CustomButton'
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react'
+import Link from 'next/link'
 import React from 'react'
 
 const Contact = () => {
@@ -16,7 +17,9 @@ const Contact = () => {
        Have any enquiries or interested joining us?
         </Heading>
         <Text></Text>
+         <Link href="/contact-us">
          <CustomButton title="Contact Us"  />
+         </Link>
     </VStack>
     </Container>
   </Box>

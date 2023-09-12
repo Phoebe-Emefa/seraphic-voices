@@ -4,24 +4,22 @@ import {
   Flex,
   Icon,
   useDisclosure,
-  useMediaQuery
-} from '@chakra-ui/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
-import { CgMenuRight } from 'react-icons/cg';
+  useMediaQuery,
+} from "@chakra-ui/react";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import { CgMenuRight } from "react-icons/cg";
 
-import logo from '../../../public/images/seraphic-voices.png';
-import CustomButton from '@/components/shared/CustomButton';
-import MenuDrawer from '@/components/container/MenuDrawer';
-import SingleMenu from '@/components/container/SingleMenu';
-import { menus } from '@/utils/misc';
-
-
+import logo from "../../../public/images/seraphic-voices.png";
+import CustomButton from "@/components/shared/CustomButton";
+import MenuDrawer from "@/components/container/MenuDrawer";
+import SingleMenu from "@/components/container/SingleMenu";
+import { menus } from "@/utils/misc";
 
 const NavBar = () => {
-  const [isMobileOrTablet] = useMediaQuery('(max-width: 1250px)');
-  const [currentPath, setCurrentPath] = React.useState<string>('');
+  const [isMobileOrTablet] = useMediaQuery("(max-width: 1250px)");
+  const [currentPath, setCurrentPath] = React.useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -40,23 +38,20 @@ const NavBar = () => {
         h="full"
         alignItems="center"
         justifyContent="space-between"
-        maxW={{ md: '2xl', lg: '4xl', xl: '6xl', '3xl': '7xl' }}
+        maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}
       >
-        <Link href="/" rel="noreferrer" onClick={() => setCurrentPath('')}>
+        <Link href="/" rel="noreferrer" onClick={() => setCurrentPath("")}>
           <Image
             src={logo}
             alt="Seraphic Voices of Toronto"
-            // height={isMobileOrTablet ? 20 : 40}
             height={96}
           />
         </Link>
         {isMobileOrTablet ? (
           <Flex align="center">
-            <CustomButton
-              title="Contact"
-              width="6rem"
-              height={10}
-            />
+            <Link href="/contact-us">
+              <CustomButton title="Contact" width="6rem" height={10} />
+            </Link>
             <Icon
               as={CgMenuRight}
               boxSize={{ base: 6, xl: 10 }}
@@ -66,20 +61,14 @@ const NavBar = () => {
           </Flex>
         ) : (
           <Flex align="center" justify="space-between" width="60%">
-            {menus?.map(menu => (
-              <SingleMenu
-                key={menu?.path}
-               menu={menu}
-              />
+            {menus?.map((menu) => (
+              <SingleMenu key={menu?.path} menu={menu} />
             ))}
-            <CustomButton title="Donate"  />
+            <CustomButton title="Donate" />
           </Flex>
         )}
       </Container>
-      <MenuDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-      />
+      <MenuDrawer isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

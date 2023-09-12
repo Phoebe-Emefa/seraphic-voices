@@ -1,18 +1,7 @@
-import {
-  Flex,
-  Text,
-  Box,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Icon,
-} from "@chakra-ui/react";
+import { Flex, Text, Box } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { FiChevronDown } from "react-icons/fi";
 
 interface ISingleMenu {
   menu: {
@@ -22,9 +11,15 @@ interface ISingleMenu {
   };
   fontSize?: string;
   color?: string;
+  onClose?: () => void;
 }
 
-const SingleMenu: React.FC<ISingleMenu> = ({ menu, color, fontSize }) => {
+const SingleMenu: React.FC<ISingleMenu> = ({
+  menu,
+  color,
+  fontSize,
+  onClose,
+}) => {
   const pathname = usePathname();
   const isActive = pathname === menu?.path;
   const [showSubmenu, setShowSubmenu] = useState(false);
@@ -34,25 +29,12 @@ const SingleMenu: React.FC<ISingleMenu> = ({ menu, color, fontSize }) => {
   };
 
   return (
-    <Box
-      position="relative"
-    >
-      {menu?.subMenus && (
-        <Menu>
-          <MenuButton as={Button} rightIcon={<Icon as={FiChevronDown} />}>
-            {menu?.label}
-          </MenuButton>
-          <MenuList>
-            {menu?.subMenus?.map((subMenu) => (
-              <Link key={subMenu?.label} href={subMenu?.path}>
-                <MenuItem>{subMenu?.label} </MenuItem>
-              </Link>
-            ))}
-          </MenuList>
-        </Menu>
-      )}
+    <Box position="relative">
       {menu?.path && (
-        <Link href={menu?.path && (menu?.path as string)}>
+        <Link
+          href={menu?.path && (menu?.path as string)}
+          onClick={onClose ? () => onClose() : undefined}
+        >
           <Flex
             direction="column"
             justify="center"

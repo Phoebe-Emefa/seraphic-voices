@@ -7,15 +7,13 @@ import {
   DrawerOverlay,
   Flex,
   Icon,
+  Image,
 } from "@chakra-ui/react";
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import { IoCloseSharp } from "react-icons/io5";
-import logo from "../../../public/images/seraphic-voices.png";
-import MenuItem from "@/components/container/SingleMenu";
 import CustomButton from "@/components/shared/CustomButton";
 import { menus } from "@/utils/misc";
+import SingleMenu from "@/components/container/SingleMenu";
 
 const MenuDrawer = ({
   isOpen,
@@ -30,25 +28,29 @@ const MenuDrawer = ({
       <DrawerContent px={{ base: 2, md: 8 }} bg="secondary.100">
         <DrawerHeader>
           <Flex justify="space-between" align="center">
-            <Link href="/" rel="noreferrer">
-              <Image
-                src={logo}
-                alt="The Talent Empowerment Foundation Logo"
-                height={30}
+           <Box height={40} width={60}>
+               <Image
+                src="/images/seraphic-voices.png"
+                alt="Seraphic Voices of Torontp"
+                height="100%"
+                width="100%"
+                objectFit="cover"
+               
               />
-            </Link>
+           </Box>
             <Icon as={IoCloseSharp} boxSize={8} onClick={() => onClose()} />
           </Flex>
         </DrawerHeader>
 
         <DrawerBody>
-          <Box mt={10}>
+          <Box >
             {menus?.map((menu) => (
-              <MenuItem
+              <SingleMenu
                 key={menu?.path}
                 menu={menu}
                 fontSize="3xl"
                 color="secondary.500"
+                onClose={onClose}
               />
             ))}
             <Box mt={8}>

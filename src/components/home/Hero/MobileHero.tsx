@@ -20,7 +20,7 @@ const MobileHero = () => {
          Explore the fusion of Western and African music, fostering cross-cultural connections
         </Text>
       </VStack>
-      <Flex justify="flex-end" position="absolute" bottom="-50%">
+      <Flex justify="flex-end" position="absolute" bottom="-60%">
         <ImageCarousel images={sliderImages} />
       </Flex>
     </Box>
