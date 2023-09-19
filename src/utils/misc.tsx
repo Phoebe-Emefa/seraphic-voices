@@ -143,6 +143,7 @@ export const organistsMembers = [
     name: "Joshua Kyeremeh",
   },
 ];
+
 export const trumpetMembers = [
   {
     image: "/images/Gideon-Boateng.jpg",
