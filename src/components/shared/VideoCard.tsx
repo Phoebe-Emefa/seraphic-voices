@@ -31,8 +31,9 @@ const VideoCard: React.FC<VideoData> = ({ title, image, url }) => {
         borderRadius="md"
         overflow="hidden"
         cursor="pointer"
+        height={60}
       >
-        <Image src={image} alt={title} objectFit="cover" objectPosition="top" />
+        <Image src={image} alt={title} objectFit="cover" height="100%" width="100%" objectPosition="top" />
         <Flex
           justify="center"
           align="center"

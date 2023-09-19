@@ -11,6 +11,7 @@ const OurTeam = () => {
         description="Meet the extraordinary voices behind Seraphic Voices of Toronto! This
           remarkable choir is a powerhouse of passionate musicians dedicated to
           crafting soul-stirring music that transcends boundaries"
+          image="/images/group.jpg"
       />
       <TeamMembers />
     </>

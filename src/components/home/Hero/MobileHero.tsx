@@ -1,13 +1,9 @@
+import { sliderImages } from "@/components/home/Hero/DesktopHero";
 import ImageCarousel from "@/components/home/Hero/ImageCarousel";
 import { Box, Container, VStack, Heading, Text, Flex } from "@chakra-ui/react";
 import React from "react";
 
 const MobileHero = () => {
-  const sliderImages = [
-    "/images/choir-1.jpg",
-    "/images/choir-2.jpg",
-    "/images/choir-3.jpg",
-  ];
 
   return (
     <Box bg="secondary.100" pt={8} pb={40} position="relative">

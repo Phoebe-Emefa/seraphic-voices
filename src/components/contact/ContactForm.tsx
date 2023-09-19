@@ -77,7 +77,6 @@ const ContactForm = () => {
       <Heading
         as="h6"
         fontSize="xl"
-        //   color="secondary.700"
       >
         Send us a Message
       </Heading>

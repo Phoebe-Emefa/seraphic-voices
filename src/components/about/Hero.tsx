@@ -1,16 +1,16 @@
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
 import React from "react";
 
-const Hero = ({heading,description }: {heading: string; description: string}) => {
+const Hero = ({heading,description, image }: {heading: string; description: string; image:string}) => {
   return (
-    <Box width="full" height={{base: "100%", xl: "26rem"}} position="relative">
+    <Box width="full" height={{base: "100%", xl: "35rem"}} position="relative">
       <Image
-        src="/images/choir-2.jpg"
+        src={image}
         alt="The seraphic voices"
         width="100%"
         height="100%"
         objectFit="cover"
-        objectPosition="top"
+        objectPosition="center"
       />
       <Box
         position="absolute"
@@ -27,7 +27,7 @@ const Hero = ({heading,description }: {heading: string; description: string}) =>
         <Heading
           as="h4"
           fontSize={{ base: "3xl", xl: "4xl" }}
-          color="secondary.700"
+          color="white"
           fontWeight="bold" 
         >
          {heading}

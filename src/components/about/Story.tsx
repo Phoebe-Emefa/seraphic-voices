@@ -16,7 +16,7 @@ const Story = () => {
       <Flex direction={{base: "column", md: "row"}} justify="space-between" align="center" gap={6}>
         <Box height={{ md: "14rem", xl: "25rem" }}>
           <Image
-            src="/images/choir-2.jpg"
+            src="/images/group-2.jpg"
             alt="The seraphic voices"
             width="100%"
             height="100%"

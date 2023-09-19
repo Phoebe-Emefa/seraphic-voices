@@ -31,58 +31,58 @@ export const menus = [
 
 export const sopranoMembers = [
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Adwoa-Good.jpg",
     name: "Ewuradwoa Goode",
   },
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Tosin.jpg",
     name: "Magdelene Tosin Lanlehin",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Belinde-Boye.jpg",
     name: "Berlinda Boye",
   },
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Dorothy.jpg",
     name: "Dorothy Okubadejo",
   },
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Bernice-Asamoah.jpg",
     name: "Bernice Asamoah",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Derrick-Allortey.jpg",
     name: "Derrick Kpakpo Allotey",
   },
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Adwoa-Asamoah.jpg",
     name: "Adwoa Asamoah",
   },
 ];
 
 export const altoMembers = [
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Afuah-Baah.jpeg",
     name: "Afua Baah",
   },
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Nancy-Bio.jpg",
     name: "Nancy Princess Bio",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Doris-Hutchful.jpg",
     name: "Doris Hutchful",
   },
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Akua.jpeg",
     name: "Akua Buado",
   },
   {
-    image: "/images/beautiful-woman.jpg",
+    image: "/images/Nana-Awura.jpg",
     name: "Nana Awura Agyeman",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Ransford-Seyi.jpg",
     name: "Ransford Sekyi",
   },
   {
@@ -93,11 +93,11 @@ export const altoMembers = [
 
 export const tenorMembers = [
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Da-Coasta.jpg",
     name: "Afua BaahDaCosta Agyeman",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Charles-Leslie.jpg",
     name: "Charles  Leslie Vandyck",
   },
   {
@@ -105,51 +105,51 @@ export const tenorMembers = [
     name: "Joel Smart",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/oscar-Gbeku.jpg",
     name: "Oscar Etorko-Gbeku",
   },
 ];
 
 export const bassMembers = [
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Albert-Acquah.jpg",
     name: "Albert Acquah",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Samuel-Duah.jpeg",
     name: "Samuel Perez Ofori Dua",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Kwaku-Agyemang.jpg",
     name: "Kwaku Agyeman Duah",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Benjamin-Osei.jpg",
     name: "Benjamin Osei Boakye",
   },
 ];
 
 export const organistsMembers = [
   {
-    image: "/images/handsome-man.webp",
-    name: "Samuel Wasley Asare Kusi (Music Director)",
+    image: "/images/Sam-Wesley.jpg",
+    name: "Samuel Wesley Asare Kusi (Music Director)",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Babatunde.jpg",
     name: "Babatunde Okubadejo",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Joshua-Kyeremeh.jpg",
     name: "Joshua Kyeremeh",
   },
 ];
 export const trumpetMembers = [
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Gideon-Boateng.jpg",
     name: "Gideon Boateng",
   },
   {
-    image: "/images/handsome-man.webp",
+    image: "/images/Richmond-Opoku.jpg",
     name: "Richmond  Opoku Agyeman",
   },
 ];

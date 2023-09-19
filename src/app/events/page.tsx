@@ -10,6 +10,7 @@ const Events = () => {
       <Hero
         heading="Upcoming Events"
         description="Explore our upcoming events, from mesmerizing concerts to community engagements, and let the harmonious magic of our choir inspire your soul"
+        image="images/events.jpg"
       />
       <Container
         maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}

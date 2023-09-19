@@ -35,18 +35,18 @@ const Repettoire = () => {
           >
             <VideoCard
               title="All Hail the Power"
-              image="/images/choir-3.jpg"
-              url="https://www.youtube.com/embed/Ud7YvLSrpUk"
+              image="/images/hail-power.jpg"
+              url="https://www.youtube.com/embed/mm67HkAnlVA?si=Ok7y0EbMhxKKWoqm"
             />
             <VideoCard
-              title="See the Conquering Hero comes"
-              image="/images/choir-3.jpg"
-              url="https://www.youtube.com/embed/O5VoaiWNP1A?si=YTIq59hKwtoG9k43"
+              title="Ye de anigye besom yen Nyame(Busy Body)"
+              image="/images/busy-body.jpg"
+              url="https://www.youtube.com/embed/2egcDazXmcs?si=s6jqjCw56MuIoPRs"
             />
             <VideoCard
-              title="Seraphic Noël hilifes"
-              image="/images/choir-3.jpg"
-              url="https://www.youtube.com/embed/HfawZypVNVw?si=yEqmjwLth4cN8h2-"
+              title="Beautiful Star"
+              image="/images/beautiful-star.jpg"
+              url="https://www.youtube.com/embed/1EvR_ZX-cY0?si=iLUttWoEVv6g_VW"
             />
           </Grid>
           <a
