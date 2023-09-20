@@ -267,3 +267,12 @@ export const contactInfo = [
     isLink: true
   }
 ]
+
+export const donationInstructions = [
+    "Login into your online bank account",
+    "Choose Interac e-Transfer within the Transfer/Payment menu options",
+    "Select a recipient by entering our email address (seraphicvoicestoronto@gmail.com)",
+    "Fill in the donation information (amount, account from which withdraw the funds, etc)",
+    "Follow the instruction to contfirm the information and complete the transfer"
+  
+]

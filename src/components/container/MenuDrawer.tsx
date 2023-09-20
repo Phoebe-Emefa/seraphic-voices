@@ -14,6 +14,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import CustomButton from "@/components/shared/CustomButton";
 import { menus } from "@/utils/misc";
 import SingleMenu from "@/components/container/SingleMenu";
+import Link from "next/link";
 
 const MenuDrawer = ({
   isOpen,
@@ -28,22 +29,21 @@ const MenuDrawer = ({
       <DrawerContent px={{ base: 2, md: 8 }} bg="secondary.100">
         <DrawerHeader>
           <Flex justify="space-between" align="center">
-           <Box height={40} width={60}>
-               <Image
+            <Box height={40} width={60}>
+              <Image
                 src="/images/seraphic-voices.png"
                 alt="Seraphic Voices of Torontp"
                 height="100%"
                 width="100%"
                 objectFit="cover"
-               
               />
-           </Box>
+            </Box>
             <Icon as={IoCloseSharp} boxSize={8} onClick={() => onClose()} />
           </Flex>
         </DrawerHeader>
 
         <DrawerBody>
-          <Box >
+          <Box>
             {menus?.map((menu) => (
               <SingleMenu
                 key={menu?.path}
@@ -53,17 +53,20 @@ const MenuDrawer = ({
                 onClose={onClose}
               />
             ))}
-            <Box mt={8}>
-              <CustomButton
-                title="Donate"
-                width="100%"
-                height={16}
-                fontSize="2xl"
-                onClick={() => {
-                  onClose();
-                }}
-              />
-            </Box>
+
+            <Link href="/donate">
+              <Box mt={8}>
+                <CustomButton
+                  title="Donate"
+                  width="100%"
+                  height={16}
+                  fontSize="2xl"
+                  onClick={() => {
+                    onClose();
+                  }}
+                />
+              </Box>
+            </Link>
           </Box>
         </DrawerBody>
       </DrawerContent>

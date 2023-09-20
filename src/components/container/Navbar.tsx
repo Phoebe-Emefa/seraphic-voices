@@ -64,7 +64,9 @@ const NavBar = () => {
             {menus?.map((menu) => (
               <SingleMenu key={menu?.path} menu={menu} />
             ))}
+           <Link href="/donate">
             <CustomButton title="Donate" />
+           </Link>
           </Flex>
         )}
       </Container>

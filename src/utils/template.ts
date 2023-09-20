@@ -119,7 +119,7 @@ export function emailHtmlTemplate(htmlData: any) {
                               "
                               class="padding message-content"
                             >
-                              <h2>TEF Website Message</h2>
+                              <h2>Message from Website</h2>
                               <div class="form-container">${htmlData}</div>
                             </td>
                           </tr>

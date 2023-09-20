@@ -36,7 +36,7 @@ const ContactForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialValues = {
-    subject: "TEF Website Message",
+    subject: "Message from Website",
     firstName: "",
     lastName: "",
     email: "",
