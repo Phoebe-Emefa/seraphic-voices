@@ -3,7 +3,6 @@ import {
   Heading,
   Container,
   VStack,
-  Box,
   Grid,
   Button,
   Icon,
@@ -11,9 +10,17 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { BsArrowRightShort } from "react-icons/bs";
+import { useQuery } from "react-query";
+import { groq } from "next-sanity";
+import { client } from "../../../sanity/sanity-client";
 
 const UpcomingEvents = () => {
   const router = useRouter();
+    const { isLoading, data } = useQuery("events", async () => {
+    return client.fetch(groq`*[_type == "events"]`);
+  });
+
+
   return (
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} py={{base: 12, md: 20}}>
       <VStack>
@@ -34,11 +41,16 @@ const UpcomingEvents = () => {
           mt={6}
           mb={4}
         >
-          <EventCard />
-          <EventCard />
-          <EventCard />
+         {
+          data?.map((item: any) => (
+             <EventCard key={item} event={item} />
+          ))
+         }
+         
         </Grid>
-        <Button
+     {
+      data?.length > 3 && (
+           <Button
           color="secondary.700"
           variant="outline"
           rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}
@@ -46,6 +58,8 @@ const UpcomingEvents = () => {
         >
           View All Events
         </Button>
+      )
+     }
       </VStack>
     </Container>
   );

@@ -11,16 +11,17 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { BsArrowRightShort } from "react-icons/bs";
+import { urlFor } from "../../../sanity/sanity-client";
 
-const About = () => {
+const About = ({content}: {content: any}) => {
   const router = useRouter();
   return (
-    <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} mt={{base: 36, md: 20}} mb={{base: 16, md: 20}}>
+    <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} mt={{base: 48, md: 20}} mb={{base: 16, md: 20}}>
       <Flex direction={{base: "column-reverse", md: "row"}} justify="space-between" align="center">
         <Box height={{ md: "14rem", xl: "25rem" }} width={{ base: "100%", md: "50%" }} display={{base: "none", md: "block"}}>
           <Image
-            src="/images/group.jpg"
-            alt="The seraphic voices"
+            src={content?.about_image && urlFor(content?.about_image?.asset?._ref)  as unknown as string}
+            alt={content?.about_image?.alt }
             width="100%"
             height="100%"
             objectFit="cover"
@@ -42,11 +43,7 @@ const About = () => {
             my={{ base: 4, md: 6 }}
             color={"black"}
           >
-            Welcome to Seraphic Voices of Toronto, where the rich tapestry of
-            Western and African choral music intertwines to create harmonious
-            connections. Founded by Samuel Wesley Asare-Kusi in 2019, our
-            26-member ensemble celebrates cultural diversity and fosters
-            cross-cultural understanding within Toronto and beyond
+           {content?.about_description}
           </Text>
           <Button
             color="secondary.700"

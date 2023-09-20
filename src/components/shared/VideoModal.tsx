@@ -27,7 +27,7 @@ const VideoModal = ({
         <ModalHeader>{title} </ModalHeader>
         <ModalCloseButton />
         <ModalBody mb={8}>
-          <ReactPlayer url={url} width="100%" height={500} />
+          <ReactPlayer url={url} width="100%" height={500} controls={true} />
         </ModalBody>
       </ModalContent>
     </Modal>

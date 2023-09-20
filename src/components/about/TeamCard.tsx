@@ -1,20 +1,21 @@
 import { Box, Heading, Image, VStack } from "@chakra-ui/react";
 import React from "react";
+import { urlFor } from "../../../sanity/sanity-client";
 
 const TeamCard = ({
   item,
 }: {
-  item: {
-    image: string;
-    name: string;
-  };
+  item: any;
 }) => {
   return (
     <VStack>
       <Box width={{base: "8rem", md: "12rem"}} height={{base: "8rem", md: "12rem"}}>
         <Image
-          src={item?.image}
-          alt="team mate name"
+            src={
+            item?.image &&
+            (urlFor(item?.image?.asset?._ref) as unknown as string)
+          }
+          alt={item?.image?.alt}
           rounded="full"
           width="100%"
           height="100%"

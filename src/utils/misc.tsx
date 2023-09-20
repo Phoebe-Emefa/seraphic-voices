@@ -29,133 +29,8 @@ export const menus = [
   },
 ];
 
-export const sopranoMembers = [
-  {
-    image: "/images/Adwoa-Good.jpg",
-    name: "Ewuradwoa Goode",
-  },
-  {
-    image: "/images/Tosin.jpg",
-    name: "Magdelene Tosin Lanlehin",
-  },
-  {
-    image: "/images/Belinde-Boye.jpg",
-    name: "Berlinda Boye",
-  },
-  {
-    image: "/images/Dorothy.jpg",
-    name: "Dorothy Okubadejo",
-  },
-  {
-    image: "/images/Bernice-Asamoah.jpg",
-    name: "Bernice Asamoah",
-  },
-  {
-    image: "/images/Derrick-Allortey.jpg",
-    name: "Derrick Kpakpo Allotey",
-  },
-  {
-    image: "/images/Adwoa-Asamoah.jpg",
-    name: "Adwoa Asamoah",
-  },
-];
 
-export const altoMembers = [
-  {
-    image: "/images/Afuah-Baah.jpeg",
-    name: "Afua Baah",
-  },
-  {
-    image: "/images/Nancy-Bio.jpg",
-    name: "Nancy Princess Bio",
-  },
-  {
-    image: "/images/Doris-Hutchful.jpg",
-    name: "Doris Hutchful",
-  },
-  {
-    image: "/images/Akua.jpeg",
-    name: "Akua Buado",
-  },
-  {
-    image: "/images/Nana-Awura.jpg",
-    name: "Nana Awura Agyeman",
-  },
-  {
-    image: "/images/Ransford-Seyi.jpg",
-    name: "Ransford Sekyi",
-  },
-  {
-    image: "/images/beautiful-woman.jpg",
-    name: "Grisela Asamoah-Gyedu",
-  },
-];
-
-export const tenorMembers = [
-  {
-    image: "/images/Da-Coasta.jpg",
-    name: "Afua BaahDaCosta Agyeman",
-  },
-  {
-    image: "/images/Charles-Leslie.jpg",
-    name: "Charles  Leslie Vandyck",
-  },
-  {
-    image: "/images/handsome-man.webp",
-    name: "Joel Smart",
-  },
-  {
-    image: "/images/oscar-Gbeku.jpg",
-    name: "Oscar Etorko-Gbeku",
-  },
-];
-
-export const bassMembers = [
-  {
-    image: "/images/Albert-Acquah.jpg",
-    name: "Albert Acquah",
-  },
-  {
-    image: "/images/Samuel-Duah.jpeg",
-    name: "Samuel Perez Ofori Dua",
-  },
-  {
-    image: "/images/Kwaku-Agyemang.jpg",
-    name: "Kwaku Agyeman Duah",
-  },
-  {
-    image: "/images/Benjamin-Osei.jpg",
-    name: "Benjamin Osei Boakye",
-  },
-];
-
-export const organistsMembers = [
-  {
-    image: "/images/Sam-Wesley.jpg",
-    name: "Samuel Wesley Asare Kusi (Music Director)",
-  },
-  {
-    image: "/images/Babatunde.jpg",
-    name: "Babatunde Okubadejo",
-  },
-  {
-    image: "/images/Joshua-Kyeremeh.jpg",
-    name: "Joshua Kyeremeh",
-  },
-];
-
-export const trumpetMembers = [
-  {
-    image: "/images/Gideon-Boateng.jpg",
-    name: "Gideon Boateng",
-  },
-  {
-    image: "/images/Richmond-Opoku.jpg",
-    name: "Richmond  Opoku Agyeman",
-  },
-];
-
-export const teamTabs = [
+export const teamTabs = (sopranoMembers: any,altoMembers: any,tenorMembers: any,bassMembers: any,organistMembers: any,trumpetersMembers: any) => [
   {
     label: "Soprano",
     comp: (
@@ -165,7 +40,7 @@ export const teamTabs = [
         justifyItems="center"
         alignItems="center"
       >
-        {sopranoMembers?.map((member) => (
+        {sopranoMembers?.map((member: any) => (
           <TeamCard key={member?.name} item={member} />
         ))}
       </Grid>
@@ -180,7 +55,7 @@ export const teamTabs = [
         justifyItems="center"
         alignItems="center"
       >
-        {altoMembers?.map((member) => (
+        {altoMembers?.map((member: any) => (
           <TeamCard key={member?.name} item={member} />
         ))}
       </Grid>
@@ -195,7 +70,7 @@ export const teamTabs = [
         justifyItems="center"
         alignItems="center"
       >
-        {tenorMembers?.map((member) => (
+        {tenorMembers?.map((member: any) => (
           <TeamCard key={member?.name} item={member} />
         ))}
       </Grid>
@@ -210,7 +85,7 @@ export const teamTabs = [
         justifyItems="center"
         alignItems="center"
       >
-        {bassMembers?.map((member) => (
+        {bassMembers?.map((member: any) => (
           <TeamCard key={member?.name} item={member} />
         ))}
       </Grid>
@@ -225,7 +100,7 @@ export const teamTabs = [
         justifyItems="center"
         alignItems="center"
       >
-        {organistsMembers?.map((member) => (
+        {organistMembers?.map((member:any) => (
           <TeamCard key={member?.name} item={member} />
         ))}
       </Grid>
@@ -240,7 +115,7 @@ export const teamTabs = [
         justifyItems="center"
         alignItems="center"
       >
-        {trumpetMembers?.map((member) => (
+        {trumpetersMembers?.map((member: any) => (
           <TeamCard key={member?.name} item={member} />
         ))}
       </Grid>
@@ -273,6 +148,6 @@ export const donationInstructions = [
     "Choose Interac e-Transfer within the Transfer/Payment menu options",
     "Select a recipient by entering our email address (seraphicvoicestoronto@gmail.com)",
     "Fill in the donation information (amount, account from which withdraw the funds, etc)",
-    "Follow the instruction to contfirm the information and complete the transfer"
+    "Follow the instruction to confirm the information and complete the transfer"
   
 ]

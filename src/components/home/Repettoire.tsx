@@ -10,10 +10,20 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { BsArrowRightShort } from "react-icons/bs";
+import { useQuery } from "react-query";
+import { groq } from "next-sanity";
+import { client, urlFor } from "../../../sanity/sanity-client";
 
 const Repettoire = () => {
+  const { isLoading, data } = useQuery("repettoire", async () => {
+    return client.fetch(groq`*[_type == "repettoire"]`);
+  });
+
+  const content = data;
+
+
   return (
-    <Box backgroundColor="bg.100" py={{base: 12, md:20}}>
+    <Box backgroundColor="bg.100" py={{ base: 12, md: 20 }}>
       <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}>
         <VStack>
           <Heading
@@ -33,21 +43,17 @@ const Repettoire = () => {
             mt={6}
             mb={4}
           >
-            <VideoCard
-              title="All Hail the Power"
-              image="/images/hail-power.jpg"
-              url="https://www.youtube.com/embed/mm67HkAnlVA?si=Ok7y0EbMhxKKWoqm"
-            />
-            <VideoCard
-              title="Ye de anigye besom yen Nyame(Busy Body)"
-              image="/images/busy-body.jpg"
-              url="https://www.youtube.com/embed/2egcDazXmcs?si=s6jqjCw56MuIoPRs"
-            />
-            <VideoCard
-              title="Beautiful Star"
-              image="/images/beautiful-star.jpg"
-              url="https://www.youtube.com/embed/1EvR_ZX-cY0?si=iLUttWoEVv6g_VW"
-            />
+            {data?.map((item: any) => (
+              <VideoCard
+                key={item?.title}
+                title={item?.title}
+                image={
+                  item?.image &&
+                  (urlFor(item?.image?.asset?._ref) as unknown as string)
+                }
+                url={item?.url}
+              />
+            ))}
           </Grid>
           <a
             href="https://www.youtube.com/@seraphicvoicesoftoronto6557"

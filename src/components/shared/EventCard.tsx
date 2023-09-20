@@ -1,56 +1,76 @@
 import {
-  Button,
   Card,
   CardBody,
-  CardFooter,
   Heading,
   Image,
   Stack,
   Text,
   HStack,
-  Box,
-  Divider,
-  ButtonGroup,
+  VStack,
   Icon,
+  Flex,
 } from "@chakra-ui/react";
+import moment from "moment";
 import React from "react";
-import { BiSolidShareAlt, BiTime } from "react-icons/bi";
+import { BiTime } from "react-icons/bi";
 import { GrLocation } from "react-icons/gr";
+import { urlFor } from "../../../sanity/sanity-client";
 
-const EventCard = () => {
+const EventCard = ({ event }: { event: any }) => {
   return (
     <Card maxW="sm">
       <CardBody>
         <Image
-          src="/images/choir-3.jpg"
-          alt="Green double couch with wooden legs"
+          src={
+            event?.image &&
+            (urlFor(event?.image?.asset?._ref) as unknown as string)
+          }
+          alt={event?.image?.alt}
           borderRadius="lg"
         />
         <Stack mt="6" spacing="6">
           <Heading as="h3" size="md">
-            Seraphic Summer Praise
+            {event?.title}
           </Heading>
-          <Stack>
-            <HStack>
-              <Icon as={BiTime} />
+          <Stack spacing={6}>
+            <Flex justify="space-between">
+              <VStack align="left">
+                <HStack>
+                  <Icon as={BiTime} />
+                  <Heading as="h6" fontSize="sm">
+                    Start Date:
+                  </Heading>
+                </HStack>
+                <Text fontWeight={500} fontSize="sm">
+                  {moment(event?.start_date).format("lll")}
+                </Text>
+              </VStack>
+              <VStack align="right">
+                <HStack>
+                  <Icon as={BiTime} />
+                  <Heading as="h6" fontSize="sm">
+                    End Date:
+                  </Heading>
+                </HStack>
+                <Text fontWeight={500} fontSize="sm">
+                  {moment(event?.end_date).format("lll")}
+                </Text>
+              </VStack>
+            </Flex>
+            <VStack align="left">
+              <HStack>
+                <Icon as={GrLocation} />
+                <Heading as="h6" fontSize="sm">
+                  Location:
+                </Heading>
+              </HStack>
               <Text fontWeight={500} fontSize="sm">
-                Sunday, 12 April 2023 | 6:00pm - 8:00pm
+                {event?.location}
               </Text>
-            </HStack>
-
-            <HStack>
-              <Icon as={GrLocation} />
-              <Text fontWeight={500} fontSize="sm">
-                2459 Islington Ave, Etobicoke, ON M9W 3X9, Toronto, Canada
-              </Text>
-            </HStack>
+            </VStack>
           </Stack>
         </Stack>
       </CardBody>
-  <CardFooter display="flex" justify="flex-end" alignItems="center" gap={2} cursor="pointer">
-     <Icon as={BiSolidShareAlt} />
-   <Text fontSize="sm">Share Event</Text>
-  </CardFooter>
     </Card>
   );
 };
