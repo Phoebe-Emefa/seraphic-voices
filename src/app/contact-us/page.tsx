@@ -14,8 +14,8 @@ const ContactUs = () => {
         py={16}
       >
         <Flex direction={{base: "column", md: "row"}} justify="space-between" gap={{base: 16, md: 2}} align="center">
+           <ContactInfo />
           <ContactForm />
-          <ContactInfo />
         </Flex>
       </Container>
     </>
