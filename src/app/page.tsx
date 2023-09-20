@@ -8,6 +8,7 @@ import React from 'react'
 import { useQuery } from 'react-query';
 import { groq } from 'next-sanity';
 import { client } from '../../sanity/sanity-client'
+import DataLoader from '@/components/shared/DataLoader'
 
 const Home = () => {
     const { isLoading, data } = useQuery('home', async () => {
@@ -17,7 +18,12 @@ const Home = () => {
     const content = data?.[0];
 
   return (
-    <div>
+ <>
+ {
+  isLoading ? (
+    <DataLoader />
+  ) : (
+       <div>
       <Hero content={content}  />
       <About content={content} />
       <Repettoire />
@@ -25,6 +31,9 @@ const Home = () => {
       <Contact />
       
     </div>
+  )
+ }
+ </>
   )
 }
 

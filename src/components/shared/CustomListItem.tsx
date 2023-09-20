@@ -8,8 +8,6 @@ const CustomList = ({
 }: {
   listItems: string[];
   color?: string;
-  iconColor?: string;
-  isLoading?: boolean;
 }) => {
   return (
     <List spacing={3}>
