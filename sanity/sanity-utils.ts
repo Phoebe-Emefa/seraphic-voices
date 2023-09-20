@@ -2,9 +2,9 @@ import { createClient, groq } from "next-sanity";
 
 export async function getHero() {
   const client = createClient({
-    projectId: "9qngbf4g",
+    projectId: "5xuvntt7",
     dataset: "production",
-    apiVersion: "2023-08-06",
+    apiVersion: "2023-09-20",
     useCdn: false,
   });
 
