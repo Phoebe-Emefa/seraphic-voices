@@ -49,7 +49,7 @@ const MenuDrawer = ({
                 key={menu?.path}
                 menu={menu}
                 fontSize="3xl"
-                color="secondary.500"
+                color="orange.400"
                 onClose={onClose}
               />
             ))}

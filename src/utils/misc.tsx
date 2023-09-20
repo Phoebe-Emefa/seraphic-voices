@@ -38,7 +38,7 @@ export const teamTabs = (sopranoMembers: any,altoMembers: any,tenorMembers: any,
         templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
         gap={5}
         justifyItems="center"
-        alignItems="center"
+        alignItems="start"
       >
         {sopranoMembers?.map((member: any) => (
           <TeamCard key={member?.name} item={member} />
