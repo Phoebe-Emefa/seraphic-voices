@@ -1,7 +1,7 @@
 "use client"
 import Container from '@/components/container';
-import { Metadata } from 'next';
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+
 
 
 export default function RootLayout({
