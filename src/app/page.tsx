@@ -9,6 +9,10 @@ import { useQuery } from 'react-query';
 import { groq } from 'next-sanity';
 import { client } from '../../sanity/sanity-client'
 import DataLoader from '@/components/shared/DataLoader'
+import { SEO } from '@/components/shared/SEO'
+
+
+ 
 
 const Home = () => {
     const { isLoading, data } = useQuery('home', async () => {
@@ -19,6 +23,11 @@ const Home = () => {
 
   return (
  <>
+    <SEO
+      title="Home"
+      description="Explore the fusion of Western and African music, fostering cross-cultural connections"
+      path="/"
+    />
  {
   isLoading ? (
     <DataLoader />

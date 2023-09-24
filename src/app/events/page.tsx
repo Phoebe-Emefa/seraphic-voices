@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { groq } from "next-sanity";
 import { client } from "../../../sanity/sanity-client";
 import DataLoader from "@/components/shared/DataLoader";
+import { SEO } from "@/components/shared/SEO";
 
 const Events = () => {
   const { isLoading, data } = useQuery("events", async () => {
@@ -15,6 +16,11 @@ const Events = () => {
 
   return (
     <>
+      <SEO
+        title="Events"
+        description="Discover our upcoming events, from mesmerizing concerts to community engagements, and let our choir inspire your soul."
+        path="/events"
+      />
       {isLoading ? (
         <DataLoader />
       ) : (
