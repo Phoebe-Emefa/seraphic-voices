@@ -6,6 +6,7 @@ import {
   Grid,
   Button,
   Icon,
+  Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -37,20 +38,29 @@ const UpcomingEvents = () => {
           >
             Upcoming Events
           </Heading>
-          <Grid
-            templateColumns={{
-              base: "repeat(1, 1fr)",
-              md: "repeat(2, 1fr)",
-              xl: "repeat(3, 1fr)",
-            }}
-            gap={6}
-            mt={6}
-            mb={4}
-          >
-            {data?.map((item: any) => (
-              <EventCard key={item} event={item} />
-            ))}
-          </Grid>
+          {data?.length > 0 ? (
+            <Grid
+              templateColumns={{
+                base: "repeat(1, 1fr)",
+                md: "repeat(2, 1fr)",
+                xl: "repeat(3, 1fr)",
+              }}
+              gap={6}
+              mt={6}
+              mb={4}
+            >
+              {data?.map((item: any) => (
+                <EventCard key={item} event={item} />
+              ))}
+            </Grid>
+          ) : (
+            <VStack  textAlign="center">
+              <Text fontSize="xl" maxW="lg">
+                We currently have no upcoming events. Please stay tuned for
+                future updates and exciting happenings!
+              </Text>
+            </VStack>
+          )}
           {data?.length > 3 && (
             <Button
               color="secondary.700"
