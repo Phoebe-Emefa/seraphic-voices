@@ -1,7 +1,7 @@
 "use client";
 import TeamCard from "@/components/about/TeamCard";
 import { Grid } from "@chakra-ui/react";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaFacebook, FaInstagram, FaLocationDot, FaYoutube } from "react-icons/fa6";
 import {FaPhoneAlt} from "react-icons/fa"
 import {MdEmail} from "react-icons/md"
 
@@ -151,3 +151,19 @@ export const donationInstructions = [
     "Follow the instruction to confirm the information and complete the transfer"
   
 ]
+
+export const socials = [
+   {
+    icon: FaFacebook,
+    link: "https://web.facebook.com/profile.php?id=100064140482985",
+  },
+  {
+    icon: FaYoutube,
+    link: "https://www.youtube.com/channel/UCW_aWGQSe4kN9vKA1Hd_qVg",
+  },
+  {
+    icon: FaInstagram,
+    link: "https://www.instagram.com/seraphicvoicesoftoronto/?hl=en",
+  },
+
+];
