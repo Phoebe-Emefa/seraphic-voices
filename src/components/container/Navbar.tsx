@@ -41,11 +41,7 @@ const NavBar = () => {
         maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}
       >
         <Link href="/" rel="noreferrer" onClick={() => setCurrentPath("")}>
-          <Image
-            src={logo}
-            alt="Seraphic Voices of Toronto"
-            height={96}
-          />
+          <Image src={logo} alt="Seraphic Voices of Toronto" height={96} />
         </Link>
         {isMobileOrTablet ? (
           <Flex align="center">
@@ -64,10 +60,12 @@ const NavBar = () => {
             {menus?.map((menu) => (
               <SingleMenu key={menu?.path} menu={menu} />
             ))}
-           <Link href="/donate">
-            <CustomButton title="Donate" />
-           </Link>
           </Flex>
+        )}
+        {!isMobileOrTablet && (
+          <Link href="/donate">
+            <CustomButton title="Donate" />
+          </Link>
         )}
       </Container>
       <MenuDrawer isOpen={isOpen} onClose={onClose} />

@@ -23,6 +23,11 @@ export const menus = [
     label: "Events",
     path: "/events",
   },
+  
+  {
+    label: "Gallery",
+    path: "/gallery",
+  },
   {
     label: "Contact Us",
     path: "/contact-us",
