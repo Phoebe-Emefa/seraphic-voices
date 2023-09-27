@@ -13,6 +13,7 @@ import { useQuery } from "react-query";
 import { groq } from "next-sanity";
 import { client, urlFor } from "../../../sanity/sanity-client";
 import DataLoader from "@/components/shared/DataLoader";
+import Reveal from "@/components/shared/Reveal";
 
 const Story = () => {
   const { isLoading, data } = useQuery("whoWeAre", async () => {
@@ -32,8 +33,9 @@ const Story = () => {
           align="center"
           gap={6}
         >
-          <Box height={{ md: "14rem", xl: "25rem" }}>
-            <Image
+          <Box height={{ md: "14rem", xl: "25rem" }}  width={{ base: "100%", md: "45%" }}>
+        <Reveal>
+              <Image
               src={
                 content?.image &&
                 (urlFor(content?.image?.asset?._ref) as unknown as string)
@@ -45,19 +47,22 @@ const Story = () => {
               objectPosition="bottom"
               rounded="md"
             />
+        </Reveal>
           </Box>
           <Box width={{ base: "100%", md: "45%" }}>
-            <Heading
+          <Reveal>
+              <Heading
               as="h4"
               fontSize={{ base: "2xl", xl: "3xl" }}
               color="secondary.700"
             >
               {content?.title}
             </Heading>
+          </Reveal>
             <VStack fontSize={{ md: "md", xl: "lg" }} spacing={6} mt={3}>
-              <Text>{content?.description_1}</Text>
-              <Text>{content?.description_2}</Text>
-              <Text>{content?.description_3}</Text>
+             <Reveal> <Text>{content?.description_1}</Text></Reveal>
+              <Reveal><Text>{content?.description_2}</Text></Reveal>
+              <Reveal><Text>{content?.description_3}</Text></Reveal>
             </VStack>
           </Box>
         </Flex>

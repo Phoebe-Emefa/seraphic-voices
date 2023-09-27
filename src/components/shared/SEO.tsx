@@ -1,4 +1,4 @@
-import defaultImage from "../../../public/images/group.jpg";
+import defaultImage from "../../../public/images/seraphic-voices.png";
 
 import favicon from "../../../public/icons/favicon.ico";
 import appleTouchIcon from "../../../public/icons/apple-touch-icon.png";

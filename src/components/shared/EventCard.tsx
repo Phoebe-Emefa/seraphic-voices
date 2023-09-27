@@ -15,10 +15,12 @@ import React from "react";
 import { BiTime } from "react-icons/bi";
 import { GrLocation } from "react-icons/gr";
 import { urlFor } from "../../../sanity/sanity-client";
+import Reveal from "@/components/shared/Reveal";
 
 const EventCard = ({ event }: { event: any }) => {
   return (
-    <Card maxW="sm">
+  <Reveal>
+      <Card maxW="sm">
       <CardBody>
         <Image
           src={
@@ -72,6 +74,7 @@ const EventCard = ({ event }: { event: any }) => {
         </Stack>
       </CardBody>
     </Card>
+  </Reveal>
   );
 };
 

@@ -35,7 +35,8 @@ export const menus = [
 ];
 
 
-export const teamTabs = (sopranoMembers: any,altoMembers: any,tenorMembers: any,bassMembers: any,organistMembers: any,trumpetersMembers: any) => [
+export const teamTabs = (conductorMembers: any, sopranoMembers: any,altoMembers: any,tenorMembers: any,bassMembers: any,organistMembers: any,trumpetersMembers: any) => [
+ 
   {
     label: "Soprano",
     comp: (
@@ -126,36 +127,45 @@ export const teamTabs = (sopranoMembers: any,altoMembers: any,tenorMembers: any,
       </Grid>
     ),
   },
+     {
+    label: "Choir Conductor",
+    comp: (
+      <Grid
+        templateColumns={{base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", xl: "repeat(5, 1fr)"}}
+        gap={5}
+        justifyItems="center"
+        alignItems="center"
+      >
+        {conductorMembers?.map((member: any) => (
+          <TeamCard key={member?.name} item={member} />
+        ))}
+      </Grid>
+    ),
+  },
+  
 ];
 
 
-export const contactInfo = [
+export const contactInfo = (data: any) => [
   {
     name: "Address",
-    value: "House Number, Street Name, Town, Country",
+    value: data?.address,
     icon: FaLocationDot
   },
     {
     name: "Phone Number",
-    value: "+233 232 333 333",
+    value: data?.phoneNumber,
     icon: FaPhoneAlt
   },
     {
     name: "Email",
-    value: "seraphicvoicestoronto@gmail.com",
+    value: data?.email,
     icon: MdEmail,
     isLink: true
   }
 ]
 
-export const donationInstructions = [
-    "Login into your online bank account",
-    "Choose Interac e-Transfer within the Transfer/Payment menu options",
-    "Select a recipient by entering our email address (seraphicvoicestoronto@gmail.com)",
-    "Fill in the donation information (amount, account from which withdraw the funds, etc)",
-    "Follow the instruction to confirm the information and complete the transfer"
-  
-]
+
 
 export const socials = [
    {

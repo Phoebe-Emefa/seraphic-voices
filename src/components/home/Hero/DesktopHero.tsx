@@ -1,8 +1,9 @@
 import ImageCarousel from "@/components/home/Hero/ImageCarousel";
+import Reveal from "@/components/shared/Reveal";
 import { Flex, Heading, Text, VStack, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 
-const DesktopHero = ({ content }: { content: any }) => {
+const DesktopHero = ({ content }: { content: any}) => {
   const [isTablet] = useMediaQuery("(max-width: 992px)");
 
   const sliderImages = content?.imageSlider?.map((image: any) => {
@@ -28,15 +29,19 @@ const DesktopHero = ({ content }: { content: any }) => {
           bottom={0}
           pl={{ md: "2", lg: "6%" }}
         >
-          <Heading
+         <Reveal>
+           <Heading
             as="h1"
             fontSize={{ md: "4xl", lg: "6xl" }}
             color="secondary.700"
           >
             {content?.title}
           </Heading>
+         </Reveal>
 
-          <Text fontSize="2xl">{content?.description}</Text>
+          <Reveal>
+            <Text fontSize="2xl">{content?.description}</Text>
+          </Reveal>
         </VStack>
       </Flex>
     </Flex>

@@ -12,14 +12,17 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 import { urlFor } from "../../../sanity/sanity-client";
+import Reveal from "@/components/shared/Reveal";
 
 const About = ({content}: {content: any}) => {
   const router = useRouter();
   return (
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} mt={{base: 48, md: 20}} mb={{base: 16, md: 20}}>
       <Flex direction={{base: "column-reverse", md: "row"}} justify="space-between" align="center">
-        <Box height={{ md: "14rem", xl: "25rem" }} width={{ base: "100%", md: "50%" }} display={{base: "none", md: "block"}}>
-          <Image
+       
+          <Box height={{ md: "14rem", xl: "25rem" }} width={{ base: "100%", md: "50%" }} display={{base: "none", md: "block"}}>
+        <Reveal>
+            <Image
             src={content?.about_image && urlFor(content?.about_image?.asset?._ref)  as unknown as string}
             alt={content?.about_image?.alt }
             width="100%"
@@ -28,9 +31,11 @@ const About = ({content}: {content: any}) => {
             objectPosition="bottom"
             rounded="md"
           />
+        </Reveal>
         </Box>
         <Box width={{ base: "100%", md: "45%" }}>
-          <Heading
+        <Reveal>
+            <Heading
             as="h4"
             fontSize={{ base: "2xl", xl: "3xl" }}
             color="secondary.700"
@@ -38,14 +43,18 @@ const About = ({content}: {content: any}) => {
           >
             About Us
           </Heading>
-          <Text
+        </Reveal>
+       <Reveal>
+           <Text
             fontSize={{ md: "md", xl: "lg" }}
             my={{ base: 4, md: 6 }}
             color={"black"}
           >
            {content?.about_description}
           </Text>
-          <Button
+       </Reveal>
+        <Reveal>
+            <Button
             color="secondary.700"
             variant="link"
             rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}
@@ -53,6 +62,7 @@ const About = ({content}: {content: any}) => {
           >
             Learn More
           </Button>
+        </Reveal>
         </Box>
       </Flex>
     </Container>

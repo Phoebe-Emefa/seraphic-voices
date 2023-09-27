@@ -5,10 +5,12 @@ const Hero = ({
   heading,
   description,
   image,
+  alt
 }: {
   heading: string;
   description: string;
   image: string;
+  alt?: string
 }) => {
   return (
     <Box
@@ -18,7 +20,7 @@ const Hero = ({
     >
         <Image
           src={image}
-          alt="The seraphic voices"
+          alt={alt || "The seraphic voices"}
           width="100%"
           height="100%"
           objectFit="cover"

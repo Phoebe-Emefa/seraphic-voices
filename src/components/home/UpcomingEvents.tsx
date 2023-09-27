@@ -15,6 +15,7 @@ import { useQuery } from "react-query";
 import { groq } from "next-sanity";
 import { client } from "../../../sanity/sanity-client";
 import DataLoader from "@/components/shared/DataLoader";
+import Reveal from "@/components/shared/Reveal";
 
 const UpcomingEvents = () => {
   const router = useRouter();
@@ -31,13 +32,15 @@ const UpcomingEvents = () => {
         <DataLoader />
       ) : (
         <VStack>
-          <Heading
+       <Reveal>
+           <Heading
             as="h4"
             fontSize={{ base: "2xl", xl: "3xl" }}
             color="secondary.700"
           >
             Upcoming Events
           </Heading>
+       </Reveal>
           {data?.length > 0 ? (
             <Grid
               templateColumns={{
@@ -55,14 +58,17 @@ const UpcomingEvents = () => {
             </Grid>
           ) : (
             <VStack  textAlign="center">
-              <Text fontSize="xl" maxW="lg">
+            <Reveal>
+                <Text fontSize="xl" maxW="lg">
                 We currently have no upcoming events. Please stay tuned for
                 future updates and exciting happenings!
               </Text>
+            </Reveal>
             </VStack>
           )}
           {data?.length > 3 && (
-            <Button
+          <Reveal>
+              <Button
               color="secondary.700"
               variant="outline"
               rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}
@@ -70,6 +76,7 @@ const UpcomingEvents = () => {
             >
               View All Events
             </Button>
+          </Reveal>
           )}
         </VStack>
       )}

@@ -11,12 +11,14 @@ import React from "react";
 import { useQuery } from "react-query";
 import { groq } from "next-sanity";
 import { client } from "../../../sanity/sanity-client";
+import Reveal from "@/components/shared/Reveal";
 
 const TeamMembers = () => {
     const {  data } = useQuery("team", async () => {
     return client.fetch(groq`*[_type == "team" ]`);
   });
 
+  const conductorMembers =  data?.filter((item: any) => item?.category === "Conductor")
   const sopranoMembers =  data?.filter((item: any) => item?.category === "Soprano")
   const altoMembers =  data?.filter((item: any) => item?.category === "Alto")
   const tenorMembers =  data?.filter((item: any) => item?.category === "Tenor")
@@ -28,8 +30,9 @@ const TeamMembers = () => {
   return (
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} py={20}>
       <Tabs isFitted>
-        <TabList overflow={{base: "auto", md: "visible "}}> 
-          {teamTabs(sopranoMembers,altoMembers,tenorMembers,bassMembers,organistMembers,trumpetersMembers)?.map((teamTab) => (
+       <Reveal width="100%">
+         <TabList overflow={{base: "auto", md: "visible "}}> 
+          {teamTabs(conductorMembers,sopranoMembers,altoMembers,tenorMembers,bassMembers,organistMembers,trumpetersMembers)?.map((teamTab) => (
             <Tab
               key={teamTab?.label}
               _selected={{ color: "white", bg: "primary", borderRadius: "sm" }}
@@ -40,8 +43,9 @@ const TeamMembers = () => {
             </Tab>
           ))}
         </TabList>
+       </Reveal>
         <TabPanels >
-          {teamTabs(sopranoMembers,altoMembers,tenorMembers,bassMembers,organistMembers,trumpetersMembers )?.map((teamTab) => (
+          {teamTabs(conductorMembers,sopranoMembers,altoMembers,tenorMembers,bassMembers,organistMembers,trumpetersMembers )?.map((teamTab) => (
             <TabPanel
               px={0}
               key={teamTab?.label}

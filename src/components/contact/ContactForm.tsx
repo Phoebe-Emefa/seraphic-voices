@@ -15,6 +15,7 @@ import CustomButton from "@/components/shared/CustomButton";
 import FormTextArea from "@/components/shared/form/FormTextArea";
 import FormInput from "@/components/shared/form/FormInput";
 import SuccessModal from "@/components/contact/SuccessModal";
+import Reveal from "@/components/shared/Reveal";
 
 export interface IContact {
   firstName?: string;
@@ -74,10 +75,7 @@ const ContactForm = () => {
 
   return (
     <Box>
-      <Heading
-        as="h6"
-        fontSize="xl"
-      >
+      <Heading as="h6" fontSize="xl">
         Send us a Message
       </Heading>
       <>
@@ -103,74 +101,84 @@ const ContactForm = () => {
               <VStack align="left" spacing={8} mt={12}>
                 <Grid templateColumns="repeat(2, 1fr)" gap={6}>
                   <GridItem>
-                    <FormInput
-                      name="firstName"
-                      id="firstName"
-                      placeholder="First Name"
-                      onChange={handleChange}
-                      handleBlur={handleBlur}
-                      setFieldTouched={setFieldTouched}
-                      setFieldValue={setFieldValue}
-                      error={errors?.firstName as string}
-                      value={values?.firstName}
-                      touched={touched?.firstName}
-                      required={true}
-                    />
+                    <Reveal width="100%">
+                      <FormInput
+                        name="firstName"
+                        id="firstName"
+                        placeholder="First Name"
+                        onChange={handleChange}
+                        handleBlur={handleBlur}
+                        setFieldTouched={setFieldTouched}
+                        setFieldValue={setFieldValue}
+                        error={errors?.firstName as string}
+                        value={values?.firstName}
+                        touched={touched?.firstName}
+                        required={true}
+                      />
+                    </Reveal>
                   </GridItem>
                   <GridItem>
-                    <FormInput
-                      name="lastName"
-                      id="lastName"
-                      placeholder="Last Name"
-                      onChange={handleChange}
-                      handleBlur={handleBlur}
-                      setFieldTouched={setFieldTouched}
-                      setFieldValue={setFieldValue}
-                      error={errors?.lastName as string}
-                      value={values?.lastName}
-                      touched={touched?.lastName}
-                      required={true}
-                    />
+                    <Reveal width="100%">
+                      <FormInput
+                        name="lastName"
+                        id="lastName"
+                        placeholder="Last Name"
+                        onChange={handleChange}
+                        handleBlur={handleBlur}
+                        setFieldTouched={setFieldTouched}
+                        setFieldValue={setFieldValue}
+                        error={errors?.lastName as string}
+                        value={values?.lastName}
+                        touched={touched?.lastName}
+                        required={true}
+                      />
+                    </Reveal>
                   </GridItem>
                 </Grid>
 
-                <FormInput
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="johndoe@gmail.com"
-                  onChange={handleChange}
-                  handleBlur={handleBlur}
-                  setFieldTouched={setFieldTouched}
-                  setFieldValue={setFieldValue}
-                  error={errors?.email as string}
-                  value={values?.email}
-                  touched={touched?.email}
-                  required={true}
-                />
+                <Reveal width="100%">
+                  <FormInput
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="johndoe@gmail.com"
+                    onChange={handleChange}
+                    handleBlur={handleBlur}
+                    setFieldTouched={setFieldTouched}
+                    setFieldValue={setFieldValue}
+                    error={errors?.email as string}
+                    value={values?.email}
+                    touched={touched?.email}
+                    required={true}
+                  />
+                </Reveal>
 
-                <FormTextArea
-                  name="message"
-                  id="message"
-                  placeholder="How can we help?"
-                  onChange={handleChange}
-                  handleBlur={handleBlur}
-                  setFieldTouched={setFieldTouched}
-                  setFieldValue={setFieldValue}
-                  error={errors?.message as string}
-                  value={values?.message}
-                  touched={touched?.message}
-                  required={true}
-                />
+                <Reveal width="100%">
+                  <FormTextArea
+                    name="message"
+                    id="message"
+                    placeholder="How can we help?"
+                    onChange={handleChange}
+                    handleBlur={handleBlur}
+                    setFieldTouched={setFieldTouched}
+                    setFieldValue={setFieldValue}
+                    error={errors?.message as string}
+                    value={values?.message}
+                    touched={touched?.message}
+                    required={true}
+                  />
+                </Reveal>
               </VStack>
               <Box mt={10}>
-                <CustomButton
-                  title="Submit"
-                  type="submit"
-                  width="100%"
-                  isLoading={isSubmitting}
-                  isDisabled={isSubmitting || !isEmpty(errors) || !dirty}
-                />
+                <Reveal width="100%">
+                  <CustomButton
+                    title="Submit"
+                    type="submit"
+                    width="100%"
+                    isLoading={isSubmitting}
+                    isDisabled={isSubmitting || !isEmpty(errors) || !dirty}
+                  />
+                </Reveal>
               </Box>
             </form>
           )}

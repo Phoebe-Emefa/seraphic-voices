@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { groq } from "next-sanity";
 import { client } from "../../../sanity/sanity-client";
 import DataLoader from "@/components/shared/DataLoader";
+import Reveal from "@/components/shared/Reveal";
 
 const MissionAndVision = () => {
   const { isLoading, data } = useQuery("whoWeAre", async () => {
@@ -26,24 +27,27 @@ const MissionAndVision = () => {
             templateColumns={{ base: "repeat(1, 1fr)", xl: "repeat(2, 1fr)" }}
             gap={6}
           >
-            <VStack
-              align="left"
-              pl={4}
-              borderLeft="10px solid #04235c"
-              backgroundColor="white"
-              p={4}
-              boxShadow="rgba(17, 12, 46, 0.15) 0px 48px 100px 0px"
-            >
-              <Heading
-                as="h4"
-                fontSize={{ base: "2xl", xl: "3xl" }}
-                color="secondary.700"
+            <Reveal height="100%">
+              <VStack
+                align="left"
+                pl={4}
+                borderLeft="10px solid #04235c"
+                backgroundColor="white"
+                p={4}
+                boxShadow="rgba(17, 12, 46, 0.15) 0px 48px 100px 0px"
               >
-                Mission Statement
-              </Heading>
-              <Text>{content?.mission}</Text>
-            </VStack>
-            <VStack
+                <Heading
+                  as="h4"
+                  fontSize={{ base: "2xl", xl: "3xl" }}
+                  color="secondary.700"
+                >
+                  Mission Statement
+                </Heading>
+                <Text>{content?.mission}</Text>
+              </VStack>
+            </Reveal>
+           <Reveal>
+             <VStack
               align="left"
               pl={4}
               borderLeft="10px solid #04235c"
@@ -60,6 +64,7 @@ const MissionAndVision = () => {
               </Heading>
               <Text>{content?.vision}</Text>
             </VStack>
+           </Reveal>
           </Grid>
         </Container>
       )}

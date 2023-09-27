@@ -1,5 +1,6 @@
 import CustomButton from '@/components/shared/CustomButton'
-import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react'
+import Reveal from '@/components/shared/Reveal'
+import { Box, Container, Heading,  VStack } from '@chakra-ui/react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -8,7 +9,8 @@ const Contact = () => {
   <Box backgroundColor="bg.200" py={20}>
     <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} >
           <VStack>
-         <Heading
+     <Reveal>
+          <Heading
           as="h4"
           fontSize={{ base: "2xl", xl: "3xl" }}
           color="secondary.700"
@@ -16,9 +18,11 @@ const Contact = () => {
         >
        Have any enquiries or interested joining us?
         </Heading>
-        <Text></Text>
+     </Reveal>
          <Link href="/contact-us">
-         <CustomButton title="Contact Us"  />
+        <Reveal>
+           <CustomButton title="Contact Us"  />
+        </Reveal>
          </Link>
     </VStack>
     </Container>

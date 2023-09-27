@@ -33,7 +33,7 @@ const Home = () => {
     <DataLoader />
   ) : (
        <div>
-      <Hero content={content}  />
+      <Hero content={content}   />
       <About content={content} />
       <Repettoire />
       <UpcomingEvents />

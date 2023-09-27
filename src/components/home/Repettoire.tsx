@@ -14,6 +14,7 @@ import { useQuery } from "react-query";
 import { groq } from "next-sanity";
 import { client, urlFor } from "../../../sanity/sanity-client";
 import DataLoader from "@/components/shared/DataLoader";
+import Reveal from "@/components/shared/Reveal";
 
 const Repettoire = () => {
   const { isLoading, data } = useQuery("repettoire", async () => {
@@ -29,13 +30,15 @@ const Repettoire = () => {
       ) : (
         <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}>
           <VStack>
-            <Heading
+          <Reveal>
+              <Heading
               as="h4"
               fontSize={{ base: "2xl", xl: "3xl" }}
               color="secondary.700"
             >
               Repettoire
             </Heading>
+          </Reveal>
             <Grid
               templateColumns={{
                 base: "repeat(1, 1fr)",
@@ -63,13 +66,15 @@ const Repettoire = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button
+             <Reveal>
+               <Button
                 color="secondary.700"
                 variant="outline"
                 rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}
               >
                 View All
               </Button>
+             </Reveal>
             </a>
           </VStack>
         </Container>

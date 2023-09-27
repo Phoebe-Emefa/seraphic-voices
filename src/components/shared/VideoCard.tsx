@@ -1,3 +1,4 @@
+import Reveal from "@/components/shared/Reveal";
 import VideoModal from "@/components/shared/VideoModal";
 import {
   Box,
@@ -23,7 +24,8 @@ const VideoCard: React.FC<VideoData> = ({ title, image, url }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <VStack width="100%">
-      <Flex
+     <Reveal>
+       <Flex
         align="center"
         justify="center"
         position="relative"
@@ -48,10 +50,13 @@ const VideoCard: React.FC<VideoData> = ({ title, image, url }) => {
           <Icon as={BsPlayCircleFill} boxSize={12} color="primary" />
         </Flex>
       </Flex>
+     </Reveal>
       <Box bgColor="white" p={4} borderRadius="md" width="full">
-        <Heading as="h6" fontSize="md">
+       <Reveal>
+         <Heading as="h6" fontSize="md">
           {title}
         </Heading>
+       </Reveal>
       </Box>
      <VideoModal isOpen={isOpen} onClose={onClose} title={title} url={url} />
     </VStack>
