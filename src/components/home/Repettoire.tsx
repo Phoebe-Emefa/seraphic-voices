@@ -62,7 +62,7 @@ const Repettoire = () => {
               ))}
             </Grid>
             <a
-              href="https://www.youtube.com/@seraphicvoicesoftoronto6557"
+              href="https://www.youtube.com/@seraphicvoicesoftoronto"
               target="_blank"
               rel="noopener noreferrer"
             >
