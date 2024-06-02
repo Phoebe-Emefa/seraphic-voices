@@ -19,11 +19,11 @@ const events = {
       title: "Start Date & Time",
       type: "datetime",
     },
-    {
-      name: "end_date",
-      title: "End Date & Time",
-      type: "datetime",
-    },
+    // {
+    //   name: "end_date",
+    //   title: "End Date & Time",
+    //   type: "datetime",
+    // },
     {
       name: "location",
       title: "Location",
@@ -41,6 +41,21 @@ const events = {
           type: "string",
         },
       ],
+    },
+    {
+      name: "video",
+      title: "Event Video (if any)",
+      type: "string",
+    },
+    {
+      name: "description",
+      title: "Event Description",
+      type: "string",
+    },
+    {
+      name: "ticket_url",
+      title: "Ticket Url",
+      type: "string",
     },
   ],
 };

@@ -4,12 +4,7 @@ import { Box, VStack, Heading, Text, Flex } from "@chakra-ui/react";
 import React from "react";
 
 const MobileHero = ({ content }: { content: any }) => {
-  const sliderImages = content?.imageSlider?.map((image: any) => {
-    return {
-      imageSrc: image?.asset?._ref,
-      imageAlt: image?.alt,
-    };
-  });
+
 
   return (
     <Box bg="secondary.100" pt={8} pb={40} position="relative">
@@ -28,7 +23,7 @@ const MobileHero = ({ content }: { content: any }) => {
        </Reveal>
       </VStack>
       <Flex justify="flex-end" position="absolute" bottom="-65%"  >
-        <ImageCarousel images={sliderImages} />
+        <ImageCarousel content={content} />
       </Flex>
     </Box>
   );

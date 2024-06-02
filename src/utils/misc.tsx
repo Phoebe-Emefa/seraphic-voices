@@ -1,9 +1,10 @@
 "use client";
 import TeamCard from "@/components/about/TeamCard";
-import { Grid } from "@chakra-ui/react";
+import { Grid, Text, VStack } from "@chakra-ui/react";
 import { FaFacebook, FaInstagram, FaLocationDot, FaYoutube } from "react-icons/fa6";
 import {FaPhoneAlt} from "react-icons/fa"
 import {MdEmail} from "react-icons/md"
+import EventCard from "@/components/shared/EventCard";
 
 export const menus = [
   {
@@ -145,6 +146,73 @@ export const teamTabs = (conductorMembers: any, sopranoMembers: any,altoMembers:
   
 ];
 
+export const eventTabs = (upcomingEvents: any, pastEvents: any) => [
+ 
+  {
+    label: "Upcoming Events",
+    comp: (
+      <>
+       {upcomingEvents?.length > 0 ? (
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                  xl: "repeat(3, 1fr)",
+                }}
+                gap={6}
+                mt={6}
+                mb={4}
+              >
+                {upcomingEvents?.map((item: any) => (
+                  <EventCard key={item} event={item} />
+                ))}
+              </Grid>
+            ) : (
+              <VStack width="full" textAlign="center" mt={4}>
+                <Text fontSize="xl" maxW="lg">
+                  We currently have no upcoming events. Please stay tuned for
+                  future updates and exciting happenings!
+                </Text>
+              </VStack>
+            )}
+      </>
+    ),
+  },
+
+  {
+    label: "Past Events",
+    comp: (
+      <>
+       {pastEvents?.length > 0 ? (
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                  xl: "repeat(3, 1fr)",
+                }}
+                gap={6}
+                mt={6}
+                mb={4}
+              >
+                {pastEvents?.map((item: any) => (
+                  <EventCard key={item} event={item} />
+                ))}
+              </Grid>
+            ) : (
+              <VStack width="full" textAlign="center" mt={4}>
+                <Text fontSize="xl" maxW="lg">
+                  No events available
+                </Text>
+              </VStack>
+            )}
+      </>
+    ),
+  },
+
+ 
+
+  
+];
 
 export const contactInfo = (data: any) => [
   {
@@ -182,3 +250,53 @@ export const socials = [
   },
 
 ];
+
+export const upcomingEvents = [
+  {
+    image: "/images/sera5th-desktop.png",
+    hasVideo: true,
+    video: "https://www.youtube.com/embed/eGBo30uHB8Y?si=UNWRfutglE4LT2hl",
+    alt: "Image Alt",
+    title: "God's Praise 2024",
+    startDate: "January, 23 2024",
+    endDate: "January, 23 2024",
+    location: "Accra, Ghana",
+    description: "Our 5th annivesary abc d abc ejdhbs svgdsvsd jhf. We hfd fhvbdvf hvg gsvdvs dgvdsvd "
+  },
+  {
+    image: "/images/sera5th-desktop.png",
+    alt: "Image Alt",
+    title: "God's Praise 2024",
+    startDate: "January, 23 2024",
+    endDate: "January, 23 2024",
+    location: "Accra, Ghana",
+    description: "Our 5th annivesary abc d abc ejdhbs svgdsvsd jhf. We hfd fhvbdvf hvg gsvdvs dgvdsvd "
+  }
+]
+export const pastEvents = [
+  {
+    image: "/images/sera5th-desktop.png",
+    alt: "Image Alt",
+    title: "God's Praise 2024",
+    startDate: "January, 23 2024",
+    endDate: "January, 23 2024",
+    location: "Accra, Ghana",
+    description: "Our 5th annivesary abc d abc ejdhbs svgdsvsd jhf. We hfd fhvbdvf hvg gsvdvs dgvdsvd "
+  },
+  {
+    image: "/images/sera5th-desktop.png",
+    alt: "Image Alt",
+    title: "God's Praise 2024",
+    startDate: "January, 23 2024",
+    endDate: "January, 23 2024",
+    location: "Accra, Ghana"
+  }
+]
+
+export const truncateString = (str: string, maxLength: number) => {
+  if (str?.length <= maxLength) {
+    return str;
+  } else {
+    return str?.slice(0, maxLength) + "...";
+  }
+};

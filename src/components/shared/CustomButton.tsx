@@ -1,4 +1,5 @@
 import { Button } from '@chakra-ui/react';
+import { Any } from 'next-sanity';
 
 import React from 'react';
 
@@ -10,7 +11,9 @@ const CustomButton = ({
   fontSize,
   type,
   isLoading,
-  isDisabled
+  isDisabled,
+
+  ...props
 }: {
   title: string;
   onClick?: () => void;
@@ -20,6 +23,7 @@ const CustomButton = ({
   type?: 'button' | 'submit' | 'reset' | undefined;
   isLoading?: boolean;
   isDisabled?: boolean;
+
 }) => {
   return (
     <Button
@@ -35,6 +39,7 @@ const CustomButton = ({
       type={type}
       isLoading={isLoading}
       isDisabled={isDisabled}
+      {...props}
     >
       {title}
     </Button>
