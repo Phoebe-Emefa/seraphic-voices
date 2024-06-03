@@ -90,7 +90,7 @@ const Sera5th = () => {
               gap={8}
             >
               {images?.map((item: any, index: any) => (
-                <Reveal key={index}>
+                <Reveal key={index} width="100%">
                   <motion.div
                     onClick={() => openModal(index)}
                     transition={{ scale: { duration: 0.2 } }}

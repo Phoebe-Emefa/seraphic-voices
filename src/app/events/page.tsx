@@ -92,34 +92,7 @@ const Events = () => {
         </TabPanels>
       </Tabs>
     </Container>
-          {/* <Container
-            maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}
-            py={16}
-          >
-            {data?.length > 0 ? (
-              <Grid
-                templateColumns={{
-                  base: "repeat(1, 1fr)",
-                  md: "repeat(2, 1fr)",
-                  xl: "repeat(3, 1fr)",
-                }}
-                gap={6}
-                mt={6}
-                mb={4}
-              >
-                {data?.map((item: any) => (
-                  <EventCard key={item} event={item} />
-                ))}
-              </Grid>
-            ) : (
-              <VStack width="full" textAlign="center">
-                <Text fontSize="xl" maxW="lg">
-                  We currently have no upcoming events. Please stay tuned for
-                  future updates and exciting happenings!
-                </Text>
-              </VStack>
-            )}
-          </Container> */}
+         
         </>
       )}
     </>

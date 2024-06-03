@@ -7,17 +7,22 @@ const events = {
       name: "title",
       title: "Title",
       type: "string",
+      validation: (Rule: any) => Rule.required().error('Title is required'),
     },
     {
       name: "slug",
       title: "Slug",
       type: "slug",
       options: { source: "title" },
+      validation: (Rule: any) => Rule.required().error('Slug is required'),
+
     },
     {
       name: "start_date",
       title: "Start Date & Time",
       type: "datetime",
+      validation: (Rule: any) => Rule.required().error('Start Date and Time is required'),
+
     },
     // {
     //   name: "end_date",
@@ -28,6 +33,8 @@ const events = {
       name: "location",
       title: "Location",
       type: "string",
+      validation: (Rule: any) => Rule.required().error('Location is required'),
+
     },
 
     {
@@ -41,6 +48,16 @@ const events = {
           type: "string",
         },
       ],
+      validation: (Rule: any) => Rule.required().error('Event Image is required'),
+
+    },
+
+    {
+      name: "description",
+      title: "Event Description",
+      type: "string",
+      validation: (Rule: any) => Rule.required().error('Description is required'),
+
     },
     {
       name: "video",
@@ -48,13 +65,8 @@ const events = {
       type: "string",
     },
     {
-      name: "description",
-      title: "Event Description",
-      type: "string",
-    },
-    {
       name: "ticket_url",
-      title: "Ticket Url",
+      title: "Ticket Url (if any)",
       type: "string",
     },
   ],

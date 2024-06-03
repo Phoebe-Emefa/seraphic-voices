@@ -110,7 +110,7 @@ const ImageCarousel = ({ content }: { content: any }) => {
         autoPlay
         transitionTime={200}
         emulateTouch={true}
-        interval={5000}
+        interval={10000}
         onChange={(index) => {
           setActive(index);
         }}
