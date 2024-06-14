@@ -1,19 +1,22 @@
 "use client";
 import Hero from "@/components/about/Hero";
 import EventCard from "@/components/shared/EventCard";
-import { Container,  Grid,  Text, VStack } from "@chakra-ui/react";
-import React from "react";
+import { Container,  Grid,  Tab,  TabList,  TabPanel,  TabPanels,  Tabs,  Text, VStack } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { groq } from "next-sanity";
 import { client, urlFor } from "../../../sanity/sanity-client";
 import DataLoader from "@/components/shared/DataLoader";
 import { SEO } from "@/components/shared/SEO";
 import Reveal from "@/components/shared/Reveal";
+import { eventTabs } from "@/utils/misc";
 
 const Events = () => {
+ 
   const { isLoading, data } = useQuery("events", async () => {
     return client.fetch(groq`*[_type == "events"]`);
   });
+
 
   const { data: heroEvent, isLoading: heroIsLoading } = useQuery(
     "eventHero",
@@ -23,6 +26,18 @@ const Events = () => {
   );
 
   const heroContent = heroEvent?.[0];
+
+  // getting upcoming and past events
+  const currentDate = new Date();
+  const upcomingEvents = data?.filter((event: any) => {
+    const eventStartDate = new Date(event?.start_date);
+    return eventStartDate > currentDate;
+  });
+
+  const pastEvents = data?.filter((event: any) => {
+    const eventStartDate = new Date(event.start_date);
+    return eventStartDate < currentDate;
+  });
 
   return (
     <>
@@ -46,34 +61,38 @@ const Events = () => {
               alt={heroContent?.image?.alt}
             />
           </Reveal>
-          <Container
-            maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}
-            py={16}
-          >
-            {data?.length > 0 ? (
-              <Grid
-                templateColumns={{
-                  base: "repeat(1, 1fr)",
-                  md: "repeat(2, 1fr)",
-                  xl: "repeat(3, 1fr)",
-                }}
-                gap={6}
-                mt={6}
-                mb={4}
-              >
-                {data?.map((item: any) => (
-                  <EventCard key={item} event={item} />
-                ))}
-              </Grid>
-            ) : (
-              <VStack width="full" textAlign="center">
-                <Text fontSize="xl" maxW="lg">
-                  We currently have no upcoming events. Please stay tuned for
-                  future updates and exciting happenings!
-                </Text>
-              </VStack>
-            )}
-          </Container>
+          <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }} py={20}>
+      <Tabs isFitted>
+       <Reveal width="100%">
+         <TabList overflow={{base: "auto", md: "visible "}}> 
+          {eventTabs(upcomingEvents,pastEvents)?.map((teamTab) => (
+            <Tab
+              key={teamTab?.label}
+              _selected={{ color: "white", bg: "primary", borderRadius: "sm" }}
+              fontSize="xl"
+              fontWeight={500}
+            >
+              {teamTab?.label}
+            </Tab>
+          ))}
+        </TabList>
+       </Reveal>
+        <TabPanels >
+          {eventTabs(upcomingEvents,pastEvents )?.map((teamTab) => (
+            <TabPanel
+              px={0}
+              key={teamTab?.label}
+              _selected={{ color: "white", bg: "primary", borderRadius: "sm" }}
+              fontSize="xl"
+              fontWeight={500}
+            >
+              {teamTab?.comp}
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    </Container>
+         
         </>
       )}
     </>

@@ -28,7 +28,7 @@ const CarouselModal = ({
       onClose={() => {
         closeModal();
       }}
-      size="4xl"
+      size="6xl"
       isCentered
     >
       <ModalOverlay />
@@ -47,7 +47,7 @@ const CarouselModal = ({
               {images?.map((item, index) => (
                 <div key={index}>
                   <Image
-                    src={urlFor(item?.image?.asset?._ref) as unknown as string}
+                    src={ urlFor(item?.image?.asset?._ref) as unknown as string}
                     alt={`Choir Gallery Image ${index + 1}`}
                     width="100%"
                     height="100%"

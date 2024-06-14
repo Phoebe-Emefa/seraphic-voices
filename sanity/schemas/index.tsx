@@ -11,6 +11,8 @@ import repettoire from "./repettoire-schema";
 import teamHero from "./team-hero-schema";
 import team from "./team-schema";
 import whoWeAre from "./who-we-are-schema";
+import sera5thHero from "./sera5th-hero-schema";
+import Sera5th from "./sera5th-schema";
 
 
 const schemas = [
@@ -27,6 +29,8 @@ const schemas = [
   donateHero,
   donation,
   contactInfo,
+  sera5thHero,
+  Sera5th
 ];
 
 export default schemas;
