@@ -1,28 +1,31 @@
-
-import { Flex, Heading } from "@chakra-ui/react";
+import { Center, Image, VStack, keyframes } from "@chakra-ui/react";
 import React from "react";
-import { RotatingSquare } from "react-loader-spinner";
 
-const DataLoader = () => {
+const Loading = () => {
+ // Define the keyframe animations
+ const rotate = keyframes`
+ 0% { transform: rotate(0deg); }
+ 100% { transform: rotate(360deg); }
+`;
+
+const scale = keyframes`
+ 0%, 100% { transform: scale(1); }
+ 50% { transform: scale(1.2); }
+`;
+
+const combinedAnimation = `${rotate} 4s linear infinite, ${scale} 2s ease-in-out infinite`;
   return (
-    <Flex justify="center" align="center" pt={40}>
-      <Flex direction="column" justify="center" align="center">
-        <RotatingSquare
-          height="100"
-          width="100"
-          color="#04235c"
-          ariaLabel="rotating-square-loading"
-          strokeWidth="4"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
+    <Center height="100vh" width="100vw">
+      <VStack>
+        <Image
+          src="/images/seraphic-voices.png"
+          alt="Seraphic Voices of Toronto Logo"
+          height={40}
+          animation={combinedAnimation}
         />
-        <Heading as="h2" fontSize="2xl" mt={3}>
-         loading Data ...
-        </Heading>
-      </Flex>
-    </Flex>
+      </VStack>
+    </Center>
   );
 };
 
-export default DataLoader;
+export default Loading;
