@@ -55,7 +55,7 @@ const EventDetails = ({
               controls={true}
             />
           ) : (
-            <Box height="40rem">
+            <Box height={{base: "20rem", lg: "30rem"}} >
               <Image
                 src={
                   event?.image &&
