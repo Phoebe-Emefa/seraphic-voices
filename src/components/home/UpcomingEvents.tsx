@@ -22,6 +22,15 @@ const UpcomingEvents = () => {
   const { isLoading, data } = useQuery("events", async () => {
     return client.fetch(groq`*[_type == "events"]`);
   });
+    // getting upcoming and past events
+    const currentDate = new Date();
+    const upcomingEvents = data?.filter((event: any) => {
+      const eventStartDate = new Date(event?.start_date);
+      return eventStartDate > currentDate;
+    });
+  
+    const firstThreeEvents = upcomingEvents?.slice(0, 3);
+  
 
   return (
     <Container
@@ -41,7 +50,7 @@ const UpcomingEvents = () => {
             Upcoming Events
           </Heading>
        </Reveal>
-          {data?.length > 0 ? (
+          {upcomingEvents?.length > 0 ? (
             <Grid
               templateColumns={{
                 base: "repeat(1, 1fr)",
@@ -52,7 +61,7 @@ const UpcomingEvents = () => {
               mt={6}
               mb={4}
             >
-              {data?.map((item: any) => (
+              {firstThreeEvents?.map((item: any) => (
                 <EventCard key={item} event={item} />
               ))}
             </Grid>
