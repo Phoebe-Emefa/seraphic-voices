@@ -13,7 +13,7 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
-import moment from "moment";
+import moment from "moment-timezone";
 import React from "react";
 import { BiTime } from "react-icons/bi";
 import { GrLocation } from "react-icons/gr";
@@ -95,7 +95,11 @@ const EventCard = ({ event }: { event: any }) => {
           <Flex align="center" color="gray.500">
             <FaRegCalendarAlt />
             <Text ml={2} fontSize="sm">
-              {`${moment(event?.start_date).format("llll")} - ${moment(event?.end_date).format("llll")}`}
+              {`${moment(event?.start_date)
+                .tz("America/Toronto")
+                .format("llll")} - ${moment(event?.end_date)
+                .tz("America/Toronto")
+                .format("llll")} (Eastern Standard Time (ET))`}
             </Text>
           </Flex>
           <Flex align="center" color="gray.500">

@@ -72,7 +72,11 @@ const EventDetails = ({
             <Box>
               <Flex mt={4} align="center" color="gray.500">
                 <FaRegCalendarAlt />
-                <Text ml={2}> {`${moment(event?.start_date).format("llll")} - ${moment(event?.end_date).format("llll")}`}</Text>
+                <Text ml={2}>   {`${moment(event?.start_date)
+                .tz("America/Toronto")
+                .format("llll")} - ${moment(event?.end_date)
+                .tz("America/Toronto")
+                .format("llll")} (Eastern Standard Time (ET))`}</Text>
               </Flex>
               <Flex align="center" color="gray.500" mt={2}>
                 <FaMapMarkerAlt />
