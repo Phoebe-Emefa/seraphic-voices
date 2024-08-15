@@ -25,6 +25,7 @@
     "framer-motion": "^10.16.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.45",
     "next": "13.4.19",
     "next-nprogress-bar": "^2.1.2",
     "next-sanity": "^5.5.4",
