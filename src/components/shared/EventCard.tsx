@@ -95,7 +95,7 @@ const EventCard = ({ event }: { event: any }) => {
           <Flex align="center" color="gray.500">
             <FaRegCalendarAlt />
             <Text ml={2} fontSize="sm">
-              {moment(event?.start_date).format("llll")}
+              {`${moment(event?.start_date).format("llll")} - ${moment(event?.end_date).format("llll")}`}
             </Text>
           </Flex>
           <Flex align="center" color="gray.500">
