@@ -24,6 +24,13 @@ const events = {
       validation: (Rule: any) => Rule.required().error('Start Date and Time is required'),
 
     },
+    {
+      name: "end_date",
+      title: "End Date & Time",
+      type: "datetime",
+      validation: (Rule: any) => Rule.required().error('End Date and Time is required'),
+
+    },
     // {
     //   name: "end_date",
     //   title: "End Date & Time",
