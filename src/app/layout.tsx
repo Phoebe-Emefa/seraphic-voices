@@ -2,7 +2,6 @@
 import Container from '@/components/container';
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 
-// This has been done
 
 export default function RootLayout({
   children
