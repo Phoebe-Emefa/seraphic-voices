@@ -11,7 +11,6 @@ import {
   Flex,
   Box,
   Button,
-  useDisclosure,
 } from "@chakra-ui/react";
 import moment from "moment-timezone";
 import React from "react";
@@ -20,12 +19,12 @@ import { GrLocation } from "react-icons/gr";
 import { urlFor } from "../../../sanity/sanity-client";
 import Reveal from "@/components/shared/Reveal";
 import { FaMapMarkerAlt, FaPlayCircle, FaRegCalendarAlt } from "react-icons/fa";
-import EventDetails from "./EventDetails";
 import { truncateString } from "@/utils/misc";
+import { useRouter } from "next/navigation";
 import CustomButton from "./CustomButton";
 
 const EventCard = ({ event }: { event: any }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
   return (
     <Reveal>
       <Box
@@ -34,9 +33,13 @@ const EventCard = ({ event }: { event: any }) => {
         overflow="hidden"
         boxShadow="md"
         m="auto"
-        onClick={onOpen}
         cursor="pointer"
         borderBottomRadius="md"
+        transition="all 0.3s ease"
+        _hover={{
+          transform: "translateY(-4px)",
+          boxShadow: "xl",
+        }}
       >
         {!event?.video && (
           <Box height={72}>
@@ -108,13 +111,15 @@ const EventCard = ({ event }: { event: any }) => {
               {event?.location}
             </Text>
           </Flex>
-          <Text fontSize="sm">{truncateString(event?.description, 80)}</Text>
+          {/* <Text fontSize="sm">{truncateString(event?.description, 80)}</Text> */}
           <Flex justify="center" width="100%">
-            <CustomButton title="View Details" onClick={onOpen} />
+            <CustomButton 
+              title="View Details" 
+              onClick={() => router.push(`/events/${event.slug?.current || event.slug}`)} 
+            />
           </Flex>
         </VStack>
       </Box>
-      <EventDetails isOpen={isOpen} closeModal={onClose} event={event} />
     </Reveal>
   );
 };

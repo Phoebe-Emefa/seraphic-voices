@@ -11,6 +11,8 @@ import { SEO } from "@/components/shared/SEO";
 import Reveal from "@/components/shared/Reveal";
 import { eventTabs } from "@/utils/misc";
 
+
+
 const Events = () => {
  
   const { isLoading, data } = useQuery("events", async () => {

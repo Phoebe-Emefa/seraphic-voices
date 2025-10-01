@@ -6,7 +6,6 @@ import {
   Image,
   Text,
   VStack,
-  keyframes,
   useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -22,7 +21,7 @@ interface IImage {
   imageAlt: string;
 }
 
-const ImageCarousel = ({ content }: { content: any }) => {
+const ImageCarousel = ({ content, onSlideChange }: { content: any; onSlideChange?: (index: number) => void }) => {
   const [active, setActive] = useState(0);
   const [isTablet] = useMediaQuery("(max-width: 992px)");
   const [isMobile] = useMediaQuery("(max-width: 750px)");
@@ -34,32 +33,22 @@ const ImageCarousel = ({ content }: { content: any }) => {
     };
   });
 
-  const bounce = keyframes`
-    0%, 100% {
-      transform: translateY(-25%);
-      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    }
-    50% {
-      transform: translateY(0);
-      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    }
-  `;
 
   return (
     <Flex
       height={"100%"}
-      width={{ base: "100%", xl: active === 0 ? "100%" : "70%" }}
+      width={{ base: "100%", xl: "70%" }}
       justify={"end"}
     >
       <VStack
-        hidden={isMobile || active === 0}
+        hidden={isMobile}
         // align="left"
         p={12}
         bg="secondary.100"
-        height={"50%"}
+        height={{ base: "60%", md: "65%", lg: "70%" }}
         position="absolute"
         width={isTablet ? "60%" : "52%"}
-        spacing={6}
+        spacing={4}
         left={0}
         bottom={0}
         pl={{ md: "6%" }}
@@ -69,38 +58,70 @@ const ImageCarousel = ({ content }: { content: any }) => {
           direction="column"
           justify="center"
           align="center"
-          gap={10}
+          gap={6}
           height="full"
         >
+          {active === 0 && (
+            <Reveal>
+              <Box
+                bg="blue.500"
+                color="white"
+                px={6}
+                py={3}
+                borderRadius="full"
+                fontSize="sm"
+                fontWeight="bold"
+                textTransform="uppercase"
+                letterSpacing="wide"
+                boxShadow="md"
+              >
+                Upcoming Event
+              </Box>
+            </Reveal>
+          )}
+          
           <Reveal>
             <Heading
               as="h1"
               fontSize={{ md: "4xl", lg: "6xl" }}
               color="secondary.700"
             >
-              {content?.title}
+              {active === 0 ? "An African Christmas" : content?.title}
             </Heading>
           </Reveal>
 
           <Reveal>
-            <Text fontSize="2xl">{content?.description}</Text>
+            <Text fontSize="2xl" textAlign="center">
+              {active === 0 ? "Radiance in Toronto - A Black Christmas Celebration." : content?.description}
+            </Text>
           </Reveal>
+
+          {active === 0 && (
+            <>
+              <Reveal>
+                <VStack spacing={1} align="center">
+                  <Text fontSize="lg" fontWeight="semibold" color="secondary.700">
+                    Sat. 6th Dec. 2025
+                  </Text>
+                  <Text fontSize="md" color="secondary.600">
+                    6pm - 9pm
+                  </Text>
+                  <Text fontSize="md" color="secondary.600" textAlign="center">
+                    Christmas Centre Church<br />
+                    4545 Jane St, North York
+                  </Text>
+                </VStack>
+              </Reveal>
+              
+              <Reveal>
+                <Link href="/events/an-african-christmas">
+                  <CustomButton title="Read more" />
+                </Link>
+              </Reveal>
+            </>
+          )}
         </Flex>
       </VStack>
-      {active === 0 && (
-        <Box
-          position={"absolute"}
-          zIndex={50}
-          left={{ base: "32%", md: "40%", xl: "45%" }}
-          transform="translateX(-50%)"
-          bottom={{ base: 10, md: 48, xl: 20 }}
-          animation={`${bounce} 1s infinite;`}
-        >
-          <Link href="/events/sera5th">
-            <CustomButton title="Learn More" />
-          </Link>
-        </Box>
-      )}
 
       <Carousel
         showThumbs={false}
@@ -113,6 +134,7 @@ const ImageCarousel = ({ content }: { content: any }) => {
         interval={10000}
         onChange={(index) => {
           setActive(index);
+          onSlideChange?.(index);
         }}
       >
         {sliderImages?.map((image: IImage) => (
