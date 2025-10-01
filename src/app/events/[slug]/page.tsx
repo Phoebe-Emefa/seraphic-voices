@@ -26,7 +26,7 @@ import { useRouter } from "next/navigation"
 import CustomButton from "@/components/shared/CustomButton"
 
 // Simple function to render portable text content
-export const renderPortableText = (content: any) => {
+ const renderPortableText = (content: any) => {
   if (!content || !Array.isArray(content)) return null
 
   return content.map((block: any, index: number) => {
