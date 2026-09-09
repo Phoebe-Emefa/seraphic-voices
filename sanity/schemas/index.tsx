@@ -4,6 +4,7 @@ import donation from "./donation-schema";
 import donateHero from "./dontate-hero-schema";
 import eventHero from "./event-hero-schema";
 import events from "./event-schema";
+import galleryAlbum from "./gallery-album-schema";
 import galleryHero from "./gallery-hero-schema";
 import gallery from "./gallery-schema";
 import home from "./home-schema";
@@ -11,6 +12,7 @@ import repettoire from "./repettoire-schema";
 import teamHero from "./team-hero-schema";
 import team from "./team-schema";
 import whoWeAre from "./who-we-are-schema";
+import whoWeAreHero from "./who-we-are-hero-schema";
 import sera5thHero from "./sera5th-hero-schema";
 import Sera5th from "./sera5th-schema";
 
@@ -20,7 +22,9 @@ const schemas = [
   repettoire,
   events,
   whoWeAre,
+  whoWeAreHero,
   team,
+  galleryAlbum,
   gallery,
   teamHero,
   eventHero,

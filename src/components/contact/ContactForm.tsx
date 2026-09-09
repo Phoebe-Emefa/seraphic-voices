@@ -1,21 +1,12 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  Heading,
-  VStack,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
-import React from "react";
-import * as Yup from "yup";
-import { Formik } from "formik";
-import { isEmpty } from "lodash";
+"use client";
+
+import SuccessModal from "@/components/contact/SuccessModal";
 import CustomButton from "@/components/shared/CustomButton";
 import FormTextArea from "@/components/shared/form/FormTextArea";
 import FormInput from "@/components/shared/form/FormInput";
-import SuccessModal from "@/components/contact/SuccessModal";
-import Reveal from "@/components/shared/Reveal";
+import { contactSchema } from "@/lib/contactSchema";
+import { Box, Grid, GridItem, Heading, Text, useDisclosure, useToast, VStack } from "@chakra-ui/react";
+import { Formik } from "formik";
 
 export interface IContact {
   firstName?: string;
@@ -24,13 +15,6 @@ export interface IContact {
   message?: string;
   subject?: string;
 }
-
-const MessageSchema = Yup.object().shape({
-  firstName: Yup.string().required("First Name is Required!"),
-  lastName: Yup.string().required("Last Name is Required!"),
-  email: Yup.string().email("Invalid email!").required("Email is required!"),
-  message: Yup.string().required("Message is Required!"),
-});
 
 const ContactForm = () => {
   const toast = useToast();
@@ -43,28 +27,23 @@ const ContactForm = () => {
     email: "",
     message: "",
   };
-  const onSubmit = async (
-    _values: IContact,
-    { setSubmitting, resetForm }: any
-  ) => {
+
+  const onSubmit = async (values: IContact, { setSubmitting, resetForm }: any) => {
     try {
       setSubmitting(true);
       const response = await fetch("/api/contact", {
         method: "POST",
-        body: JSON.stringify(_values),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: JSON.stringify(values),
+        headers: { "Content-Type": "application/json" },
       });
-      resetForm();
-
-      onOpen();
       if (!response.ok) {
-        throw new Error("HTTP error! status: " + response.status);
+        throw new Error("failed");
       }
-    } catch (error: any) {
+      resetForm();
+      onOpen();
+    } catch {
       toast({
-        title: `An Error Occured`,
+        title: "We could not send your message. Please try again.",
         status: "error",
         isClosable: true,
       });
@@ -74,117 +53,131 @@ const ContactForm = () => {
   };
 
   return (
-    <Box>
-      <Heading as="h6" fontSize="xl">
-        Send us a Message
+    <Box
+      w="full"
+      minW={0}
+      p={{ base: 6, md: 8 }}
+      borderRadius="2xl"
+      bg="white"
+      border="1px solid"
+      borderColor="blackAlpha.50"
+      boxShadow="0 24px 48px -28px rgba(4, 35, 92, 0.25)"
+    >
+      <Heading
+        as="h2"
+        fontSize={{ base: "xl", md: "2xl" }}
+        fontWeight="bold"
+        color="secondary.700"
+        letterSpacing="-0.02em"
+        mb={2}
+      >
+        Send us a message
       </Heading>
-      <>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={MessageSchema}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        >
-          {({
-            handleChange,
-            values,
-            errors,
-            touched,
-            setFieldTouched,
-            setFieldValue,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            dirty,
-          }) => (
-            <form onSubmit={handleSubmit}>
-              <VStack align="left" spacing={8} mt={12}>
-                <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-                  <GridItem>
-                    <Reveal width="100%">
-                      <FormInput
-                        name="firstName"
-                        id="firstName"
-                        placeholder="First Name"
-                        onChange={handleChange}
-                        handleBlur={handleBlur}
-                        setFieldTouched={setFieldTouched}
-                        setFieldValue={setFieldValue}
-                        error={errors?.firstName as string}
-                        value={values?.firstName}
-                        touched={touched?.firstName}
-                        required={true}
-                      />
-                    </Reveal>
-                  </GridItem>
-                  <GridItem>
-                    <Reveal width="100%">
-                      <FormInput
-                        name="lastName"
-                        id="lastName"
-                        placeholder="Last Name"
-                        onChange={handleChange}
-                        handleBlur={handleBlur}
-                        setFieldTouched={setFieldTouched}
-                        setFieldValue={setFieldValue}
-                        error={errors?.lastName as string}
-                        value={values?.lastName}
-                        touched={touched?.lastName}
-                        required={true}
-                      />
-                    </Reveal>
-                  </GridItem>
-                </Grid>
+      <Text fontSize="sm" color="secondary.700" opacity={0.75} mb={8} lineHeight={1.6}>
+        Fill in the form below and we&apos;ll respond as soon as we can.
+      </Text>
 
-                <Reveal width="100%">
+      <Formik
+        initialValues={initialValues}
+        validationSchema={contactSchema}
+        onSubmit={onSubmit}
+        enableReinitialize
+      >
+        {({
+          handleChange,
+          values,
+          errors,
+          touched,
+          setFieldTouched,
+          setFieldValue,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          dirty,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <VStack align="stretch" spacing={5}>
+              <Grid templateColumns={{ base: "1fr", sm: "repeat(2, minmax(0, 1fr))" }} gap={5}>
+                <GridItem minW={0}>
                   <FormInput
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="johndoe@gmail.com"
+                    name="firstName"
+                    id="firstName"
+                    label="First name"
+                    placeholder="Jane"
+                    variant="outline"
                     onChange={handleChange}
                     handleBlur={handleBlur}
                     setFieldTouched={setFieldTouched}
                     setFieldValue={setFieldValue}
-                    error={errors?.email as string}
-                    value={values?.email}
-                    touched={touched?.email}
-                    required={true}
+                    error={touched.firstName ? (errors.firstName as string) : undefined}
+                    value={values.firstName}
+                    touched={touched.firstName}
+                    required
                   />
-                </Reveal>
-
-                <Reveal width="100%">
-                  <FormTextArea
-                    name="message"
-                    id="message"
-                    placeholder="How can we help?"
+                </GridItem>
+                <GridItem minW={0}>
+                  <FormInput
+                    name="lastName"
+                    id="lastName"
+                    label="Last name"
+                    placeholder="Mensah"
+                    variant="outline"
                     onChange={handleChange}
                     handleBlur={handleBlur}
                     setFieldTouched={setFieldTouched}
                     setFieldValue={setFieldValue}
-                    error={errors?.message as string}
-                    value={values?.message}
-                    touched={touched?.message}
-                    required={true}
+                    error={touched.lastName ? (errors.lastName as string) : undefined}
+                    value={values.lastName}
+                    touched={touched.lastName}
+                    required
                   />
-                </Reveal>
-              </VStack>
-              <Box mt={10}>
-                <Reveal width="100%">
-                  <CustomButton
-                    title="Submit"
-                    type="submit"
-                    width="100%"
-                    isLoading={isSubmitting}
-                    isDisabled={isSubmitting || !isEmpty(errors) || !dirty}
-                  />
-                </Reveal>
-              </Box>
-            </form>
-          )}
-        </Formik>
-        <SuccessModal isOpen={isOpen} onClose={onClose} />
-      </>
+                </GridItem>
+              </Grid>
+              <FormInput
+                type="email"
+                name="email"
+                id="email"
+                label="Email"
+                placeholder="you@example.com"
+                variant="outline"
+                onChange={handleChange}
+                handleBlur={handleBlur}
+                setFieldTouched={setFieldTouched}
+                setFieldValue={setFieldValue}
+                error={touched.email ? (errors.email as string) : undefined}
+                value={values.email}
+                touched={touched.email}
+                required
+              />
+              <FormTextArea
+                name="message"
+                id="message"
+                label="Message"
+                placeholder="How can we help?"
+                variant="outline"
+                onChange={handleChange}
+                handleBlur={handleBlur}
+                setFieldTouched={setFieldTouched}
+                setFieldValue={setFieldValue}
+                error={touched.message ? (errors.message as string) : undefined}
+                value={values.message}
+                touched={touched.message}
+                required
+              />
+            </VStack>
+            <Box mt={8}>
+              <CustomButton
+                title="Send message"
+                type="submit"
+                width="100%"
+                isLoading={isSubmitting}
+                isDisabled={isSubmitting || !dirty}
+              />
+            </Box>
+          </form>
+        )}
+      </Formik>
+      <SuccessModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

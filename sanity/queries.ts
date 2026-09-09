@@ -1,0 +1,51 @@
+export const queryKeys = {
+  home: ["home"] as const,
+  events: ["events"] as const,
+  event: (slug: string) => ["event", slug] as const,
+  eventHero: ["eventHero"] as const,
+  gallery: ["gallery"] as const,
+  galleryHero: ["galleryHero"] as const,
+  whoWeAre: ["whoWeAre"] as const,
+  whoWeAreHero: ["whoWeAreHero"] as const,
+  team: ["team"] as const,
+  teamHero: ["teamHero"] as const,
+  contactHero: ["contactHero"] as const,
+  contactInfo: ["contactInfo"] as const,
+  donateHero: ["donateHero"] as const,
+  donation: ["donation"] as const,
+  repertoire: ["repertoire"] as const,
+  sera5th: ["sera5th"] as const,
+  sera5thHero: ["sera5thHero"] as const,
+};
+
+export const groqQueries = {
+  home: `*[_type == "home"]`,
+  events: `*[_type == "events"] | order(start_date asc)`,
+  eventBySlug: `*[_type == "events" && slug.current == $slug][0]`,
+  eventHero: `*[_type == "eventHero"]`,
+  gallery: `*[_type == "gallery"] | order(_createdAt desc) {
+    _id,
+    caption,
+    category,
+    image,
+    album->{
+      _id,
+      title,
+      slug,
+      date,
+      description
+    }
+  }`,
+  galleryHero: `*[_type == "galleryHero"]`,
+  whoWeAre: `*[_type == "whoWeAre"]`,
+  whoWeAreHero: `*[_type == "whoWeAreHero"]`,
+  team: `*[_type == "team"]`,
+  teamHero: `*[_type == "teamHero"]`,
+  contactHero: `*[_type == "contactHero"]`,
+  contactInfo: `*[_type == "contactInfo"]`,
+  donateHero: `*[_type == "donateHero"]`,
+  donation: `*[_type == "donation"]`,
+  repertoire: `*[_type == "repettoire"]`,
+  sera5th: `*[_type == "Sera5th"]`,
+  sera5thHero: `*[_type == "sera5thHero"]`,
+};

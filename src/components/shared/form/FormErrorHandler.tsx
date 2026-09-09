@@ -1,27 +1,11 @@
-import { Text, Fade, Flex } from '@chakra-ui/react';
-import React from 'react';
+import { Text, Fade, Flex } from "@chakra-ui/react";
+import React from "react";
 
-export interface IFormErrorHandler {
-  error: string;
-}
-
-function FormErrorHandler({ error }: IFormErrorHandler) {
+function FormErrorHandler({ error }: { error?: string }) {
   return (
     <Fade in={!!error}>
-      <Flex
-        rounded="md"
-        justify="space-between"
-        align="center"
-        color="red"
-        w="full"
-        py={1}
-      >
-        <Text
-          fontSize="xs"
-          dangerouslySetInnerHTML={{
-            __html: error as string
-          }}
-        />
+      <Flex rounded="md" align="center" color="red.600" w="full" py={1}>
+        <Text fontSize="xs">{error}</Text>
       </Flex>
     </Fade>
   );

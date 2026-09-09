@@ -21,8 +21,10 @@
 
 # debug
 npm-debug.log*
+# yarn (legacy; this repo uses pnpm)
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
 
 # local env files
 .env*.local

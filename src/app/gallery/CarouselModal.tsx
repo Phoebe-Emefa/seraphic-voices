@@ -1,15 +1,9 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
-  Image,
-} from "@chakra-ui/react";
-import React from "react";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { urlFor } from "../../../sanity/sanity-client";
+"use client";
+
+import GalleryLightbox from "@/components/gallery/GalleryLightbox";
+import type { GalleryImage } from "@/lib/galleryDisplay";
+import { imageSrc } from "../../../sanity/sanity-client";
+import { useEffect, useState } from "react";
 
 const CarouselModal = ({
   isOpen,
@@ -22,45 +16,37 @@ const CarouselModal = ({
   selectedImageIndex: number | null;
   images: any[];
 }) => {
+  const [currentIndex, setCurrentIndex] = useState(selectedImageIndex ?? 0);
+
+  useEffect(() => {
+    if (selectedImageIndex !== null) {
+      setCurrentIndex(selectedImageIndex);
+    }
+  }, [selectedImageIndex]);
+
+  const normalized: GalleryImage[] = images
+    .map((item, index) => {
+      const url = imageSrc(item?.image?.asset?._ref);
+      if (!url) return null;
+
+      return {
+        _id: item._id,
+        url,
+        alt: item?.image?.alt || `Gallery image ${index + 1}`,
+        caption: item?.caption,
+        albumKey: "gallery",
+      };
+    })
+    .filter(Boolean) as GalleryImage[];
+
   return (
-    <Modal
+    <GalleryLightbox
       isOpen={isOpen}
-      onClose={() => {
-        closeModal();
-      }}
-      size="6xl"
-      isCentered
-    >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalCloseButton zIndex="9999" bg="primary" color="white" />
-        <ModalBody>
-          {selectedImageIndex !== null && (
-            <Carousel
-              selectedItem={selectedImageIndex}
-              infiniteLoop
-              showArrows
-              showThumbs={false}
-              showStatus={false}
-              dynamicHeight
-            >
-              {images?.map((item, index) => (
-                <div key={index}>
-                  <Image
-                    src={ urlFor(item?.image?.asset?._ref) as unknown as string}
-                    alt={`Choir Gallery Image ${index + 1}`}
-                    width="100%"
-                    height="100%"
-                    maxHeight="80vh"
-                    objectFit="contain"
-                  />
-                </div>
-              ))}
-            </Carousel>
-          )}
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+      images={normalized}
+      selectedIndex={currentIndex}
+      onClose={closeModal}
+      onSelect={setCurrentIndex}
+    />
   );
 };
 

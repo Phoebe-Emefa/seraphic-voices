@@ -37,6 +37,21 @@ const home = {
               type: "string",
               title: "Alt",
             },
+            {
+              name: "slideType",
+              type: "string",
+              title: "Slide type",
+              description:
+                "Photo: choir or venue image (shows site headline on hero). Poster: event flyer (hides headline; flyer has its own text).",
+              options: {
+                list: [
+                  { title: "Photo", value: "photo" },
+                  { title: "Poster / flyer", value: "poster" },
+                ],
+                layout: "radio",
+              },
+              initialValue: "photo",
+            },
           ],
         },
       ],

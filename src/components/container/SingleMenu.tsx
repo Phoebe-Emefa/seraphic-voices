@@ -1,5 +1,7 @@
-import { Flex, Text, Box } from "@chakra-ui/react";
-import React, { useState } from "react";
+"use client";
+
+import { NavPendingBar, NavPendingText } from "@/components/shared/NavLinkStatus";
+import { Flex, Box } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -7,10 +9,10 @@ interface ISingleMenu {
   menu: {
     label: string;
     path?: string;
-    subMenus?: { label: string; path: string }[];
   };
   fontSize?: string;
   color?: string;
+  activeBorderColor?: string;
   onClose?: () => void;
 }
 
@@ -18,42 +20,41 @@ const SingleMenu: React.FC<ISingleMenu> = ({
   menu,
   color,
   fontSize,
+  activeBorderColor,
   onClose,
 }) => {
   const pathname = usePathname();
-  const isActive = pathname === menu?.path;
-  const [showSubmenu, setShowSubmenu] = useState(false);
+  const isActive = pathname === menu.path;
+  const resolvedActiveColor = activeBorderColor || "#244983";
 
-  const toggleSubmenu = () => {
-    setShowSubmenu(!showSubmenu);
-  };
+  if (!menu.path) return null;
 
   return (
     <Box position="relative">
-      {menu?.path && (
-        <Link
-          href={menu?.path && (menu?.path as string)}
-          onClick={onClose ? () => onClose() : undefined}
-        >
-          <Flex
-            direction="column"
-            justify="center"
-            cursor="pointer"
-            onMouseEnter={toggleSubmenu}
+      <Link href={menu.path} onClick={onClose} style={{ display: "block" }}>
+        <Flex direction="column" justify="center">
+          <NavPendingText
+            isActive={isActive}
+            fontWeight={isActive ? 700 : 500}
+            fontSize={fontSize || "lg"}
+            color={isActive ? resolvedActiveColor : color || "black"}
+            borderBottom={
+              isActive
+                ? `3px solid ${resolvedActiveColor}`
+                : "3px solid transparent"
+            }
+            py={4}
+            width="fit-content"
+            transition="border-color 160ms cubic-bezier(0.23, 1, 0.32, 1), opacity 120ms ease-out"
           >
-            <Text
-              fontWeight={isActive ? 700 : 500}
-              fontSize={fontSize || "lg"}
-              color={isActive ? "secondary.700" : color || "black"}
-              borderBottom={isActive ? "4px solid #244983" : "none"}
-              py={4}
-              width="fit-content"
-            >
-              {menu?.label}
-            </Text>
-          </Flex>
-        </Link>
-      )}
+            {menu.label}
+          </NavPendingText>
+        </Flex>
+        <NavPendingBar
+          variant="underline"
+          color={isActive ? resolvedActiveColor : "secondary.500"}
+        />
+      </Link>
     </Box>
   );
 };

@@ -1,20 +1,12 @@
-import MissionAndVision from "@/components/about/MissionAndVision";
-import Story from "@/components/about/Story";
-import { SEO } from "@/components/shared/SEO";
-import React from "react";
+import AboutUsPage from "@/components/about/AboutUsPage";
+import type { Metadata } from "next";
 
-const AboutUs = () => {
-  return (
-    <div>
-      <SEO
-        title="About Us"
-        description="Excellence, Innovation, and Cultural Collaboration."
-        path="/about-us"
-      />
-      <Story />
-      <MissionAndVision />
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Discover the vision, mission, and story behind Seraphic Voices of Toronto.",
 };
 
-export default AboutUs;
+export default function AboutUs() {
+  return <AboutUsPage />;
+}

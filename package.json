@@ -2,6 +2,7 @@
   "name": "seraphic-voices",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,42 +10,49 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@chakra-ui/next-js": "^2.1.5",
-    "@chakra-ui/react": "^2.8.1",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@sanity/ui": "^1.8.2",
-    "@types/node": "20.5.9",
-    "@types/nodemailer": "^6.4.10",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
-    "@types/react-slick": "^0.23.10",
-    "eslint": "8.48.0",
-    "eslint-config-next": "13.4.19",
-    "formik": "^2.4.4",
-    "framer-motion": "^10.16.4",
-    "lodash": "^4.17.21",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.45",
-    "next": "13.4.19",
-    "next-nprogress-bar": "^2.1.2",
-    "next-sanity": "^5.5.4",
-    "nodemailer": "^6.9.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-icons": "^4.10.1",
-    "react-player": "^2.13.0",
-    "react-query": "^3.39.3",
+    "@chakra-ui/next-js": "^2.4.2",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@sanity/client": "^6.28.4",
+    "@sanity/image-url": "^1.1.0",
+    "@tanstack/react-query": "^5.62.8",
+    "formik": "^2.4.6",
+    "framer-motion": "^10.18.0",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.46",
+    "next": "15.5.25",
+    "next-nprogress-bar": "^2.3.13",
+    "next-sanity": "9.8.51",
+    "nodemailer": "^9.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "react-player": "^2.16.0",
     "react-responsive-carousel": "^3.2.23",
-    "react-slick": "^0.29.0",
-    "sanity": "^3.16.7",
-    "slick-carousel": "^1.8.1",
-    "styled-components": "^6.0.8",
-    "typescript": "5.2.2",
-    "yup": "^1.2.0"
+    "sanity": "^3.74.0",
+    "styled-components": "^6.1.13",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/nodemailer": "^6.4.16",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "15.5.25",
+    "typescript": "^5.6.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "next": "15.5.25",
+      "@sanity/client": "^6.28.4",
+      "postcss": "8.5.18",
+      "glob": "10.5.0",
+      "adm-zip": "0.6.0"
+    }
   },
   "engines": {
-  "node": "22.x"
-}
-
+    "node": "22.x || 24.x"
+  }
 }

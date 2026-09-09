@@ -9,6 +9,12 @@ const team = {
       type: "string",
     },
     {
+      name: "role",
+      title: "Role / Title",
+      type: "string",
+      description: "Optional. Shown below the member name (e.g. Financial Secretary).",
+    },
+    {
       name: "slug",
       title: "Slug",
       type: "slug",

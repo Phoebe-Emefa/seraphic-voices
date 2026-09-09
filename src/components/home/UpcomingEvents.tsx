@@ -1,95 +1,135 @@
-import EventCard from "@/components/shared/EventCard";
+"use client";
+
+import UpcomingEventCard from "@/components/home/UpcomingEventCard";
+import UpcomingEventsEmpty from "@/components/home/UpcomingEventsEmpty";
+import UpcomingEventsSkeleton from "@/components/home/skeletons/UpcomingEventsSkeleton";
+import CustomButton from "@/components/shared/CustomButton";
+import { useEvents } from "@/hooks/useCms";
+import { isCmsLoading } from "@/hooks/useCmsLoading";
+import { resolveHomeUpcomingEvents } from "@/lib/resolveEvents";
 import {
-  Heading,
+  Box,
   Container,
-  VStack,
+  Flex,
   Grid,
-  Button,
-  Icon,
+  Heading,
+  HStack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { BsArrowRightShort } from "react-icons/bs";
-import { useQuery } from "react-query";
-import { groq } from "next-sanity";
-import { client } from "../../../sanity/sanity-client";
-import DataLoader from "@/components/shared/DataLoader";
-import Reveal from "@/components/shared/Reveal";
+import { useMemo } from "react";
+
+const HOME_EVENT_LIMIT = 2;
 
 const UpcomingEvents = () => {
-  const router = useRouter();
-  const { isLoading, data } = useQuery("events", async () => {
-    return client.fetch(groq`*[_type == "events"]`);
-  });
-    // getting upcoming and past events
-    const currentDate = new Date();
-    const upcomingEvents = data?.filter((event: any) => {
-      const eventStartDate = new Date(event?.start_date);
-      return eventStartDate > currentDate;
-    });
-  
-    const firstThreeEvents = upcomingEvents?.slice(0, 3);
-  
+  const eventsQuery = useEvents();
+  const { data } = eventsQuery;
+  const upcomingEvents = useMemo(
+    () => resolveHomeUpcomingEvents(data),
+    [data],
+  );
+  const eventsToShow = upcomingEvents.slice(0, HOME_EVENT_LIMIT);
+  const isEmpty = !isCmsLoading(eventsQuery) && eventsToShow.length === 0;
+
+  if (isCmsLoading(eventsQuery)) {
+    return <UpcomingEventsSkeleton />;
+  }
 
   return (
-    <Container
-      maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}
-      py={{ base: 12, md: 20 }}
+    <Box
+      as="section"
+      aria-labelledby="upcoming-events-heading"
+      bg="secondary.100"
+      py={{ base: 16, sm: 20, md: 24 }}
     >
-      {isLoading ? (
-        <DataLoader />
-      ) : (
-        <VStack>
-       <Reveal>
-           <Heading
-            as="h4"
-            fontSize={{ base: "2xl", xl: "3xl" }}
-            color="secondary.700"
+      <Container
+        maxW={{ base: "full", md: "2xl", lg: "5xl", xl: "7xl" }}
+        px={{ base: 5, sm: 6, md: 8, xl: 12 }}
+      >
+        <VStack spacing={{ base: 8, md: 12 }} align="stretch">
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            justify="space-between"
+            align={{ base: "flex-start", md: "flex-end" }}
+            gap={{ base: 5, md: 8 }}
           >
-            Upcoming Events
-          </Heading>
-       </Reveal>
-          {upcomingEvents?.length > 0 ? (
+            <VStack align="flex-start" spacing={3} maxW="38rem">
+              <HStack spacing={3} color="secondary.700">
+                <Box w={8} h="2px" bg="secondary.700" />
+                <Text
+                  fontSize={{ base: "2xs", sm: "xs" }}
+                  fontWeight="bold"
+                  letterSpacing="0.2em"
+                  textTransform="uppercase"
+                >
+                  On Stage Next
+                </Text>
+              </HStack>
+              <Heading
+                as="h2"
+                id="upcoming-events-heading"
+                fontSize={{ base: "2xl", sm: "3xl", md: "4xl", lg: "4.5xl" }}
+                fontWeight="bold"
+                color="secondary.700"
+                lineHeight={1.15}
+                letterSpacing="-0.02em"
+              >
+                Upcoming Concerts
+              </Heading>
+              {!isEmpty ? (
+                <Text fontSize={{ base: "sm", sm: "md" }} color="text" maxW="36rem" lineHeight={1.6}>
+                  Join us for evenings of choral artistry — from seasonal celebrations to gala
+                  performances across Toronto&apos;s finest venues.
+                </Text>
+              ) : null}
+            </VStack>
+
+            {!isEmpty ? (
+              <Box display={{ base: "none", md: "block" }} flexShrink={0}>
+                <CustomButton
+                  title="View all events"
+                  href="/events"
+                  width="12.5rem"
+                  height="3.25rem"
+                  fontSize="sm"
+                />
+              </Box>
+            ) : null}
+          </Flex>
+
+          {isEmpty ? (
+            <UpcomingEventsEmpty />
+          ) : (
             <Grid
-              templateColumns={{
-                base: "repeat(1, 1fr)",
-                md: "repeat(2, 1fr)",
-                xl: "repeat(3, 1fr)",
-              }}
-              gap={6}
-              mt={6}
-              mb={4}
+              templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+              gap={{ base: 6, md: 8 }}
+              alignItems="stretch"
             >
-              {firstThreeEvents?.map((item: any) => (
-                <EventCard key={item} event={item} />
+              {eventsToShow.map((event, index) => (
+                <UpcomingEventCard
+                  key={event._id || event.title}
+                  event={event}
+                  index={index}
+                  showTicketCta
+                />
               ))}
             </Grid>
-          ) : (
-            <VStack  textAlign="center">
-            <Reveal>
-                <Text fontSize="xl" maxW="lg">
-                We currently have no upcoming events. Please stay tuned for
-                future updates and exciting happenings!
-              </Text>
-            </Reveal>
-            </VStack>
           )}
-          {data?.length > 3 && (
-          <Reveal>
-              <Button
-              color="secondary.700"
-              variant="outline"
-              rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}
-              onClick={() => router?.push("/events")}
-            >
-              View All Events
-            </Button>
-          </Reveal>
-          )}
+
+          {!isEmpty ? (
+            <Box display={{ base: "block", md: "none" }} pt={2}>
+              <CustomButton
+                title="View all events"
+                href="/events"
+                width="100%"
+                height="3.25rem"
+                fontSize="sm"
+              />
+            </Box>
+          ) : null}
         </VStack>
-      )}
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

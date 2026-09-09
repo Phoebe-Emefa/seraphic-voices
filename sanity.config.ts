@@ -1,14 +1,14 @@
 import { defineConfig } from "sanity";
-import { deskTool } from "sanity/desk";
+import { structureTool } from "sanity/structure";
 import schemas from "./sanity/schemas";
 
 const config = defineConfig({
-  projectId: "5xuvntt7",
-  dataset: "production",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "5xuvntt7",
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
   title: "Seraphic Voices",
   apiVersion: "2023-09-20",
   basePath: "/admin",
-  plugins: [deskTool()],
+  plugins: [structureTool()],
   schema: {
     types: schemas,
   },
