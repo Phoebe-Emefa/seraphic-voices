@@ -2,26 +2,30 @@
 
 import AboutHeroSkeleton from "@/components/about/skeletons/AboutHeroSkeleton";
 import PageHero from "@/components/shared/PageHero";
-import { CONTACT_FALLBACK } from "@/data/contactContent";
-import { useContactHero } from "@/hooks/useCms";
+import { useContactPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
-import { imageSrc } from "../../../sanity/sanity-client";
+import { normalizeContactPageData, resolveContactHero } from "@/lib/contactPageContent";
 
 const ContactHero = () => {
-  const heroQuery = useContactHero();
-  const { data } = heroQuery;
-  const hero = data?.[0];
+  const pageQuery = useContactPage();
 
-  if (isCmsLoading(heroQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <AboutHeroSkeleton />;
+  }
+
+  const { page } = normalizeContactPageData(pageQuery.data?.page);
+  const hero = resolveContactHero(page);
+
+  if (!hero) {
+    return null;
   }
 
   return (
     <PageHero
-      heading={hero?.title || CONTACT_FALLBACK.hero.title}
-      description={hero?.description || CONTACT_FALLBACK.hero.description}
-      image={imageSrc(hero?.image?.asset?._ref)}
-      alt={hero?.image?.alt}
+      heading={hero.title}
+      description={hero.description}
+      image={hero.imageUrl}
+      alt={hero.imageAlt}
     />
   );
 };

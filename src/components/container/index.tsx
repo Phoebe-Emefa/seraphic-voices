@@ -6,10 +6,23 @@ import NavBar from "@/components/container/Navbar";
 import { HeroNavProvider } from "@/components/home/Hero/HeroNavContext";
 import RouteTransition from "@/components/shared/RouteTransition";
 import { Box } from "@chakra-ui/react";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 const AppShell = ({ children }: { children: React.ReactNode }) => {
   const [isNavigating, setIsNavigating] = useState(false);
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin");
+
+  if (isAdmin) {
+    return (
+      <Providers>
+        <Box as="main" role="main" h="100dvh" w="full" overflow="hidden">
+          {children}
+        </Box>
+      </Providers>
+    );
+  }
 
   return (
     <Providers>

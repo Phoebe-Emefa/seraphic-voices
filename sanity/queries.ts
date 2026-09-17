@@ -1,51 +1,65 @@
 export const queryKeys = {
-  home: ["home"] as const,
-  events: ["events"] as const,
-  event: (slug: string) => ["event", slug] as const,
-  eventHero: ["eventHero"] as const,
-  gallery: ["gallery"] as const,
-  galleryHero: ["galleryHero"] as const,
-  whoWeAre: ["whoWeAre"] as const,
-  whoWeAreHero: ["whoWeAreHero"] as const,
-  team: ["team"] as const,
-  teamHero: ["teamHero"] as const,
-  contactHero: ["contactHero"] as const,
-  contactInfo: ["contactInfo"] as const,
-  donateHero: ["donateHero"] as const,
-  donation: ["donation"] as const,
-  repertoire: ["repertoire"] as const,
-  sera5th: ["sera5th"] as const,
-  sera5thHero: ["sera5thHero"] as const,
+  homePage: ["homePage"] as const,
+  eventPage: ["eventPage"] as const,
+  galleryPage: ["galleryPage"] as const,
+  whoWeArePage: ["whoWeArePage"] as const,
+  teamPage: ["teamPage"] as const,
+  contactPage: ["contactPage"] as const,
+  donatePage: ["donatePage"] as const,
 };
 
+function singletonDoc(type: string, id: string, fields: string) {
+  return `coalesce(
+    *[_id == "${id}"][0],
+    *[_type == "${type}"] | order(_updatedAt desc) [0]
+  )${fields}`;
+}
+
 export const groqQueries = {
-  home: `*[_type == "home"]`,
-  events: `*[_type == "events"] | order(start_date asc)`,
-  eventBySlug: `*[_type == "events" && slug.current == $slug][0]`,
-  eventHero: `*[_type == "eventHero"]`,
-  gallery: `*[_type == "gallery"] | order(_createdAt desc) {
-    _id,
-    caption,
-    category,
-    image,
-    album->{
-      _id,
-      title,
-      slug,
-      date,
-      description
-    }
+  homePage: `${singletonDoc("home", "home", `{
+    hero,
+    about,
+    repertoire,
+    upcomingEvents,
+    contact
+  }`)}`,
+  eventPage: `coalesce(
+    *[_id == "event"][0],
+    *[_id == "eventsPage"][0]
+  ){
+    hero,
+    listing,
+    bookingCta
   }`,
-  galleryHero: `*[_type == "galleryHero"]`,
-  whoWeAre: `*[_type == "whoWeAre"]`,
-  whoWeAreHero: `*[_type == "whoWeAreHero"]`,
-  team: `*[_type == "team"]`,
-  teamHero: `*[_type == "teamHero"]`,
-  contactHero: `*[_type == "contactHero"]`,
-  contactInfo: `*[_type == "contactInfo"]`,
-  donateHero: `*[_type == "donateHero"]`,
-  donation: `*[_type == "donation"]`,
-  repertoire: `*[_type == "repettoire"]`,
-  sera5th: `*[_type == "Sera5th"]`,
-  sera5thHero: `*[_type == "sera5thHero"]`,
+  galleryPage: `{
+    "page": ${singletonDoc("galleryPage", "galleryPage", `{
+      hero,
+      listing
+    }`)}
+  }`,
+  whoWeArePage: `${singletonDoc("whoWeAre", "whoWeAre", `{
+    hero,
+    story,
+    vision,
+    mission,
+    belief
+  }`)}`,
+  teamPage: `{
+    "page": ${singletonDoc("teamPage", "teamPage", `{
+      hero,
+      listing
+    }`)}
+  }`,
+  contactPage: `{
+    "page": ${singletonDoc("contactPage", "contactPage", `{
+      hero,
+      content
+    }`)}
+  }`,
+  donatePage: `{
+    "page": ${singletonDoc("donatePage", "donatePage", `{
+      hero,
+      content
+    }`)}
+  }`,
 };

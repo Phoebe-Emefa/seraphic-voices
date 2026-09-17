@@ -1,5 +1,6 @@
 "use client";
 
+import { SANITY_FETCH_OPTIONS } from "@/lib/cms/cache";
 import { useQuery } from "@tanstack/react-query";
 import { client } from "../../sanity/sanity-client";
 
@@ -22,19 +23,23 @@ async function fetchWithTimeout<T>(promise: Promise<T>, ms: number): Promise<T> 
 export function useSanityQuery<T>(
   queryKey: readonly unknown[],
   groq: string,
-  params?: Record<string, unknown>
+  params?: Record<string, unknown>,
 ) {
   return useQuery({
     queryKey,
     queryFn: () =>
       fetchWithTimeout(
-        params
-          ? client.fetch<T>(groq, params as Record<string, string>)
-          : client.fetch<T>(groq),
-        QUERY_TIMEOUT_MS
+        client.fetch<T>(
+          groq,
+          (params ?? {}) as Record<string, string>,
+          SANITY_FETCH_OPTIONS,
+        ),
+        QUERY_TIMEOUT_MS,
       ),
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
     retry: 2,
-    staleTime: 60_000,
-    refetchOnWindowFocus: false,
   });
 }

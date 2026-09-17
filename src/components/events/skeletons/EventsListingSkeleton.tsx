@@ -1,6 +1,7 @@
-import { Box, Container, Flex, Skeleton, VStack } from "@chakra-ui/react";
 import EventsGridSkeleton from "@/components/events/skeletons/EventsGridSkeleton";
+import { Box, Container, Flex, Skeleton, VStack } from "@chakra-ui/react";
 
+/** Matches the events listing: two tabs, two cards per row. */
 const EventsListingSkeleton = () => {
   return (
     <Box
@@ -17,9 +18,9 @@ const EventsListingSkeleton = () => {
         <VStack spacing={{ base: 8, md: 12 }} align="stretch">
           <VStack align="flex-start" spacing={4} maxW="40rem">
             <Skeleton h="0.75rem" w="7rem" borderRadius="sm" />
+            <Skeleton h={{ base: "2rem", md: "2.5rem" }} w="55%" borderRadius="md" />
             <Skeleton h="1rem" w="100%" borderRadius="sm" />
             <Skeleton h="1rem" w="88%" borderRadius="sm" />
-            <Skeleton h="1rem" w="72%" borderRadius="sm" display={{ base: "none", sm: "block" }} />
           </VStack>
 
           <Flex
@@ -31,8 +32,8 @@ const EventsListingSkeleton = () => {
               "&::-webkit-scrollbar": { display: "none" },
             }}
           >
-            <Skeleton h="2.5rem" w="8rem" borderRadius="full" flexShrink={0} />
-            <Skeleton h="2.5rem" w="6rem" borderRadius="full" flexShrink={0} />
+            <Skeleton h="2.5rem" w="8.5rem" borderRadius="full" flexShrink={0} />
+            <Skeleton h="2.5rem" w="7rem" borderRadius="full" flexShrink={0} />
           </Flex>
 
           <EventsGridSkeleton count={2} />

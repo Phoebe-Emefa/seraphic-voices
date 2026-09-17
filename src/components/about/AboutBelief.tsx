@@ -1,7 +1,7 @@
 "use client";
 
 import AboutBeliefSkeleton from "@/components/about/skeletons/AboutBeliefSkeleton";
-import { useWhoWeAre } from "@/hooks/useCms";
+import { useWhoWeArePage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
 import { resolveAboutBelief } from "@/lib/aboutUsContent";
 import { splitMissionLines } from "@/lib/missionText";
@@ -25,16 +25,19 @@ function splitBeliefCopy(text: string): { lead: string | null; lines: string[] }
 }
 
 const AboutBelief = () => {
-  const whoWeAreQuery = useWhoWeAre();
-  const { data } = whoWeAreQuery;
-  const content = data?.[0];
+  const pageQuery = useWhoWeArePage();
   const reduceMotion = useReducedMotion();
 
-  if (isCmsLoading(whoWeAreQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <AboutBeliefSkeleton />;
   }
 
-  const belief = resolveAboutBelief(content);
+  const belief = resolveAboutBelief(pageQuery.data);
+
+  if (!belief) {
+    return null;
+  }
+
   const { lead, lines } = splitBeliefCopy(belief);
 
   return (

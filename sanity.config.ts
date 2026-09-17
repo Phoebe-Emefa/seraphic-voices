@@ -1,16 +1,28 @@
-import { defineConfig } from "sanity";
+import { defineConfig, type SchemaTypeDefinition } from "sanity";
 import { structureTool } from "sanity/structure";
 import schemas from "./sanity/schemas";
+import { deskStructure } from "./sanity/structure";
+import "./sanity/studio.css";
+
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+
+if (!projectId) {
+  throw new Error("Missing NEXT_PUBLIC_SANITY_PROJECT_ID");
+}
+if (!dataset) {
+  throw new Error("Missing NEXT_PUBLIC_SANITY_DATASET");
+}
 
 const config = defineConfig({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "5xuvntt7",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  projectId,
+  dataset,
   title: "Seraphic Voices",
-  apiVersion: "2023-09-20",
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2023-09-20",
   basePath: "/admin",
-  plugins: [structureTool()],
+  plugins: [structureTool({ structure: deskStructure })],
   schema: {
-    types: schemas,
+    types: schemas as SchemaTypeDefinition[],
   },
 });
 

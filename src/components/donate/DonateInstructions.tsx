@@ -60,6 +60,10 @@ function InstructionStep({ text, index }: { text: string; index: number }) {
 }
 
 const DonateInstructions = ({ title, instructions }: DonateInstructionsProps) => {
+  if (!title && instructions.length === 0) {
+    return null;
+  }
+
   return (
     <Box
       w="full"
@@ -71,23 +75,33 @@ const DonateInstructions = ({ title, instructions }: DonateInstructionsProps) =>
       borderColor="blackAlpha.50"
       boxShadow="0 24px 48px -28px rgba(4, 35, 92, 0.25)"
     >
-      <Heading
-        as="h2"
-        fontSize={{ base: "xl", md: "2xl" }}
-        fontWeight="bold"
-        color="secondary.700"
-        letterSpacing="-0.02em"
-        mb={2}
-      >
-        {title}
-      </Heading>
-      <Box w="2.5rem" h="2px" bg="secondary.500" mb={8} />
+      {title ? (
+        <>
+          <Heading
+            as="h2"
+            fontSize={{ base: "xl", md: "2xl" }}
+            fontWeight="bold"
+            color="secondary.700"
+            letterSpacing="-0.02em"
+            mb={2}
+          >
+            {title}
+          </Heading>
+          <Box w="2.5rem" h="2px" bg="secondary.500" mb={8} />
+        </>
+      ) : null}
 
-      <VStack spacing={4} align="stretch" w="full">
-        {instructions.map((instruction, index) => (
-          <InstructionStep key={`${index}-${instruction.slice(0, 24)}`} text={instruction} index={index} />
-        ))}
-      </VStack>
+      {instructions.length > 0 ? (
+        <VStack spacing={4} align="stretch" w="full">
+          {instructions.map((instruction, index) => (
+            <InstructionStep
+              key={`${index}-${instruction.slice(0, 24)}`}
+              text={instruction}
+              index={index}
+            />
+          ))}
+        </VStack>
+      ) : null}
     </Box>
   );
 };

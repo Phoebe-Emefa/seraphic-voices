@@ -3,10 +3,24 @@ import { Box, Flex, Heading, HStack, Icon, Text, VStack } from "@chakra-ui/react
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 
 type UpcomingEventsEmptyProps = {
-  showViewAll?: boolean;
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+  ctaTitle?: string;
+  ctaHref?: string;
 };
 
-const UpcomingEventsEmpty = ({ showViewAll = true }: UpcomingEventsEmptyProps) => {
+const UpcomingEventsEmpty = ({
+  eyebrow,
+  heading,
+  body,
+  ctaTitle,
+  ctaHref,
+}: UpcomingEventsEmptyProps) => {
+  if (!eyebrow && !heading && !body && !(ctaTitle && ctaHref)) {
+    return null;
+  }
+
   return (
     <Box
       borderRadius="2xl"
@@ -38,16 +52,6 @@ const UpcomingEventsEmpty = ({ showViewAll = true }: UpcomingEventsEmptyProps) =
           top="-4rem"
           right="-3rem"
         />
-        <Box
-          position="absolute"
-          w="10rem"
-          h="10rem"
-          borderRadius="full"
-          border="1px solid"
-          borderColor="whiteAlpha.100"
-          bottom="-3rem"
-          left="-2rem"
-        />
         <Flex
           align="center"
           justify="center"
@@ -68,39 +72,45 @@ const UpcomingEventsEmpty = ({ showViewAll = true }: UpcomingEventsEmptyProps) =
         gap={{ base: 4, md: 5 }}
         p={{ base: 6, sm: 7, md: 8, lg: 10 }}
       >
-        <HStack spacing={2.5} color="whiteAlpha.700">
-          <Box w={1.5} h={1.5} borderRadius="full" bg="secondary.500" flexShrink={0} />
-          <Text
-            fontSize="2xs"
-            fontWeight="bold"
-            letterSpacing="0.18em"
-            textTransform="uppercase"
-          >
-            Stay tuned
-          </Text>
-        </HStack>
+        {eyebrow ? (
+          <HStack spacing={2.5} color="whiteAlpha.700">
+            <Box w={1.5} h={1.5} borderRadius="full" bg="secondary.500" flexShrink={0} />
+            <Text
+              fontSize="2xs"
+              fontWeight="bold"
+              letterSpacing="0.18em"
+              textTransform="uppercase"
+            >
+              {eyebrow}
+            </Text>
+          </HStack>
+        ) : null}
 
         <VStack align="flex-start" spacing={2}>
-          <Heading
-            as="p"
-            fontSize={{ base: "xl", sm: "2xl", md: "2.25xl" }}
-            fontWeight="bold"
-            color="white"
-            lineHeight={1.2}
-            letterSpacing="-0.02em"
-          >
-            New concerts coming soon
-          </Heading>
-          <Text fontSize={{ base: "sm", md: "md" }} color="whiteAlpha.700" maxW="30ch" lineHeight={1.55}>
-            Our next performances will be announced here.
-          </Text>
+          {heading ? (
+            <Heading
+              as="p"
+              fontSize={{ base: "xl", sm: "2xl", md: "2.25xl" }}
+              fontWeight="bold"
+              color="white"
+              lineHeight={1.2}
+              letterSpacing="-0.02em"
+            >
+              {heading}
+            </Heading>
+          ) : null}
+          {body ? (
+            <Text fontSize={{ base: "sm", md: "md" }} color="whiteAlpha.700" maxW="30ch" lineHeight={1.55}>
+              {body}
+            </Text>
+          ) : null}
         </VStack>
 
-        {showViewAll ? (
+        {ctaTitle && ctaHref ? (
           <Box pt={1}>
             <CustomButton
-              title="View all events"
-              href="/events"
+              title={ctaTitle}
+              href={ctaHref}
               width={{ base: "full", sm: "12.5rem" }}
               height="3.25rem"
               fontSize="sm"

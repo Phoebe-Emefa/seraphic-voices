@@ -2,7 +2,7 @@
 
 import SectionEyebrow from "@/components/about/SectionEyebrow";
 import AboutMissionSkeleton from "@/components/about/skeletons/AboutMissionSkeleton";
-import { useWhoWeAre } from "@/hooks/useCms";
+import { useWhoWeArePage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
 import { resolveAboutMission } from "@/lib/aboutUsContent";
 import { splitPillarBody } from "@/lib/missionText";
@@ -140,15 +140,17 @@ function PillarCard({
 }
 
 const AboutMission = () => {
-  const whoWeAreQuery = useWhoWeAre();
-  const { data } = whoWeAreQuery;
-  const content = data?.[0];
+  const pageQuery = useWhoWeArePage();
 
-  if (isCmsLoading(whoWeAreQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <AboutMissionSkeleton />;
   }
 
-  const mission = resolveAboutMission(content);
+  const mission = resolveAboutMission(pageQuery.data);
+
+  if (!mission) {
+    return null;
+  }
 
   return (
     <Box

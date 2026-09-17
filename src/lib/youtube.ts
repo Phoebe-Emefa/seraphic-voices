@@ -58,3 +58,60 @@ export function buildYouTubeEmbedUrl(
 export function buildYouTubeWatchUrl(videoId: string): string {
   return `https://www.youtube.com/watch?v=${videoId}`;
 }
+
+export type YouTubeThumbnailQuality = "max" | "hq" | "mq" | "default";
+
+const YOUTUBE_THUMBNAIL_CDN = "https://img.youtube.com";
+
+const YOUTUBE_THUMBNAIL_FILES: Record<YouTubeThumbnailQuality, string> = {
+  max: "maxresdefault.jpg",
+  hq: "hqdefault.jpg",
+  mq: "mqdefault.jpg",
+  default: "default.jpg",
+};
+
+/** YouTube returns a ~120px-wide JPEG when maxres is unavailable. */
+export const YOUTUBE_THUMBNAIL_PLACEHOLDER_MAX_WIDTH = 120;
+
+export function isYouTubeThumbnailPlaceholder(
+  img: Pick<HTMLImageElement, "naturalWidth">,
+): boolean {
+  return img.naturalWidth > 0 && img.naturalWidth <= YOUTUBE_THUMBNAIL_PLACEHOLDER_MAX_WIDTH;
+}
+
+/**
+ * Card thumbnails: mq first (16:9, exists for virtually all videos).
+ * maxres is probed separately — when missing, YouTube often returns a gray
+ * 120×90 JPEG on 404 that still paints and breaks naive fallbacks.
+ */
+export const YOUTUBE_THUMBNAIL_FALLBACK_ORDER: YouTubeThumbnailQuality[] = [
+  "mq",
+  "hq",
+  "default",
+];
+
+export function buildYouTubeThumbnailUrl(
+  videoId: string,
+  quality: YouTubeThumbnailQuality = "hq",
+): string {
+  return `${YOUTUBE_THUMBNAIL_CDN}/vi/${videoId}/${YOUTUBE_THUMBNAIL_FILES[quality]}`;
+}
+
+/** Thumbnail from a pasted YouTube URL (mq, with hq/default fallbacks). */
+export function buildYouTubeThumbnailFromUrl(url?: string | null): string | null {
+  const videoId = extractYouTubeId(url);
+  return videoId ? buildYouTubeThumbnailUrl(videoId, "mq") : null;
+}
+
+export function youtubeThumbnailFallback(src: string): string | null {
+  const match = src.match(/\/vi\/([^/]+)\/([^/?]+)/);
+  if (!match) return null;
+
+  const [, videoId, file] = match;
+  const files = YOUTUBE_THUMBNAIL_FALLBACK_ORDER.map((q) => YOUTUBE_THUMBNAIL_FILES[q]);
+  const currentIndex = files.indexOf(file);
+  if (currentIndex < 0 || currentIndex >= files.length - 1) return null;
+
+  const nextFile = files[currentIndex + 1];
+  return `${YOUTUBE_THUMBNAIL_CDN}/vi/${videoId}/${nextFile}`;
+}

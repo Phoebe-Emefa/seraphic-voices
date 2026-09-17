@@ -1,18 +1,22 @@
 "use client";
 
 import CustomButton from "@/components/shared/CustomButton";
-import { Box, Container, Flex, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, HStack, Icon, Image, Text, VStack } from "@chakra-ui/react";
 import React from "react";
+import { FaClock, FaMapMarkerAlt } from "react-icons/fa";
 
 type HeroCinematicPhotoProps = {
   imageUrl: string;
   imageAlt: string;
   objectPosition?: string;
   title?: string;
-  description?: string;
+  briefTitle?: string;
+  metaDate?: string;
+  metaLocation?: string;
   ctaTitle?: string;
   ctaHref?: string;
   ctaOnClick?: () => void;
+  primaryHeading?: boolean;
 };
 
 export default function HeroCinematicPhoto({
@@ -20,11 +24,18 @@ export default function HeroCinematicPhoto({
   imageAlt,
   objectPosition = "center top",
   title,
-  description,
-  ctaTitle = "Who we are",
-  ctaHref = "/about-us",
+  briefTitle,
+  metaDate,
+  metaLocation,
+  ctaTitle,
+  ctaHref,
   ctaOnClick,
+  primaryHeading,
 }: HeroCinematicPhotoProps) {
+  const showText = Boolean(title || briefTitle || metaDate || metaLocation);
+  const showCta = Boolean(ctaTitle && (ctaHref || ctaOnClick));
+  const headingAs = primaryHeading ? "h1" : "h2";
+
   return (
     <Box
       position="relative"
@@ -46,7 +57,6 @@ export default function HeroCinematicPhoto({
         objectPosition={objectPosition}
       />
 
-      {/* Top seamless blend for navbar */}
       <Box
         position="absolute"
         top={0}
@@ -56,8 +66,6 @@ export default function HeroCinematicPhoto({
         bg="linear-gradient(to bottom, rgba(4, 25, 68, 0.85) 0%, rgba(4, 25, 68, 0.35) 60%, transparent 100%)"
         pointerEvents="none"
       />
-
-      {/* Deep cinematic bottom gradient scrim */}
       <Box
         position="absolute"
         bottom={0}
@@ -68,69 +76,102 @@ export default function HeroCinematicPhoto({
         pointerEvents="none"
       />
 
-      {/* Lower-Third Stage — lifted higher on mobile with safe bottom space */}
-      <Box
-        position="absolute"
-        bottom={0}
-        left={0}
-        right={0}
-        pb={{ base: 14, sm: 14, md: 10, lg: 12 }}
-        pt={6}
-        px={{ base: 5, sm: 6, md: 10, xl: 16 }}
-      >
-        <Container maxW="7xl" p={0}>
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            align={{ base: "flex-start", md: "flex-end" }}
-            justify="space-between"
-            gap={{ base: 5, md: 10 }}
-          >
-            {/* Left: Headline & Description */}
-            <VStack align="flex-start" spacing={{ base: 2.5, md: 3 }} maxW={{ base: "100%", md: "46rem", lg: "54rem" }}>
-              {title ? (
-                <Heading
-                  as="h1"
-                  fontSize={{ base: "2xl", sm: "3xl", md: "4xl", lg: "5xl", xl: "5.5xl" }}
-                  fontWeight="bold"
-                  color="white"
-                  lineHeight={{ base: 1.15, md: 1.12 }}
-                  letterSpacing="-0.02em"
-                  textShadow="0 4px 20px rgba(0, 0, 0, 0.5)"
+      {showText || showCta ? (
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          pb={{ base: 14, sm: 14, md: 10, lg: 12 }}
+          pt={6}
+          px={{ base: 5, sm: 6, md: 10, xl: 16 }}
+        >
+          <Container maxW="7xl" p={0}>
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              align={{ base: "flex-start", md: "flex-end" }}
+              justify="space-between"
+              gap={{ base: 5, md: 10 }}
+            >
+              {showText ? (
+                <VStack
+                  align="flex-start"
+                  spacing={{ base: 2.5, md: 3 }}
+                  maxW={{ base: "100%", md: "46rem", lg: "54rem" }}
                 >
-                  {title}
-                </Heading>
-              ) : null}
+                  {title ? (
+                    <Heading
+                      as={headingAs}
+                      fontSize={{ base: "2xl", sm: "3xl", md: "4xl", lg: "5xl", xl: "5.5xl" }}
+                      fontWeight="bold"
+                      color="white"
+                      lineHeight={{ base: 1.15, md: 1.12 }}
+                      letterSpacing="-0.02em"
+                      textShadow="0 4px 20px rgba(0, 0, 0, 0.5)"
+                    >
+                      {title}
+                    </Heading>
+                  ) : null}
 
-              {description ? (
-                <Text
-                  fontSize={{ base: "xs", sm: "sm", md: "lg", lg: "xl" }}
-                  color="whiteAlpha.900"
-                  maxW="44rem"
-                  lineHeight={{ base: 1.45, md: 1.55 }}
-                  textShadow="0 2px 10px rgba(0, 0, 0, 0.45)"
-                  noOfLines={{ base: 2, md: 2 }}
-                >
-                  {description}
-                </Text>
-              ) : null}
-            </VStack>
+                  {briefTitle ? (
+                    <Text
+                      fontSize={{ base: "sm", sm: "md", md: "lg" }}
+                      color="whiteAlpha.900"
+                      maxW="36rem"
+                      lineHeight={{ base: 1.4, md: 1.5 }}
+                      textShadow="0 2px 10px rgba(0, 0, 0, 0.45)"
+                      noOfLines={2}
+                    >
+                      {briefTitle}
+                    </Text>
+                  ) : null}
 
-            {/* Right: CTA Action Button */}
-            {ctaTitle && (ctaHref || ctaOnClick) ? (
-              <Box flexShrink={0} pt={{ base: 1, md: 0 }} pb={{ base: 0, md: 1 }}>
-                <CustomButton
-                  title={ctaTitle}
-                  href={ctaOnClick ? undefined : ctaHref}
-                  onClick={ctaOnClick}
-                  width={{ base: "10.5rem", sm: "11rem", md: "12.5rem" }}
-                  height={{ base: "3rem", md: 14 }}
-                  fontSize={{ base: "sm", md: "md" }}
-                />
-              </Box>
-            ) : null}
-          </Flex>
-        </Container>
-      </Box>
+                  {metaDate || metaLocation ? (
+                    <HStack
+                      spacing={{ base: 3, md: 5 }}
+                      color="whiteAlpha.850"
+                      flexWrap="wrap"
+                      rowGap={2}
+                    >
+                      {metaDate ? (
+                        <HStack spacing={2}>
+                          <Icon as={FaClock} boxSize={3.5} />
+                          <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="semibold">
+                            {metaDate}
+                          </Text>
+                        </HStack>
+                      ) : null}
+                      {metaLocation ? (
+                        <HStack spacing={2}>
+                          <Icon as={FaMapMarkerAlt} boxSize={3.5} />
+                          <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="semibold">
+                            {metaLocation}
+                          </Text>
+                        </HStack>
+                      ) : null}
+                    </HStack>
+                  ) : null}
+                </VStack>
+              ) : (
+                <Box />
+              )}
+
+              {showCta && ctaTitle ? (
+                <Box flexShrink={0} pt={{ base: 1, md: 0 }} pb={{ base: 0, md: 1 }}>
+                  <CustomButton
+                    title={ctaTitle}
+                    href={ctaOnClick ? undefined : ctaHref}
+                    onClick={ctaOnClick}
+                    width={{ base: "10.5rem", sm: "11rem", md: "12.5rem" }}
+                    height={{ base: "3rem", md: 14 }}
+                    fontSize={{ base: "sm", md: "md" }}
+                  />
+                </Box>
+              ) : null}
+            </Flex>
+          </Container>
+        </Box>
+      ) : null}
     </Box>
   );
 }

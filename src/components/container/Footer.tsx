@@ -1,7 +1,8 @@
 "use client";
 
-import { useContactInfo } from "@/hooks/useCms";
-import { menus, socials } from "@/utils/misc";
+import { useContactPage } from "@/hooks/useCms";
+import { normalizeContactPageData, resolveFooterContact } from "@/lib/contactPageContent";
+import { menus } from "@/utils/misc";
 import {
   Box,
   Container,
@@ -34,10 +35,12 @@ const contactStyles = {
 };
 
 const Footer = () => {
-  const { data } = useContactInfo();
-  const info = data?.[0];
+  const { data } = useContactPage();
+  const { page } = normalizeContactPageData(data?.page);
+  const footerContact = resolveFooterContact(page);
 
-  const hasContact = info?.address || info?.phoneNumber || info?.email;
+  const hasContact =
+    footerContact?.address || footerContact?.phoneNumber || footerContact?.email;
 
   return (
     <Box
@@ -134,12 +137,12 @@ const Footer = () => {
               borderTop={{ base: "1px solid", md: "1px solid", lg: "none" }}
               borderColor="whiteAlpha.100"
             >
-              {info?.address ? (
-                <Text {...contactStyles}>{info.address}</Text>
+              {footerContact?.address ? (
+                <Text {...contactStyles}>{footerContact.address}</Text>
               ) : null}
-              {info?.phoneNumber ? (
+              {footerContact?.phoneNumber ? (
                 <Text {...contactStyles}>
-                  {info.phoneNumber.split("/").map((part: string, i: number, arr: string[]) => (
+                  {footerContact.phoneNumber.split("/").map((part: string, i: number, arr: string[]) => (
                     <React.Fragment key={i}>
                       <a href={`tel:${part.trim()}`} style={{ color: "inherit" }}>
                         {part.trim()}
@@ -149,10 +152,10 @@ const Footer = () => {
                   ))}
                 </Text>
               ) : null}
-              {info?.email ? (
+              {footerContact?.email ? (
                 <Text {...contactStyles}>
-                  <a href={`mailto:${info.email}`} style={{ color: "inherit" }}>
-                    {info.email}
+                  <a href={`mailto:${footerContact.email}`} style={{ color: "inherit" }}>
+                    {footerContact.email}
                   </a>
                 </Text>
               ) : null}
@@ -195,25 +198,27 @@ const Footer = () => {
                 </HStack>
               </Link>
 
-              <HStack spacing={5}>
-                {socials.map((social) => (
-                  <Box
-                    key={social.link}
-                    as="a"
-                    href={social.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.link}
-                    color="whiteAlpha.600"
-                    transition="color 180ms ease"
-                    _hover={{ color: "white" }}
-                  >
-                    {React.createElement(social.icon, {
-                      style: { height: "17px", width: "17px" },
-                    })}
-                  </Box>
-                ))}
-              </HStack>
+              {footerContact?.socials.length ? (
+                <HStack spacing={5}>
+                  {footerContact.socials.map((social) => (
+                    <Box
+                      key={social.url}
+                      as="a"
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.ariaLabel}
+                      color="whiteAlpha.600"
+                      transition="color 180ms ease"
+                      _hover={{ color: "white" }}
+                    >
+                      {React.createElement(social.icon, {
+                        style: { height: "17px", width: "17px" },
+                      })}
+                    </Box>
+                  ))}
+                </HStack>
+              ) : null}
             </HStack>
           </Flex>
         </Stack>

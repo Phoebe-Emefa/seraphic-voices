@@ -2,26 +2,30 @@
 
 import AboutHeroSkeleton from "@/components/about/skeletons/AboutHeroSkeleton";
 import PageHero from "@/components/shared/PageHero";
-import { TEAM_FALLBACK } from "@/data/teamContent";
-import { useTeamHero } from "@/hooks/useCms";
+import { useTeamPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
-import { imageSrc } from "../../../sanity/sanity-client";
+import { normalizeTeamPageData, resolveTeamHero } from "@/lib/teamPageContent";
 
 const TeamHero = () => {
-  const heroQuery = useTeamHero();
-  const { data } = heroQuery;
-  const hero = data?.[0];
+  const pageQuery = useTeamPage();
 
-  if (isCmsLoading(heroQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <AboutHeroSkeleton />;
+  }
+
+  const { page } = normalizeTeamPageData(pageQuery.data?.page);
+  const hero = resolveTeamHero(page);
+
+  if (!hero) {
+    return null;
   }
 
   return (
     <PageHero
-      heading={hero?.title || TEAM_FALLBACK.hero.title}
-      description={hero?.description || TEAM_FALLBACK.hero.description}
-      image={imageSrc(hero?.image?.asset?._ref)}
-      alt={hero?.image?.alt}
+      heading={hero.title}
+      description={hero.description}
+      image={hero.imageUrl}
+      alt={hero.imageAlt}
     />
   );
 };

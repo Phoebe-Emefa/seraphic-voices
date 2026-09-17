@@ -1,7 +1,7 @@
 "use client";
 
 import type { GalleryImage } from "@/lib/galleryDisplay";
-import { Box, Flex, Icon, Image, Text } from "@chakra-ui/react";
+import { Box, Icon, Image, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import { HiOutlineArrowsPointingOut } from "react-icons/hi2";
 
@@ -10,18 +10,10 @@ const easeOut = [0.23, 1, 0.32, 1];
 type GalleryFeaturedProps = {
   image: GalleryImage;
   collectionLabel: string;
-  dateLabel?: string;
-  description?: string;
   onOpen: () => void;
 };
 
-const GalleryFeatured = ({
-  image,
-  collectionLabel,
-  dateLabel,
-  description,
-  onOpen,
-}: GalleryFeaturedProps) => {
+const GalleryFeatured = ({ image, collectionLabel, onOpen }: GalleryFeaturedProps) => {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -84,22 +76,16 @@ const GalleryFeatured = ({
           bottom={{ base: 5, md: 8 }}
           pointerEvents="none"
         >
-          <Flex align="center" gap={3} mb={2} flexWrap="wrap">
-            <Text
-              fontSize="xs"
-              fontWeight="bold"
-              letterSpacing="0.2em"
-              textTransform="uppercase"
-              color="secondary.500"
-            >
-              {collectionLabel}
-            </Text>
-            {dateLabel ? (
-              <Text fontSize="xs" color="whiteAlpha.700" fontWeight="medium">
-                {dateLabel}
-              </Text>
-            ) : null}
-          </Flex>
+          <Text
+            fontSize="xs"
+            fontWeight="bold"
+            letterSpacing="0.2em"
+            textTransform="uppercase"
+            color="secondary.500"
+            mb={2}
+          >
+            {collectionLabel}
+          </Text>
           <Text
             color="white"
             fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
@@ -110,7 +96,7 @@ const GalleryFeatured = ({
             noOfLines={2}
             sx={{ textWrap: "balance" }}
           >
-            {description || image.caption || image.alt}
+            {image.caption || image.alt}
           </Text>
         </Box>
 

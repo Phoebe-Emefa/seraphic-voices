@@ -4,6 +4,7 @@ import SuccessModal from "@/components/contact/SuccessModal";
 import CustomButton from "@/components/shared/CustomButton";
 import FormTextArea from "@/components/shared/form/FormTextArea";
 import FormInput from "@/components/shared/form/FormInput";
+import type { ContactFormContent } from "@/lib/contactPageContent";
 import { contactSchema } from "@/lib/contactSchema";
 import { Box, Grid, GridItem, Heading, Text, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { Formik } from "formik";
@@ -16,12 +17,12 @@ export interface IContact {
   subject?: string;
 }
 
-const ContactForm = () => {
+const ContactForm = ({ form }: { form: ContactFormContent }) => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialValues = {
-    subject: "Message from Website",
+    subject: form.emailSubject,
     firstName: "",
     lastName: "",
     email: "",
@@ -42,11 +43,13 @@ const ContactForm = () => {
       resetForm();
       onOpen();
     } catch {
-      toast({
-        title: "We could not send your message. Please try again.",
-        status: "error",
-        isClosable: true,
-      });
+      if (form.errorMessage) {
+        toast({
+          title: form.errorMessage,
+          status: "error",
+          isClosable: true,
+        });
+      }
     } finally {
       setSubmitting(false);
     }
@@ -63,19 +66,23 @@ const ContactForm = () => {
       borderColor="blackAlpha.50"
       boxShadow="0 24px 48px -28px rgba(4, 35, 92, 0.25)"
     >
-      <Heading
-        as="h2"
-        fontSize={{ base: "xl", md: "2xl" }}
-        fontWeight="bold"
-        color="secondary.700"
-        letterSpacing="-0.02em"
-        mb={2}
-      >
-        Send us a message
-      </Heading>
-      <Text fontSize="sm" color="secondary.700" opacity={0.75} mb={8} lineHeight={1.6}>
-        Fill in the form below and we&apos;ll respond as soon as we can.
-      </Text>
+      {form.title ? (
+        <Heading
+          as="h2"
+          fontSize={{ base: "xl", md: "2xl" }}
+          fontWeight="bold"
+          color="secondary.700"
+          letterSpacing="-0.02em"
+          mb={2}
+        >
+          {form.title}
+        </Heading>
+      ) : null}
+      {form.intro ? (
+        <Text fontSize="sm" color="secondary.700" opacity={0.75} mb={8} lineHeight={1.6}>
+          {form.intro}
+        </Text>
+      ) : null}
 
       <Formik
         initialValues={initialValues}
@@ -165,19 +172,27 @@ const ContactForm = () => {
                 required
               />
             </VStack>
-            <Box mt={8}>
-              <CustomButton
-                title="Send message"
-                type="submit"
-                width="100%"
-                isLoading={isSubmitting}
-                isDisabled={isSubmitting || !dirty}
-              />
-            </Box>
+            {form.submitLabel ? (
+              <Box mt={8}>
+                <CustomButton
+                  title={form.submitLabel}
+                  type="submit"
+                  width="100%"
+                  isLoading={isSubmitting}
+                  isDisabled={isSubmitting || !dirty}
+                />
+              </Box>
+            ) : null}
           </form>
         )}
       </Formik>
-      <SuccessModal isOpen={isOpen} onClose={onClose} />
+      <SuccessModal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={form.successTitle}
+        message={form.successMessage}
+        closeLabel={form.successCloseLabel}
+      />
     </Box>
   );
 };

@@ -4,10 +4,10 @@ import SectionEyebrow from "@/components/about/SectionEyebrow";
 import TeamCard from "@/components/about/TeamCard";
 import TeamGridSkeleton from "@/components/about/skeletons/TeamGridSkeleton";
 import TeamMembersSkeleton from "@/components/about/skeletons/TeamMembersSkeleton";
-import { TEAM_FALLBACK } from "@/data/teamContent";
-import { useTeam } from "@/hooks/useCms";
+import { useTeamPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
-import { TEAM_VOICES } from "@/utils/misc";
+import { memberMatchesCategory } from "@/lib/teamCategories";
+import { normalizeTeamPageData, resolveTeamListing } from "@/lib/teamPageContent";
 import {
   Box,
   Button,
@@ -22,8 +22,7 @@ import { useEffect, useMemo, useState } from "react";
 import { HiOutlineMusicalNote } from "react-icons/hi2";
 
 const TeamMembers = () => {
-  const teamQuery = useTeam();
-  const { data } = teamQuery;
+  const pageQuery = useTeamPage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSwitching, setIsSwitching] = useState(false);
 
@@ -39,25 +38,36 @@ const TeamMembers = () => {
     return () => window.clearTimeout(timer);
   }, [activeIndex, isSwitching]);
 
-  const membersByCategory = useMemo(() => {
-    const map = new Map<string, typeof data>();
+  const listing = useMemo(() => {
+    const { page } = normalizeTeamPageData(pageQuery.data?.page);
+    return resolveTeamListing(page);
+  }, [pageQuery.data]);
 
-    for (const voice of TEAM_VOICES) {
+  const voiceTabs = useMemo(() => listing?.categories ?? [], [listing]);
+
+  const membersByCategory = useMemo(() => {
+    const map = new Map<string, NonNullable<typeof listing>["members"]>();
+
+    for (const voice of voiceTabs) {
       map.set(
-        voice.category,
-        data?.filter((item) => item?.category === voice.category) ?? [],
+        voice.value,
+        listing?.members.filter((item) => memberMatchesCategory(item, voice)) ?? [],
       );
     }
 
     return map;
-  }, [data]);
+  }, [listing, voiceTabs]);
 
-  if (isCmsLoading(teamQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <TeamMembersSkeleton />;
   }
 
-  const activeVoice = TEAM_VOICES[activeIndex];
-  const members = membersByCategory.get(activeVoice.category) ?? [];
+  if (!listing || voiceTabs.length === 0) {
+    return null;
+  }
+
+  const activeVoice = voiceTabs[activeIndex];
+  const members = activeVoice ? membersByCategory.get(activeVoice.value) ?? [] : [];
 
   return (
     <Box
@@ -71,19 +81,23 @@ const TeamMembers = () => {
         px={{ base: 4, sm: 6, md: 8, xl: 12 }}
       >
         <VStack spacing={{ base: 8, md: 10 }} align="stretch">
-          <VStack align="flex-start" spacing={4} maxW="40rem">
-            <SectionEyebrow label={TEAM_FALLBACK.section.eyebrow} />
-            <Text
-              id="team-members-heading"
-              fontSize={{ base: "md", md: "lg" }}
-              color="secondary.700"
-              opacity={0.9}
-              lineHeight={1.75}
-              sx={{ textWrap: "pretty" }}
-            >
-              {TEAM_FALLBACK.section.intro}
-            </Text>
-          </VStack>
+          {listing.eyebrow || listing.intro ? (
+            <VStack align="flex-start" spacing={4} maxW="40rem">
+              {listing.eyebrow ? <SectionEyebrow label={listing.eyebrow} /> : null}
+              {listing.intro ? (
+                <Text
+                  id="team-members-heading"
+                  fontSize={{ base: "md", md: "lg" }}
+                  color="secondary.700"
+                  opacity={0.9}
+                  lineHeight={1.75}
+                  sx={{ textWrap: "pretty" }}
+                >
+                  {listing.intro}
+                </Text>
+              ) : null}
+            </VStack>
+          ) : null}
 
           <Box
             position={{ base: "sticky", md: "static" }}
@@ -104,8 +118,8 @@ const TeamMembers = () => {
                 scrollSnapType: "x proximity",
               }}
             >
-              {TEAM_VOICES.map((voice, index) => {
-                const count = membersByCategory.get(voice.category)?.length ?? 0;
+              {voiceTabs.map((voice, index) => {
+                const count = membersByCategory.get(voice.value)?.length ?? 0;
                 const isActive = index === activeIndex;
 
                 return (

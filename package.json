@@ -7,7 +7,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:home-slides": "sanity exec scripts/seed-home-brand-photos.cjs --with-user-token",
+    "seed:team-page": "sanity exec scripts/seed-team-page.cjs --with-user-token",
+    "migrate:team-categories": "sanity exec scripts/migrate-team-categories.cjs --with-user-token",
+    "seed:gallery-page": "sanity exec scripts/seed-gallery-page.cjs --with-user-token",
+    "publish:gallery-draft": "sanity exec scripts/publish-gallery-draft.cjs --with-user-token",
+    "seed:contact-page": "sanity exec scripts/seed-contact-page.cjs --with-user-token",
+    "fix:contact-social-keys": "sanity exec scripts/fix-contact-social-keys.cjs --with-user-token",
+    "migrate:contact-page-fields": "sanity exec scripts/migrate-contact-page-fields.cjs --with-user-token",
+    "seed:donate-page": "sanity exec scripts/seed-donate-page.cjs --with-user-token",
+    "seed:events-concerts": "sanity exec scripts/seed-events-concerts.cjs --with-user-token"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.4.2",

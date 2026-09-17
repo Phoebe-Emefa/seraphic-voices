@@ -1,40 +1,21 @@
-import contactInfo from "./contact-schema";
-import contactHero from "./contact-hero-schema";
-import donation from "./donation-schema";
-import donateHero from "./dontate-hero-schema";
-import eventHero from "./event-hero-schema";
-import events from "./event-schema";
-import galleryAlbum from "./gallery-album-schema";
-import galleryHero from "./gallery-hero-schema";
-import gallery from "./gallery-schema";
+import contactPage from "./contact-page-schema";
+import donatePage from "./donate-page-schema";
+import event from "./event-schema";
+import galleryAlbumItem from "./gallery-album-item-schema";
+import galleryPage from "./gallery-page-schema";
 import home from "./home-schema";
-import repettoire from "./repettoire-schema";
-import teamHero from "./team-hero-schema";
-import team from "./team-schema";
+import teamPage from "./team-page-schema";
 import whoWeAre from "./who-we-are-schema";
-import whoWeAreHero from "./who-we-are-hero-schema";
-import sera5thHero from "./sera5th-hero-schema";
-import Sera5th from "./sera5th-schema";
-
 
 const schemas = [
   home,
-  repettoire,
-  events,
+  event,
   whoWeAre,
-  whoWeAreHero,
-  team,
-  galleryAlbum,
-  gallery,
-  teamHero,
-  eventHero,
-  galleryHero,
-  contactHero, 
-  donateHero,
-  donation,
-  contactInfo,
-  sera5thHero,
-  Sera5th
+  teamPage,
+  galleryPage,
+  contactPage,
+  donatePage,
+  galleryAlbumItem,
 ];
 
 export default schemas;

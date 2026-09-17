@@ -1,138 +1,205 @@
+import { requiredAltField } from "./image-fields";
+import {
+  storyBlockFields,
+  storyBlockPreview,
+  storyBlockValidation,
+} from "./story-block-fields";
+import { visionApproachBlock, visionContentBlock } from "./vision-rich-text";
+
 const whoWeAre = {
   name: "whoWeAre",
-  title: "Who We Are Page",
+  title: "Who We Are",
   type: "document",
+  description: "Who We Are page (/about-us).",
+  groups: [
+    { name: "hero", title: "Hero", default: true },
+    { name: "story", title: "Story" },
+    { name: "vision", title: "Vision" },
+    { name: "mission", title: "Mission" },
+    { name: "belief", title: "Belief" },
+  ],
   fields: [
     {
-      name: "title",
-      title: "Story Title",
-      type: "string",
-    },
-    {
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: { source: "title" },
-    },
-    {
-      name: "description_1",
-      title: "Story Paragraph 1",
-      type: "text",
-    },
-    {
-      name: "description_2",
-      title: "Story Paragraph 2",
-      type: "text",
-    },
-    {
-      name: "description_3",
-      title: "Story Paragraph 3",
-      type: "text",
-    },
-    {
-      name: "image",
-      type: "image",
-      title: "Story Image (primary)",
-      options: {
-        hotspot: true,
-      },
+      name: "hero",
+      title: "Hero",
+      type: "object",
+      group: "hero",
       fields: [
         {
-          name: "alt",
+          name: "title",
+          title: "Title",
           type: "string",
-          title: "Alt",
+        },
+        {
+          name: "description",
+          title: "Description",
+          type: "text",
+        },
+        {
+          name: "image",
+          type: "image",
+          title: "Image",
+          options: { hotspot: true },
+          fields: [requiredAltField],
         },
       ],
     },
     {
-      name: "story_images",
-      title: "Story Gallery",
-      type: "array",
-      of: [
+      name: "story",
+      title: "Story",
+      type: "object",
+      group: "story",
+      fields: [
         {
-          type: "image",
-          options: { hotspot: true },
-          fields: [
+          name: "title",
+          title: "Section title",
+          type: "string",
+        },
+        {
+          name: "blocks",
+          title: "Story blocks",
+          type: "array",
+          description:
+            "Each block is a designed section on the page. Use Text+image (right) for the opening, Full width for the middle passage, and Image+text (left) for the closing.",
+          of: [
             {
-              name: "alt",
-              type: "string",
-              title: "Alt",
+              name: "storyBlock",
+              title: "Story block",
+              type: "object",
+              fields: storyBlockFields,
+              preview: storyBlockPreview,
+              validation: storyBlockValidation,
             },
           ],
         },
       ],
     },
     {
-      name: "founder_name",
-      title: "Founder Name",
-      type: "string",
-    },
-    {
-      name: "founder_title",
-      title: "Founder Title",
-      type: "string",
-    },
-    {
-      name: "founder_image",
-      type: "image",
-      title: "Founder Image",
-      options: {
-        hotspot: true,
-      },
+      name: "vision",
+      title: "Vision",
+      type: "object",
+      group: "vision",
       fields: [
         {
-          name: "alt",
+          name: "eyebrow",
+          title: "Eyebrow",
           type: "string",
-          title: "Alt",
+        },
+        {
+          name: "founderName",
+          title: "Founder name",
+          type: "string",
+        },
+        {
+          name: "founderTitle",
+          title: "Founder title",
+          type: "string",
+        },
+        {
+          name: "founderImage",
+          title: "Founder image",
+          type: "image",
+          options: { hotspot: true },
+          fields: [requiredAltField],
+        },
+        {
+          name: "content",
+          title: "Founder story",
+          type: "array",
+          description: "Body copy shown beside the founder portrait.",
+          of: [visionContentBlock],
+        },
+        {
+          name: "approachPassage",
+          title: "Approach",
+          type: "array",
+          description: "Italic passage below the founder section (after the gold line).",
+          of: [visionApproachBlock],
         },
       ],
     },
     {
-      name: "vision_paragraph_1",
-      title: "Vision Paragraph 1",
-      type: "text",
-    },
-    {
-      name: "vision_paragraph_2",
-      title: "Vision Paragraph 2",
-      type: "text",
-    },
-    {
-      name: "approach_paragraph",
-      title: "Approach Paragraph",
-      type: "text",
-    },
-    {
       name: "mission",
-      title: "Mission Statement",
-      type: "text",
+      title: "Mission",
+      type: "object",
+      group: "mission",
+      fields: [
+        {
+          name: "eyebrow",
+          title: "Eyebrow",
+          type: "string",
+        },
+        {
+          name: "statement",
+          title: "Mission statement",
+          type: "text",
+        },
+        {
+          name: "pillars",
+          title: "Pillars",
+          type: "array",
+          description: "Add 3 pillars when this section is ready (Faith, Heritage, Excellence).",
+          validation: (Rule: {
+            custom: (fn: (value: unknown) => true | string) => unknown;
+          }) =>
+            Rule.custom((value) => {
+              const items = Array.isArray(value) ? value : [];
+              if (items.length === 0) return true;
+              if (items.length === 3) return true;
+              if (items.length < 3) {
+                const remaining = 3 - items.length;
+                return `${items.length} of 3 pillars — add ${remaining} more to publish.`;
+              }
+              const extra = items.length - 3;
+              return `${items.length} of 3 pillars — remove ${extra} to publish.`;
+            }),
+          of: [
+            {
+              name: "pillar",
+              title: "Pillar",
+              type: "object",
+              fields: [
+                {
+                  name: "title",
+                  title: "Title",
+                  type: "string",
+                },
+                {
+                  name: "body",
+                  title: "Body",
+                  type: "text",
+                },
+              ],
+              preview: {
+                select: { title: "title" },
+                prepare({ title }: { title?: string }) {
+                  return { title: title || "Pillar" };
+                },
+              },
+            },
+          ],
+        },
+      ],
     },
     {
-      name: "faith",
-      title: "Faith Pillar",
-      type: "text",
-    },
-    {
-      name: "heritage",
-      title: "Heritage Pillar",
-      type: "text",
-    },
-    {
-      name: "excellence",
-      title: "Excellence Pillar",
-      type: "text",
-    },
-    {
-      name: "closing_belief",
-      title: "Closing Belief",
-      type: "text",
-    },
-    {
-      name: "vision",
-      title: "Vision (legacy)",
-      type: "string",
+      name: "belief",
+      title: "Belief",
+      type: "object",
+      group: "belief",
+      fields: [
+        {
+          name: "text",
+          title: "Closing belief",
+          type: "text",
+        },
+      ],
     },
   ],
+  preview: {
+    prepare() {
+      return { title: "Who We Are" };
+    },
+  },
 };
 
 export default whoWeAre;

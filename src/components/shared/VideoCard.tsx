@@ -12,9 +12,16 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BsArrowRight, BsPlayFill } from "react-icons/bs";
 import { httpsUrl } from "@/lib/httpsUrl";
+import {
+  buildYouTubeThumbnailUrl,
+  extractYouTubeId,
+  isYouTubeThumbnailPlaceholder,
+  YOUTUBE_THUMBNAIL_PLACEHOLDER_MAX_WIDTH,
+  youtubeThumbnailFallback,
+} from "@/lib/youtube";
 
 interface VideoCardProps {
   title: string;
@@ -25,6 +32,52 @@ interface VideoCardProps {
 const VideoCard = ({ title, image, url }: VideoCardProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const safeUrl = httpsUrl(url) || url;
+  const videoId = safeUrl ? extractYouTubeId(safeUrl) : null;
+  const isPlayable = Boolean(videoId);
+  const [thumbSrc, setThumbSrc] = useState(image);
+
+  useEffect(() => {
+    setThumbSrc(image);
+  }, [image]);
+
+  const handlePlay = () => {
+    if (isPlayable) onOpen();
+  };
+
+  const advanceThumbnail = useCallback(() => {
+    setThumbSrc((current) => {
+      const fallback = youtubeThumbnailFallback(current);
+      return fallback && fallback !== current ? fallback : current;
+    });
+  }, []);
+
+  const handleThumbLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    if (isYouTubeThumbnailPlaceholder(event.currentTarget)) {
+      advanceThumbnail();
+    }
+  };
+
+  useEffect(() => {
+    if (!videoId) return;
+
+    const maxUrl = buildYouTubeThumbnailUrl(videoId, "max");
+    const probe = new window.Image();
+
+    const handleProbeLoad = () => {
+      if (probe.naturalWidth > YOUTUBE_THUMBNAIL_PLACEHOLDER_MAX_WIDTH) {
+        setThumbSrc(maxUrl);
+      }
+    };
+
+    probe.addEventListener("load", handleProbeLoad);
+    probe.addEventListener("error", () => {});
+    probe.src = maxUrl;
+
+    return () => {
+      probe.removeEventListener("load", handleProbeLoad);
+      probe.src = "";
+    };
+  }, [videoId]);
 
   return (
     <>
@@ -40,51 +93,46 @@ const VideoCard = ({ title, image, url }: VideoCardProps) => {
         boxShadow="0 20px 50px -12px rgba(4, 35, 92, 0.22), 0 8px 20px -6px rgba(4, 35, 92, 0.1)"
         border="1px solid"
         borderColor="rgba(255, 255, 255, 0.14)"
-        cursor="pointer"
-        onClick={() => safeUrl && onOpen()}
+        cursor={isPlayable ? "pointer" : "default"}
+        onClick={handlePlay}
         transition="transform 300ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 300ms cubic-bezier(0.23, 1, 0.32, 1), border-color 300ms ease"
-        _hover={{
-          transform: "translateY(-6px)",
-          boxShadow: "0 30px 70px -16px rgba(4, 35, 92, 0.35), 0 12px 28px -6px rgba(4, 35, 92, 0.15)",
-          borderColor: "rgba(255, 255, 255, 0.3)",
-        }}
-        _active={{
-          transform: "scale(0.985)",
-        }}
-        tabIndex={0}
+        _hover={
+          isPlayable
+            ? {
+                transform: "translateY(-6px)",
+                boxShadow: "0 30px 70px -16px rgba(4, 35, 92, 0.35), 0 12px 28px -6px rgba(4, 35, 92, 0.15)",
+                borderColor: "rgba(255, 255, 255, 0.3)",
+              }
+            : undefined
+        }
+        _active={isPlayable ? { transform: "scale(0.985)" } : undefined}
+        tabIndex={isPlayable ? 0 : -1}
         onKeyDown={(e: React.KeyboardEvent) => {
+          if (!isPlayable) return;
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            safeUrl && onOpen();
+            onOpen();
           }
         }}
-        aria-label={`Watch performance: ${title}`}
+        aria-label={isPlayable ? `Watch performance: ${title}` : `${title} — video unavailable`}
+        aria-disabled={!isPlayable}
       >
-        {/* Background Image with Zoom on Hover */}
+        {/* Background image — 16:9 thumbnails (maxres/mq) fill edge-to-edge */}
         <Image
-          src={image}
+          src={thumbSrc}
           alt={title}
           position="absolute"
           inset={0}
           w="full"
           h="full"
           objectFit="cover"
-          objectPosition="center 20%"
+          objectPosition="center top"
           transition="transform 600ms cubic-bezier(0.23, 1, 0.32, 1)"
           _groupHover={{
             transform: "scale(1.06)",
           }}
-        />
-
-        {/* Top Vignette for Pill Contrast */}
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          right={0}
-          h="7rem"
-          bg="linear-gradient(to bottom, rgba(4, 25, 68, 0.8) 0%, rgba(4, 25, 68, 0.3) 60%, transparent 100%)"
-          pointerEvents="none"
+          onError={advanceThumbnail}
+          onLoad={handleThumbLoad}
         />
 
         {/* Deep Bottom Cinematic Scrim */}
@@ -201,7 +249,7 @@ const VideoCard = ({ title, image, url }: VideoCardProps) => {
         </Box>
       </Box>
 
-      {safeUrl ? (
+      {isPlayable && safeUrl ? (
         <VideoModal
           isOpen={isOpen}
           onClose={onClose}

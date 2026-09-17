@@ -8,12 +8,10 @@ import GalleryCollectionsSkeleton from "@/components/gallery/skeletons/GalleryCo
 import GalleryImageTile from "@/components/gallery/GalleryImageTile";
 import GalleryLightbox from "@/components/gallery/GalleryLightbox";
 import CustomButton from "@/components/shared/CustomButton";
-import { GALLERY_FALLBACK } from "@/data/galleryContent";
-import { useGallery } from "@/hooks/useCms";
+import { useGalleryPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
 import type { GalleryAlbum } from "@/lib/galleryDisplay";
-import { formatAlbumDate } from "@/lib/galleryDisplay";
-import { resolveGalleryAlbums } from "@/lib/resolveGallery";
+import { normalizeGalleryPageData, resolveGalleryListing } from "@/lib/galleryPageContent";
 import {
   Box,
   Container,
@@ -27,18 +25,19 @@ import { useEffect, useMemo, useState } from "react";
 const GRID_BATCH = 12;
 
 const GalleryCollections = () => {
-  const galleryQuery = useGallery();
-  const { data } = galleryQuery;
+  const pageQuery = useGalleryPage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSwitching, setIsSwitching] = useState(false);
   const [gridLimit, setGridLimit] = useState(GRID_BATCH);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const albums = useMemo(
-    () => resolveGalleryAlbums(data),
-    [data],
-  );
+  const listing = useMemo(() => {
+    const { page } = normalizeGalleryPageData(pageQuery.data?.page);
+    return resolveGalleryListing(page);
+  }, [pageQuery.data]);
+
+  const albums = listing?.albums ?? [];
 
   useEffect(() => {
     if (activeIndex < albums.length) return;
@@ -58,19 +57,21 @@ const GalleryCollections = () => {
     return () => window.clearTimeout(timer);
   }, [activeIndex, isSwitching]);
 
-  if (isCmsLoading(galleryQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <GalleryCollectionsSkeleton />;
   }
 
+  if (!listing || albums.length === 0) {
+    return null;
+  }
+
   const activeAlbum: GalleryAlbum | undefined = albums[activeIndex];
-  const activeImages = activeAlbum?.images ?? [];
-  const featuredImage = activeImages[0];
-  const gridImages = activeImages.slice(1);
+  const featuredImage = activeAlbum?.cover;
+  const gridImages = activeAlbum?.images ?? [];
+  const lightboxImages = featuredImage ? [featuredImage, ...gridImages] : gridImages;
   const visibleGridImages = gridImages.slice(0, gridLimit);
   const hasMore = gridImages.length > gridLimit;
   const remainingCount = gridImages.length - gridLimit;
-  const albumDateLabel = formatAlbumDate(activeAlbum?.date);
-
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
     setLightboxOpen(true);
@@ -95,19 +96,23 @@ const GalleryCollections = () => {
         minW={0}
       >
         <VStack spacing={{ base: 8, md: 12 }} align="stretch" w="full" minW={0}>
-          <VStack align="flex-start" spacing={4} maxW="40rem">
-            <SectionEyebrow label={GALLERY_FALLBACK.section.eyebrow} />
-            <Text
-              id="gallery-collections-heading"
-              fontSize={{ base: "md", md: "lg" }}
-              color="secondary.700"
-              opacity={0.9}
-              lineHeight={1.75}
-              sx={{ textWrap: "pretty" }}
-            >
-              {GALLERY_FALLBACK.section.intro}
-            </Text>
-          </VStack>
+          {listing.eyebrow || listing.intro ? (
+            <VStack align="flex-start" spacing={4} maxW="40rem">
+              {listing.eyebrow ? <SectionEyebrow label={listing.eyebrow} /> : null}
+              {listing.intro ? (
+                <Text
+                  id="gallery-collections-heading"
+                  fontSize={{ base: "md", md: "lg" }}
+                  color="secondary.700"
+                  opacity={0.9}
+                  lineHeight={1.75}
+                  sx={{ textWrap: "pretty" }}
+                >
+                  {listing.intro}
+                </Text>
+              ) : null}
+            </VStack>
+          ) : null}
 
           <Box
             position={{ base: "sticky", md: "static" }}
@@ -131,8 +136,6 @@ const GalleryCollections = () => {
                 <GalleryFeatured
                   image={featuredImage}
                   collectionLabel={activeAlbum.label}
-                  dateLabel={albumDateLabel}
-                  description={activeAlbum.description}
                   onOpen={() => openLightbox(0)}
                 />
               ) : null}
@@ -149,7 +152,7 @@ const GalleryCollections = () => {
                   minW={0}
                 >
                   {visibleGridImages.map((image, index) => {
-                    const lightboxIndex = index + 1;
+                    const lightboxIndex = featuredImage ? index + 1 : index;
 
                     return (
                       <GalleryImageTile
@@ -163,7 +166,7 @@ const GalleryCollections = () => {
                 </Grid>
               ) : null}
 
-              {activeImages.length === 1 ? null : (
+              {gridImages.length === 0 ? null : (
                 <Flex justify="center" pt={{ base: 2, md: 4 }}>
                   {hasMore ? (
                     <CustomButton
@@ -173,7 +176,7 @@ const GalleryCollections = () => {
                     />
                   ) : gridImages.length > GRID_BATCH ? (
                     <Text fontSize="sm" color="secondary.700" opacity={0.6}>
-                      All {activeImages.length} photos shown
+                      All {gridImages.length} photos shown
                     </Text>
                   ) : null}
                 </Flex>
@@ -185,7 +188,7 @@ const GalleryCollections = () => {
 
       <GalleryLightbox
         isOpen={lightboxOpen}
-        images={activeImages}
+        images={lightboxImages}
         selectedIndex={lightboxIndex}
         collectionLabel={activeAlbum?.label}
         onClose={closeLightbox}

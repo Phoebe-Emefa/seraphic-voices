@@ -2,76 +2,88 @@
 
 import { groqQueries, queryKeys } from "../../sanity/queries";
 import { isUpcomingEvent } from "@/lib/eventDates";
+import type {
+  EventDocument,
+  EventPageDocument,
+  HomePageDocument,
+  ContactPageQueryResult,
+  DonatePageQueryResult,
+  GalleryPageQueryResult,
+  TeamPageQueryResult,
+  WhoWeArePageDocument,
+} from "@/lib/cms/types";
+import { eventsFromPage } from "@/lib/normalizeEvents";
+import { useMemo } from "react";
 import { useSanityQuery } from "./useSanityQuery";
 
-export function useHome() {
-  return useSanityQuery<any[]>(queryKeys.home, groqQueries.home);
+export function useHomePage() {
+  return useSanityQuery<HomePageDocument | null>(queryKeys.homePage, groqQueries.homePage);
 }
 
-export function useEvents() {
-  return useSanityQuery<any[]>(queryKeys.events, groqQueries.events);
+export function useEventPage() {
+  return useSanityQuery<EventPageDocument | null>(queryKeys.eventPage, groqQueries.eventPage);
 }
 
-export function useEvent(slug: string) {
-  return useSanityQuery<any>(queryKeys.event(slug), groqQueries.eventBySlug, { slug });
+export function useResolvedEvents() {
+  const pageQuery = useEventPage();
+
+  const events = useMemo(
+    () => eventsFromPage(pageQuery.data ?? null),
+    [pageQuery.data],
+  );
+
+  return {
+    events,
+    eventPage: pageQuery.data ?? null,
+    pageQuery,
+  };
 }
 
-export function useEventHero() {
-  return useSanityQuery<any[]>(queryKeys.eventHero, groqQueries.eventHero);
+export function useFeaturedUpcomingEvents(events: EventDocument[]) {
+  return useMemo(
+    () =>
+      events
+        .filter((event) => event.featured === true && isUpcomingEvent(event))
+        .sort((a, b) => {
+          const aTime = a.start_date ? Date.parse(a.start_date) : Number.POSITIVE_INFINITY;
+          const bTime = b.start_date ? Date.parse(b.start_date) : Number.POSITIVE_INFINITY;
+          return aTime - bTime;
+        }),
+    [events],
+  );
 }
 
-export function useGallery() {
-  return useSanityQuery<any[]>(queryKeys.gallery, groqQueries.gallery);
+export function useGalleryPage() {
+  return useSanityQuery<GalleryPageQueryResult | null>(
+    queryKeys.galleryPage,
+    groqQueries.galleryPage,
+  );
 }
 
-export function useGalleryHero() {
-  return useSanityQuery<any[]>(queryKeys.galleryHero, groqQueries.galleryHero);
+export function useWhoWeArePage() {
+  return useSanityQuery<WhoWeArePageDocument | null>(
+    queryKeys.whoWeArePage,
+    groqQueries.whoWeArePage,
+  );
 }
 
-export function useWhoWeAre() {
-  return useSanityQuery<any[]>(queryKeys.whoWeAre, groqQueries.whoWeAre);
+export function useTeamPage() {
+  return useSanityQuery<TeamPageQueryResult | null>(
+    queryKeys.teamPage,
+    groqQueries.teamPage,
+  );
 }
 
-export function useWhoWeAreHero() {
-  return useSanityQuery<any[]>(queryKeys.whoWeAreHero, groqQueries.whoWeAreHero);
+export function useContactPage() {
+  return useSanityQuery<ContactPageQueryResult | null>(
+    queryKeys.contactPage,
+    groqQueries.contactPage,
+  );
 }
 
-export function useTeam() {
-  return useSanityQuery<any[]>(queryKeys.team, groqQueries.team);
-}
-
-export function useTeamHero() {
-  return useSanityQuery<any[]>(queryKeys.teamHero, groqQueries.teamHero);
-}
-
-export function useContactHero() {
-  return useSanityQuery<any[]>(queryKeys.contactHero, groqQueries.contactHero);
-}
-
-export function useContactInfo() {
-  return useSanityQuery<any[]>(queryKeys.contactInfo, groqQueries.contactInfo);
-}
-
-export function useDonateHero() {
-  return useSanityQuery<any[]>(queryKeys.donateHero, groqQueries.donateHero);
-}
-
-export function useDonation() {
-  return useSanityQuery<any[]>(queryKeys.donation, groqQueries.donation);
-}
-
-export function useRepertoire() {
-  return useSanityQuery<any[]>(queryKeys.repertoire, groqQueries.repertoire);
-}
-
-export function useSera5th() {
-  return useSanityQuery<any[]>(queryKeys.sera5th, groqQueries.sera5th);
-}
-
-export function useSera5thHero() {
-  return useSanityQuery<any[]>(queryKeys.sera5thHero, groqQueries.sera5thHero);
-}
-
-export function nextUpcomingEvent(events?: any[]) {
-  return events?.filter(isUpcomingEvent)[0] ?? null;
+export function useDonatePage() {
+  return useSanityQuery<DonatePageQueryResult | null>(
+    queryKeys.donatePage,
+    groqQueries.donatePage,
+  );
 }

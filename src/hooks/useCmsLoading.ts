@@ -2,12 +2,12 @@
 
 import type { UseQueryResult } from "@tanstack/react-query";
 
-export function isCmsLoading(query: Pick<UseQueryResult, "isPending" | "isError">) {
+type CmsQueryState = Pick<UseQueryResult, "isPending" | "isError">;
+
+export function isCmsLoading(query: CmsQueryState) {
   return query.isPending && !query.isError;
 }
 
-export function isAnyCmsLoading(
-  ...queries: Array<Pick<UseQueryResult, "isPending" | "isError">>
-) {
+export function isAnyCmsLoading(...queries: CmsQueryState[]) {
   return queries.some((query) => isCmsLoading(query));
 }

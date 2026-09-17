@@ -1,11 +1,31 @@
 import GalleryPage from "@/components/gallery/GalleryPage";
+import JsonLd from "@/components/seo/JsonLd";
+import { getGalleryRouteData } from "@/lib/cms/fetchPages";
+import { buildBreadcrumbJsonLd, buildPageMetadataFromConfig } from "@/lib/seo";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Gallery",
-  description: "A gallery of performances and moments from Seraphic Voices of Toronto.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const { page } = await getGalleryRouteData();
+    return buildPageMetadataFromConfig("gallery", {
+      title: page?.hero?.title,
+      description: page?.hero?.description,
+    });
+  } catch {
+    return buildPageMetadataFromConfig("gallery");
+  }
+}
 
 export default function Page() {
-  return <GalleryPage />;
+  return (
+    <>
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Gallery", path: "/gallery" },
+        ])}
+      />
+      <GalleryPage />
+    </>
+  );
 }

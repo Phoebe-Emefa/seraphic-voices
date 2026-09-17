@@ -1,126 +1,179 @@
-import { ABOUT_US_FALLBACK } from "@/data/aboutUsContent";
+import type { WhoWeArePageDocument } from "@/lib/cms/types";
+import { hasPortableText, type PortableBlock } from "@/lib/portableText";
 import { cleanMissionStatement, splitMissionLines } from "@/lib/missionText";
 import { imageSrc } from "../../sanity/sanity-client";
 
-export type WhoWeAreContent = {
-  title?: string;
-  description_1?: string;
-  description_2?: string;
-  description_3?: string;
-  image?: { asset?: { _ref?: string }; alt?: string };
-  story_images?: Array<{ asset?: { _ref?: string }; alt?: string }>;
-  founder_name?: string;
-  founder_title?: string;
-  founder_image?: { asset?: { _ref?: string }; alt?: string };
-  vision_paragraph_1?: string;
-  vision_paragraph_2?: string;
-  approach_paragraph?: string;
-  mission?: string;
-  faith?: string;
-  heritage?: string;
-  excellence?: string;
-  closing_belief?: string;
+export type StoryBlockLayout = "textImage" | "fullWidth" | "imageText";
+
+export type AboutStoryBlock = {
+  layout: StoryBlockLayout;
+  content: PortableBlock[];
+  imageUrl?: string;
+  imageAlt?: string;
+  taglines: PortableBlock[];
 };
 
-const STORY_IMAGE_FALLBACKS = [
-  {
-    url: "https://picsum.photos/seed/seraphic-story-hero/1600/900",
-    alt: "Seraphic Voices performing on stage",
-  },
-  {
-    url: "https://picsum.photos/seed/seraphic-story-ensemble/1200/800",
-    alt: "Seraphic Voices ensemble in concert",
-  },
-  {
-    url: "https://picsum.photos/seed/seraphic-story-choir/1200/800",
-    alt: "Choir members during a live performance",
-  },
-] as const;
-
-const FOUNDER_IMAGE_FALLBACK = "https://picsum.photos/seed/seraphic-founder/900/1100";
-
-export type StoryImage = {
-  url: string;
-  alt: string;
+export type AboutHeroContent = {
+  title: string;
+  description: string;
+  imageUrl?: string;
+  imageAlt?: string;
 };
 
-export function resolveAboutStory(content?: WhoWeAreContent) {
-  const paragraphs = [
-    content?.description_1,
-    content?.description_2,
-    content?.description_3,
-  ].filter(Boolean) as string[];
+export type AboutStoryContent = {
+  title: string;
+  blocks: AboutStoryBlock[];
+};
 
-  const cmsImages: StoryImage[] = [];
+export type AboutVisionContent = {
+  eyebrow: string;
+  founderName: string;
+  founderTitle: string;
+  content: PortableBlock[];
+  approach: PortableBlock[];
+  imageUrl?: string;
+  imageAlt?: string;
+};
 
-  const primaryUrl = imageSrc(content?.image?.asset?._ref);
-  if (primaryUrl) {
-    cmsImages.push({
-      url: primaryUrl,
-      alt: content?.image?.alt || STORY_IMAGE_FALLBACKS[0].alt,
-    });
+export type AboutMissionContent = {
+  eyebrow: string;
+  statement: string;
+  statementLines: string[];
+  pillars: Array<{ title: string; body: string }>;
+};
+
+const STORY_LAYOUTS = new Set<StoryBlockLayout>(["textImage", "fullWidth", "imageText"]);
+
+type StoryCmsBlock = NonNullable<NonNullable<WhoWeArePageDocument["story"]>["blocks"]>[number];
+
+function resolveStoryBlock(block: StoryCmsBlock): AboutStoryBlock | null {
+  const layout = block?.layout;
+  if (!layout || !STORY_LAYOUTS.has(layout as StoryBlockLayout)) {
+    return null;
   }
 
-  for (const item of content?.story_images ?? []) {
-    const url = imageSrc(item?.asset?._ref);
-    if (url) {
-      cmsImages.push({
-        url,
-        alt: item?.alt || "Seraphic Voices of Toronto",
-      });
-    }
-  }
+  const content = (block.content ?? []) as PortableBlock[];
+  const taglines = (block.taglines ?? []) as PortableBlock[];
+  const imageUrl = imageSrc(block.image);
 
-  const images: StoryImage[] =
-    cmsImages.length > 0
-      ? [
-          ...cmsImages,
-          ...STORY_IMAGE_FALLBACKS.filter(
-            (_, index) => index >= cmsImages.length,
-          ),
-        ].slice(0, 3)
-      : [...STORY_IMAGE_FALLBACKS];
+  const hasContent = hasPortableText(content);
+  const hasTaglines = hasPortableText(taglines);
+
+  if (!hasContent && !imageUrl && !hasTaglines) {
+    return null;
+  }
 
   return {
-    title: content?.title || ABOUT_US_FALLBACK.story.title,
-    paragraphs: paragraphs.length ? paragraphs : ABOUT_US_FALLBACK.story.paragraphs,
-    images,
+    layout: layout as StoryBlockLayout,
+    content,
+    imageUrl,
+    imageAlt: block.image?.alt,
+    taglines,
   };
 }
 
-export function resolveAboutVision(content?: WhoWeAreContent) {
-  const paragraphs = [content?.vision_paragraph_1, content?.vision_paragraph_2].filter(
-    Boolean,
-  ) as string[];
+export function resolveAboutHero(
+  page?: WhoWeArePageDocument | null,
+): AboutHeroContent | null {
+  const hero = page?.hero;
+  const title = hero?.title?.trim();
+  const description = hero?.description?.trim();
+  const imageUrl = imageSrc(hero?.image);
+
+  if (!title && !description && !imageUrl) {
+    return null;
+  }
 
   return {
-    eyebrow: ABOUT_US_FALLBACK.vision.eyebrow,
-    founderName: content?.founder_name || ABOUT_US_FALLBACK.vision.founderName,
-    founderTitle: content?.founder_title || ABOUT_US_FALLBACK.vision.founderTitle,
-    paragraphs: paragraphs.length ? paragraphs : ABOUT_US_FALLBACK.vision.paragraphs,
-    approach: content?.approach_paragraph || ABOUT_US_FALLBACK.vision.approach,
-    imageUrl: imageSrc(content?.founder_image?.asset?._ref) || FOUNDER_IMAGE_FALLBACK,
-    imageAlt: content?.founder_image?.alt || content?.founder_name || "Founder portrait",
+    title: title ?? "",
+    description: description ?? "",
+    imageUrl,
+    imageAlt: hero?.image?.alt,
   };
 }
 
-export function resolveAboutMission(content?: WhoWeAreContent) {
-  const pillars = [
-    { title: "Faith", body: content?.faith || ABOUT_US_FALLBACK.mission.pillars[0].body },
-    { title: "Heritage", body: content?.heritage || ABOUT_US_FALLBACK.mission.pillars[1].body },
-    { title: "Excellence", body: content?.excellence || ABOUT_US_FALLBACK.mission.pillars[2].body },
-  ];
+export function resolveAboutStory(
+  page?: WhoWeArePageDocument | null,
+): AboutStoryContent | null {
+  const story = page?.story;
+  const title = story?.title?.trim();
+  const blocks =
+    story?.blocks
+      ?.map(resolveStoryBlock)
+      .filter((block): block is AboutStoryBlock => block !== null) ?? [];
 
-  const rawStatement = content?.mission || ABOUT_US_FALLBACK.mission.statement;
+  if (!title && blocks.length === 0) {
+    return null;
+  }
 
   return {
-    eyebrow: ABOUT_US_FALLBACK.mission.eyebrow,
-    statement: cleanMissionStatement(rawStatement),
-    statementLines: splitMissionLines(rawStatement),
+    title: title ?? "",
+    blocks,
+  };
+}
+
+export function resolveAboutVision(
+  page?: WhoWeArePageDocument | null,
+): AboutVisionContent | null {
+  const vision = page?.vision;
+  const eyebrow = vision?.eyebrow?.trim();
+  const founderName = vision?.founderName?.trim();
+  const founderTitle = vision?.founderTitle?.trim();
+  const content = (vision?.content ?? []) as PortableBlock[];
+  const approach = (vision?.approachPassage ?? []) as PortableBlock[];
+  const imageUrl = imageSrc(vision?.founderImage);
+  const hasContent = hasPortableText(content);
+  const hasApproach = hasPortableText(approach);
+
+  if (
+    !eyebrow &&
+    !founderName &&
+    !founderTitle &&
+    !hasContent &&
+    !hasApproach &&
+    !imageUrl
+  ) {
+    return null;
+  }
+
+  return {
+    eyebrow: eyebrow ?? "",
+    founderName: founderName ?? "",
+    founderTitle: founderTitle ?? "",
+    content,
+    approach,
+    imageUrl,
+    imageAlt: vision?.founderImage?.alt || founderName || "",
+  };
+}
+
+export function resolveAboutMission(
+  page?: WhoWeArePageDocument | null,
+): AboutMissionContent | null {
+  const mission = page?.mission;
+  const eyebrow = mission?.eyebrow?.trim();
+  const rawStatement = mission?.statement?.trim();
+  const pillars =
+    mission?.pillars
+      ?.map((pillar) => ({
+        title: pillar.title?.trim() ?? "",
+        body: pillar.body?.trim() ?? "",
+      }))
+      .filter((pillar) => pillar.title || pillar.body) ?? [];
+
+  if (!eyebrow && !rawStatement && pillars.length === 0) {
+    return null;
+  }
+
+  return {
+    eyebrow: eyebrow ?? "",
+    statement: rawStatement ? cleanMissionStatement(rawStatement) : "",
+    statementLines: rawStatement ? splitMissionLines(rawStatement) : [],
     pillars,
   };
 }
 
-export function resolveAboutBelief(content?: WhoWeAreContent) {
-  return content?.closing_belief || ABOUT_US_FALLBACK.belief;
+export function resolveAboutBelief(page?: WhoWeArePageDocument | null): string | null {
+  const text = page?.belief?.text?.trim();
+  return text || null;
 }

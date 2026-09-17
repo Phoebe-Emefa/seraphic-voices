@@ -2,26 +2,30 @@
 
 import AboutHeroSkeleton from "@/components/about/skeletons/AboutHeroSkeleton";
 import PageHero from "@/components/shared/PageHero";
-import { GALLERY_FALLBACK } from "@/data/galleryContent";
-import { useGalleryHero } from "@/hooks/useCms";
+import { useGalleryPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
-import { imageSrc } from "../../../sanity/sanity-client";
+import { normalizeGalleryPageData, resolveGalleryHero } from "@/lib/galleryPageContent";
 
 const GalleryHero = () => {
-  const heroQuery = useGalleryHero();
-  const { data } = heroQuery;
-  const hero = data?.[0];
+  const pageQuery = useGalleryPage();
 
-  if (isCmsLoading(heroQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <AboutHeroSkeleton />;
+  }
+
+  const { page } = normalizeGalleryPageData(pageQuery.data?.page);
+  const hero = resolveGalleryHero(page);
+
+  if (!hero) {
+    return null;
   }
 
   return (
     <PageHero
-      heading={hero?.title || GALLERY_FALLBACK.hero.title}
-      description={hero?.description || GALLERY_FALLBACK.hero.description}
-      image={imageSrc(hero?.image?.asset?._ref)}
-      alt={hero?.image?.alt}
+      heading={hero.title}
+      description={hero.description}
+      image={hero.imageUrl}
+      alt={hero.imageAlt}
     />
   );
 };

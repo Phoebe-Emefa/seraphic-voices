@@ -3,8 +3,9 @@
 import CustomButton from "@/components/shared/CustomButton";
 import { resolveObjectPosition } from "@/components/home/Hero/buildHeroSlides";
 import AboutSkeleton from "@/components/home/skeletons/AboutSkeleton";
-import { useHome } from "@/hooks/useCms";
+import { useHomePage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
+import { cmsHref } from "@/lib/cmsHref";
 import {
   Box,
   Container,
@@ -19,21 +20,25 @@ import {
 import { imageSrc } from "../../../sanity/sanity-client";
 
 const About = () => {
-  const homeQuery = useHome();
-  const { data } = homeQuery;
-  const content = data?.[0];
+  const homeQuery = useHomePage();
+  const home = homeQuery.data;
+  const about = home?.about;
 
   if (isCmsLoading(homeQuery)) {
     return <AboutSkeleton />;
   }
-  const aboutImage = content?.about_image;
-  const imageUrl = imageSrc(aboutImage?.asset?._ref);
-  const objectPosition = resolveObjectPosition(aboutImage);
+  const imageUrl = imageSrc(about?.image?.asset?._ref);
+  const objectPosition = resolveObjectPosition(about?.image);
+  const ctaHref = cmsHref(about?.ctaHref);
+
+  if (!about?.eyebrow && !about?.heading && !about?.body && !imageUrl) {
+    return null;
+  }
 
   return (
     <Box
       as="section"
-      aria-labelledby="home-about-heading"
+      aria-labelledby={about?.heading ? "home-about-heading" : undefined}
       w="full"
       minH={{ base: "auto", lg: "100dvh" }}
       display="flex"
@@ -51,61 +56,64 @@ const About = () => {
           gap={{ base: 10, sm: 12, lg: 12, xl: 16 }}
           alignItems="center"
         >
-          {/* Left Column: Narrative & Typography */}
           <VStack
             align="flex-start"
             spacing={{ base: 5, md: 6 }}
             order={{ base: 2, lg: 1 }}
           >
-            {/* Elegant Minimal Eyebrow */}
-            <HStack spacing={3} color="secondary.700">
-              <Box w={8} h="2px" bg="secondary.700" />
-              <Text
-                fontSize={{ base: "xs", sm: "sm" }}
+            {about?.eyebrow ? (
+              <HStack spacing={3} color="secondary.700">
+                <Box w={8} h="2px" bg="secondary.700" />
+                <Text
+                  fontSize={{ base: "xs", sm: "sm" }}
+                  fontWeight="bold"
+                  letterSpacing="0.18em"
+                  textTransform="uppercase"
+                >
+                  {about.eyebrow}
+                </Text>
+              </HStack>
+            ) : null}
+
+            {about?.heading ? (
+              <Heading
+                as="h2"
+                id="home-about-heading"
+                fontSize={{ base: "2.25xl", sm: "3xl", md: "4xl", lg: "4.5xl", xl: "5xl" }}
                 fontWeight="bold"
-                letterSpacing="0.18em"
-                textTransform="uppercase"
+                color="secondary.700"
+                lineHeight={1.15}
+                letterSpacing="-0.02em"
+                sx={{ textWrap: "balance" }}
               >
-                About Our Ensemble
-              </Text>
-            </HStack>
+                {about.heading}
+              </Heading>
+            ) : null}
 
-            <Heading
-              as="h2"
-              id="home-about-heading"
-              fontSize={{ base: "2.25xl", sm: "3xl", md: "4xl", lg: "4.5xl", xl: "5xl" }}
-              fontWeight="bold"
-              color="secondary.700"
-              lineHeight={1.15}
-              letterSpacing="-0.02em"
-              sx={{ textWrap: "balance" }}
-            >
-              Harmonizing cultures through the gift of choral music.
-            </Heading>
-
-            {content?.about_description ? (
+            {about?.body ? (
               <Text
                 fontSize={{ base: "sm", sm: "md", lg: "lg" }}
                 color="text"
                 maxW="48ch"
                 lineHeight={{ base: 1.7, md: 1.8 }}
               >
-                {content.about_description}
+                {about.body}
               </Text>
             ) : null}
 
-            <Box pt={{ base: 2, sm: 3 }} w={{ base: "full", sm: "auto" }}>
-              <CustomButton
-                title="Discover our story"
-                href="/about-us"
-                width={{ base: "100%", sm: "13rem" }}
-                height={{ base: "3.25rem", md: "3.5rem" }}
-                fontSize={{ base: "sm", md: "md" }}
-              />
-            </Box>
+            {about?.ctaTitle && ctaHref ? (
+              <Box pt={{ base: 2, sm: 3 }} w={{ base: "full", sm: "auto" }}>
+                <CustomButton
+                  title={about.ctaTitle}
+                  href={ctaHref}
+                  width={{ base: "100%", sm: "13rem" }}
+                  height={{ base: "3.25rem", md: "3.5rem" }}
+                  fontSize={{ base: "sm", md: "md" }}
+                />
+              </Box>
+            ) : null}
           </VStack>
 
-          {/* Right Column: Massive Clean Cinematic Photo */}
           {imageUrl ? (
             <Flex
               direction="column"
@@ -124,7 +132,7 @@ const About = () => {
               >
                 <Image
                   src={imageUrl}
-                  alt={aboutImage?.alt || "Seraphic Voices of Toronto ensemble"}
+                  alt={about?.image?.alt || about?.heading || ""}
                   position="absolute"
                   inset={0}
                   w="full"
@@ -133,8 +141,6 @@ const About = () => {
                   objectPosition={objectPosition}
                   loading="lazy"
                 />
-
-                {/* Ambient vignette scrim */}
                 <Box
                   position="absolute"
                   inset={0}

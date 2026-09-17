@@ -17,10 +17,20 @@ import { HiXMark } from "react-icons/hi2";
 const SuccessModal = ({
   onClose,
   isOpen,
+  title,
+  message,
+  closeLabel,
 }: {
   onClose: () => void;
   isOpen: boolean;
+  title: string;
+  message: string;
+  closeLabel: string;
 }) => {
+  if (!title && !message && !closeLabel) {
+    return null;
+  }
+
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered size="md" motionPreset="none">
       <ModalOverlay bg="rgba(4, 18, 48, 0.88)" backdropFilter="blur(8px)" />
@@ -47,28 +57,34 @@ const SuccessModal = ({
 
           <VStack spacing={5} align="center" pt={2}>
             <Box w="2.5rem" h="2px" bg="secondary.500" />
-            <Text
-              fontWeight="bold"
-              fontSize={{ base: "xl", md: "2xl" }}
-              color="secondary.700"
-              textAlign="center"
-              letterSpacing="-0.02em"
-              sx={{ textWrap: "balance" }}
-            >
-              Thank you for reaching out
-            </Text>
-            <Text
-              fontSize={{ base: "sm", md: "md" }}
-              color="secondary.700"
-              opacity={0.8}
-              textAlign="center"
-              lineHeight={1.7}
-              maxW="28rem"
-            >
-              We&apos;ve received your message and will get back to you as soon as we can.
-            </Text>
+            {title ? (
+              <Text
+                fontWeight="bold"
+                fontSize={{ base: "xl", md: "2xl" }}
+                color="secondary.700"
+                textAlign="center"
+                letterSpacing="-0.02em"
+                sx={{ textWrap: "balance" }}
+              >
+                {title}
+              </Text>
+            ) : null}
+            {message ? (
+              <Text
+                fontSize={{ base: "sm", md: "md" }}
+                color="secondary.700"
+                opacity={0.8}
+                textAlign="center"
+                lineHeight={1.7}
+                maxW="28rem"
+              >
+                {message}
+              </Text>
+            ) : null}
             <Image src="/images/success.svg" alt="" w="20" opacity={0.9} />
-            <CustomButton title="Close" onClick={onClose} width="auto" />
+            {closeLabel ? (
+              <CustomButton title={closeLabel} onClick={onClose} width="auto" />
+            ) : null}
           </VStack>
         </ModalBody>
       </ModalContent>

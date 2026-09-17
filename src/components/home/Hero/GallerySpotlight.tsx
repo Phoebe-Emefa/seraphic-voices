@@ -1,11 +1,9 @@
 "use client";
 
-import CustomButton from "@/components/shared/CustomButton";
-import EventDetailsModal from "@/components/shared/EventDetailsModal";
 import HeroCinematicPhoto from "@/components/home/Hero/HeroCinematicPhoto";
 import { useHeroNav } from "@/components/home/Hero/HeroNavContext";
-import { EventDetail } from "@/lib/eventDisplay";
-import { Box, Flex, Heading, HStack, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import type { EventDocument, HomePageDocument } from "@/lib/cms/types";
+import { Box, Flex, HStack, Text } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { buildHeroSlides } from "./buildHeroSlides";
 
@@ -57,9 +55,9 @@ function EditorialCounter({
               borderRadius="full"
               bg={isActive ? "white" : "whiteAlpha.400"}
               boxShadow={isActive ? "0 0 10px rgba(255, 255, 255, 0.7)" : "none"}
-              transition="all 300ms cubic-bezier(0.4, 0, 0.2, 1)"
+              transition="width 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1)"
               cursor="pointer"
-              _hover={{ bg: "whiteAlpha.900", transform: "scaleY(1.3)" }}
+              _hover={{ bg: "whiteAlpha.900" }}
             />
           );
         })}
@@ -76,16 +74,16 @@ function EditorialCounter({
 }
 
 const GallerySpotlight = ({
-  content,
-  featuredEvent,
+  home,
+  featuredEvents,
+  detailsLabel,
 }: {
-  content: any;
-  featuredEvent?: any;
+  home: HomePageDocument | null;
+  featuredEvents: EventDocument[];
+  detailsLabel?: string;
 }) => {
   const heroNav = useHeroNav();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [modalEvent, setModalEvent] = useState<EventDetail | null>(null);
-  const slides = buildHeroSlides(content, featuredEvent);
+  const slides = buildHeroSlides(home, featuredEvents, detailsLabel);
   const [active, setActive] = useState(0);
   const [isHoveringControls, setIsHoveringControls] = useState(false);
   const touchStartX = useRef<number | null>(null);
@@ -152,20 +150,6 @@ const GallerySpotlight = ({
     touchStartX.current = null;
   };
 
-  if (!slides.length) {
-    return (
-      <VStack justify="center" px={6} py={16} pt={24} textAlign="center" spacing={4} minH="50vh">
-        <Heading as="h1" fontSize={{ base: "3xl", md: "5xl" }} color="secondary.700">
-          {content?.title || "Seraphic Voices of Toronto"}
-        </Heading>
-        <Text fontSize={{ base: "md", md: "xl" }} maxW="40ch" color="text">
-          {content?.description}
-        </Text>
-        <CustomButton title="Who we are" href="/about-us" />
-      </VStack>
-    );
-  }
-
   return (
     <Box
       w="full"
@@ -178,10 +162,10 @@ const GallerySpotlight = ({
       aria-roledescription="carousel"
       aria-live="polite"
     >
-      {/* Slides Container */}
       <Box position="absolute" inset={0} overflow="hidden">
         {slides.map((slide, index) => {
           const isActive = index === safeActive;
+
           return (
             <Box
               key={slide.id}
@@ -198,24 +182,18 @@ const GallerySpotlight = ({
                 imageAlt={slide.imageAlt}
                 objectPosition={slide.objectPosition}
                 title={slide.title}
-                description={slide.description}
+                briefTitle={slide.briefTitle}
+                metaDate={slide.metaDate}
+                metaLocation={slide.metaLocation}
                 ctaTitle={slide.ctaTitle}
-                ctaHref={slide.event ? undefined : slide.ctaHref}
-                ctaOnClick={
-                  slide.event
-                    ? () => {
-                        setModalEvent(slide.event as EventDetail);
-                        onOpen();
-                      }
-                    : undefined
-                }
+                ctaHref={slide.ctaHref}
+                primaryHeading={slide.primaryHeading}
               />
             </Box>
           );
         })}
       </Box>
 
-      {/* Slide track — bottom right on mobile, upper right on md+ */}
       {slides.length > 1 ? (
         <Flex
           position="absolute"
@@ -233,8 +211,6 @@ const GallerySpotlight = ({
           />
         </Flex>
       ) : null}
-
-      <EventDetailsModal isOpen={isOpen} onClose={onClose} event={modalEvent} />
     </Box>
   );
 };

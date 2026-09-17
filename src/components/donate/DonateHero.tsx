@@ -2,26 +2,30 @@
 
 import AboutHeroSkeleton from "@/components/about/skeletons/AboutHeroSkeleton";
 import PageHero from "@/components/shared/PageHero";
-import { DONATE_FALLBACK } from "@/data/donateContent";
-import { useDonateHero } from "@/hooks/useCms";
+import { useDonatePage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
-import { imageSrc } from "../../../sanity/sanity-client";
+import { normalizeDonatePageData, resolveDonateHero } from "@/lib/donatePageContent";
 
 const DonateHero = () => {
-  const heroQuery = useDonateHero();
-  const { data } = heroQuery;
-  const hero = data?.[0];
+  const pageQuery = useDonatePage();
 
-  if (isCmsLoading(heroQuery)) {
+  if (isCmsLoading(pageQuery)) {
     return <AboutHeroSkeleton />;
+  }
+
+  const { page } = normalizeDonatePageData(pageQuery.data?.page);
+  const hero = resolveDonateHero(page);
+
+  if (!hero) {
+    return null;
   }
 
   return (
     <PageHero
-      heading={hero?.title || DONATE_FALLBACK.hero.title}
-      description={hero?.description || DONATE_FALLBACK.hero.description}
-      image={imageSrc(hero?.image?.asset?._ref)}
-      alt={hero?.image?.alt}
+      heading={hero.title}
+      description={hero.description}
+      image={hero.imageUrl}
+      alt={hero.imageAlt}
     />
   );
 };

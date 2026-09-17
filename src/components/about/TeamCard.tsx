@@ -20,7 +20,7 @@ type TeamCardProps = {
 const TeamCard = ({ item, index = 0 }: TeamCardProps) => {
   const reduceMotion = useReducedMotion();
   const { name, role } = resolveTeamMemberDisplay(item);
-  const imageUrl = imageSrc(item?.image?.asset?._ref);
+  const imageUrl = imageSrc(item?.image);
 
   return (
     <motion.div

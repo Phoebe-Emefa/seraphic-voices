@@ -1,18 +1,21 @@
 import { Grid, Skeleton, VStack } from "@chakra-ui/react";
 
 type EventsGridSkeletonProps = {
+  /** Events listing always shows two cards per row on md+. */
   count?: number;
 };
 
 const EventsGridSkeleton = ({ count = 2 }: EventsGridSkeletonProps) => {
+  const cardCount = Math.min(Math.max(count, 1), 2);
+
   return (
     <Grid
-      templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+      templateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
       gap={{ base: 6, md: 8 }}
       aria-busy="true"
       aria-label="Loading events"
     >
-      {Array.from({ length: count }).map((_, index) => (
+      {Array.from({ length: cardCount }).map((_, index) => (
         <VStack
           key={index}
           spacing={0}
