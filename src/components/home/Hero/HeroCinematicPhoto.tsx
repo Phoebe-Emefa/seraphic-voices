@@ -129,22 +129,23 @@ export default function HeroCinematicPhoto({
                   {metaDate || metaLocation ? (
                     <HStack
                       spacing={{ base: 3, md: 5 }}
-                      color="whiteAlpha.850"
+                      color="white"
                       flexWrap="wrap"
                       rowGap={2}
+                      textShadow="0 2px 10px rgba(0, 0, 0, 0.45)"
                     >
                       {metaDate ? (
                         <HStack spacing={2}>
-                          <Icon as={FaClock} boxSize={3.5} />
-                          <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="semibold">
+                          <Icon as={FaClock} boxSize={{ base: 4, md: 4.5 }} />
+                          <Text fontSize={{ base: "sm", md: "md" }} fontWeight="semibold">
                             {metaDate}
                           </Text>
                         </HStack>
                       ) : null}
                       {metaLocation ? (
                         <HStack spacing={2}>
-                          <Icon as={FaMapMarkerAlt} boxSize={3.5} />
-                          <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="semibold">
+                          <Icon as={FaMapMarkerAlt} boxSize={{ base: 4, md: 4.5 }} />
+                          <Text fontSize={{ base: "sm", md: "md" }} fontWeight="semibold">
                             {metaLocation}
                           </Text>
                         </HStack>

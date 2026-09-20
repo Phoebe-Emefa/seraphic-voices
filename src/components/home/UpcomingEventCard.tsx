@@ -19,10 +19,11 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 
 function formatBadge(date?: string) {
   const m = eventMoment(date);
-  if (!m) return { day: "—", month: "TBD", time: "", weekday: "" };
+  if (!m) return { day: "—", month: "TBD", year: "", time: "", weekday: "" };
   return {
     day: m.format("D"),
     month: m.format("MMM"),
+    year: m.format("YYYY"),
     time: m.format("h:mm A"),
     weekday: m.format("dddd"),
   };
@@ -150,6 +151,17 @@ const UpcomingEventCard = ({
             >
               {badge.month}
             </Text>
+            {badge.year ? (
+              <Text
+                fontSize="xs"
+                fontWeight="semibold"
+                letterSpacing="0.12em"
+                color="whiteAlpha.700"
+                mt={1}
+              >
+                {badge.year}
+              </Text>
+            ) : null}
           </VStack>
           <Box w="1px" h="3.25rem" bg="whiteAlpha.300" />
           <VStack align="flex-start" spacing={1}>

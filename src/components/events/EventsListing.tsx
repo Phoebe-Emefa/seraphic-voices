@@ -11,7 +11,12 @@ import { useResolvedEvents } from "@/hooks/useCms";
 import { isAnyCmsLoading } from "@/hooks/useCmsLoading";
 import type { EventDocument } from "@/lib/cms/types";
 import { cmsHref } from "@/lib/cmsHref";
-import { isPastEvent, isUpcomingEvent } from "@/lib/eventDates";
+import {
+  isPastEvent,
+  isUpcomingEvent,
+  sortPastEvents,
+  sortUpcomingEvents,
+} from "@/lib/eventDates";
 import {
   Box,
   Button,
@@ -74,8 +79,14 @@ const EventsListing = () => {
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">(initialTab);
   const [isSwitching, setIsSwitching] = useState(false);
 
-  const upcomingEvents = useMemo(() => events.filter(isUpcomingEvent), [events]);
-  const pastEvents = useMemo(() => events.filter(isPastEvent), [events]);
+  const upcomingEvents = useMemo(
+    () => sortUpcomingEvents(events.filter(isUpcomingEvent)),
+    [events],
+  );
+  const pastEvents = useMemo(
+    () => sortPastEvents(events.filter(isPastEvent)),
+    [events],
+  );
   const bookingHref = cmsHref(page?.bookingCta?.href);
 
   const tabs = [
