@@ -1,0 +1,4 @@
+/* Sanity 3.x: hide the default "All fields" group tab when using field groups */
+[data-testid="field-group-tabs"] > div:has(#all-fields-tab) {
+  display: none !important;
+}

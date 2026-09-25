@@ -1,20 +1,31 @@
-import MissionAndVision from "@/components/about/MissionAndVision";
-import Story from "@/components/about/Story";
-import { SEO } from "@/components/shared/SEO";
-import React from "react";
+import AboutUsPage from "@/components/about/AboutUsPage";
+import JsonLd from "@/components/seo/JsonLd";
+import { getWhoWeAreRouteData } from "@/lib/cms/fetchPages";
+import { buildBreadcrumbJsonLd, buildPageMetadataFromConfig } from "@/lib/seo";
+import type { Metadata } from "next";
 
-const AboutUs = () => {
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const { page } = await getWhoWeAreRouteData();
+    return buildPageMetadataFromConfig("aboutUs", {
+      title: page?.hero?.title,
+      description: page?.hero?.description,
+    });
+  } catch {
+    return buildPageMetadataFromConfig("aboutUs");
+  }
+}
+
+export default function AboutUs() {
   return (
-    <div>
-      <SEO
-        title="About Us"
-        description="Excellence, Innovation, and Cultural Collaboration."
-        path="/about-us"
+    <>
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Who We Are", path: "/about-us" },
+        ])}
       />
-      <Story />
-      <MissionAndVision />
-    </div>
+      <AboutUsPage />
+    </>
   );
-};
-
-export default AboutUs;
+}

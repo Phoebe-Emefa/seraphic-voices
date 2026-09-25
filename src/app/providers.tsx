@@ -1,38 +1,39 @@
-// app/providers.tsx
 "use client";
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../styles/theme";
-import { Space_Grotesk } from "next/font/google";
-import {QueryClientProvider, QueryClient } from "react-query";
-
-const brandFont = Space_Grotesk({
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient();
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60_000,
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
 
   return (
-    <>
-      <style jsx global>
-        {`
-          :root {
-            --font-spacegrotesk: ${brandFont.style.fontFamily};
-          }
-        `}
-      </style>
-
-      <CacheProvider>
-        <ChakraProvider theme={theme}>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </ChakraProvider>
-      </CacheProvider>
-    </>
+    <CacheProvider>
+      <ChakraProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <ProgressBar
+            height="2px"
+            color="#FFE099"
+            delay={120}
+            shallowRouting
+            options={{ showSpinner: false }}
+          />
+          {children}
+        </QueryClientProvider>
+      </ChakraProvider>
+    </CacheProvider>
   );
 }

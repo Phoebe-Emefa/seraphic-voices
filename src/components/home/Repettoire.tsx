@@ -1,84 +1,134 @@
+"use client";
+
+import CustomButton from "@/components/shared/CustomButton";
 import VideoCard from "@/components/shared/VideoCard";
+import RepettoireSkeleton from "@/components/home/skeletons/RepettoireSkeleton";
+import { useHomePage } from "@/hooks/useCms";
+import { isCmsLoading } from "@/hooks/useCmsLoading";
+import { cmsHref } from "@/lib/cmsHref";
+import { httpsUrl } from "@/lib/httpsUrl";
+import { buildYouTubeThumbnailFromUrl } from "@/lib/youtube";
 import {
   Box,
-  Button,
   Container,
+  Flex,
   Grid,
   Heading,
-  Icon,
+  HStack,
+  Text,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
-import { BsArrowRightShort } from "react-icons/bs";
-import { useQuery } from "react-query";
-import { groq } from "next-sanity";
-import { client, urlFor } from "../../../sanity/sanity-client";
-import DataLoader from "@/components/shared/DataLoader";
-import Reveal from "@/components/shared/Reveal";
-
 const Repettoire = () => {
-  const { isLoading, data } = useQuery("repettoire", async () => {
-    return client.fetch(groq`*[_type == "repettoire"]`);
-  });
+  const homeQuery = useHomePage();
+  const home = homeQuery.data;
+  const section = home?.repertoire;
 
-  const content = data;
+  if (isCmsLoading(homeQuery)) {
+    return <RepettoireSkeleton />;
+  }
+  const ctaHref = cmsHref(section?.ctaHref) || httpsUrl(section?.ctaHref);
+  const videos = section?.performances ?? [];
+
+  if (!section?.eyebrow && !section?.heading && !section?.intro && videos.length === 0) {
+    return null;
+  }
 
   return (
-    <Box backgroundColor="bg.100" py={{ base: 12, md: 20 }}>
-      {isLoading ? (
-        <DataLoader />
-      ) : (
-        <Container maxW={{ md: "2xl", lg: "4xl", xl: "6xl", "3xl": "7xl" }}>
-          <VStack>
-          <Reveal>
-              <Heading
-              as="h4"
-              fontSize={{ base: "2xl", xl: "3xl" }}
-              color="secondary.700"
-            >
-              Repettoire
-            </Heading>
-          </Reveal>
-            <Grid
-              templateColumns={{
-                base: "repeat(1, 1fr)",
-                md: "repeat(2, 1fr)",
-                xl: "repeat(3, 1fr)",
-              }}
-              gap={6}
-              mt={6}
-              mb={4}
-            >
-              {data?.map((item: any) => (
-                <VideoCard
-                  key={item?.title}
-                  title={item?.title}
-                  image={
-                    item?.image &&
-                    (urlFor(item?.image?.asset?._ref) as unknown as string)
-                  }
-                  url={item?.url}
+    <Box
+      as="section"
+      aria-labelledby={section?.heading ? "repertoire-heading" : undefined}
+      bg="bg.100"
+      py={{ base: 16, sm: 20, md: 24 }}
+      position="relative"
+    >
+      <Container maxW={{ base: "full", md: "2xl", lg: "5xl", xl: "7xl" }} px={{ base: 5, sm: 6, md: 8, xl: 12 }}>
+        <VStack spacing={{ base: 8, md: 12 }} align="stretch">
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            justify="space-between"
+            align={{ base: "flex-start", md: "flex-end" }}
+            gap={{ base: 5, md: 8 }}
+          >
+            <VStack align="flex-start" spacing={3} maxW="38rem">
+              {section?.eyebrow ? (
+                <HStack spacing={3} color="secondary.700">
+                  <Box w={8} h="2px" bg="secondary.700" />
+                  <Text
+                    fontSize={{ base: "2xs", sm: "xs" }}
+                    fontWeight="bold"
+                    letterSpacing="0.2em"
+                    textTransform="uppercase"
+                  >
+                    {section.eyebrow}
+                  </Text>
+                </HStack>
+              ) : null}
+              {section?.heading ? (
+                <Heading
+                  as="h2"
+                  id="repertoire-heading"
+                  fontSize={{ base: "2xl", sm: "3xl", md: "4xl", lg: "4.5xl" }}
+                  fontWeight="bold"
+                  color="secondary.700"
+                  lineHeight={1.15}
+                  letterSpacing="-0.02em"
+                >
+                  {section.heading}
+                </Heading>
+              ) : null}
+              {section?.intro ? (
+                <Text fontSize={{ base: "sm", sm: "md" }} color="text" maxW="36rem" lineHeight={1.6}>
+                  {section.intro}
+                </Text>
+              ) : null}
+            </VStack>
+
+            {section?.ctaTitle && ctaHref ? (
+              <Box display={{ base: "none", md: "block" }}>
+                <CustomButton
+                  title={section.ctaTitle}
+                  href={ctaHref}
+                  width="13.5rem"
+                  height="3.25rem"
+                  fontSize="sm"
                 />
-              ))}
-            </Grid>
-            <a
-              href="https://www.youtube.com/@seraphicvoicesoftoronto"
-              target="_blank"
-              rel="noopener noreferrer"
+              </Box>
+            ) : null}
+          </Flex>
+
+          {videos.length > 0 ? (
+            <Grid
+              templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+              gap={{ base: 6, md: 8 }}
             >
-             <Reveal>
-               <Button
-                color="secondary.700"
-                variant="outline"
-                rightIcon={<Icon as={BsArrowRightShort} boxSize={6} />}
-              >
-                View All
-              </Button>
-             </Reveal>
-            </a>
-          </VStack>
-        </Container>
-      )}
+              {videos.map((item, index) => {
+                const url = httpsUrl(item?.url) || "";
+                const image = buildYouTubeThumbnailFromUrl(url) || "";
+                return (
+                  <VideoCard
+                    key={`${item.title}-${index}`}
+                    title={item?.title || ""}
+                    image={image}
+                    url={url}
+                  />
+                );
+              })}
+            </Grid>
+          ) : null}
+
+          {section?.ctaTitle && ctaHref ? (
+            <Box display={{ base: "block", md: "none" }} pt={2}>
+              <CustomButton
+                title={section.ctaTitle}
+                href={ctaHref}
+                width="100%"
+                height="3.25rem"
+                fontSize="sm"
+              />
+            </Box>
+          ) : null}
+        </VStack>
+      </Container>
     </Box>
   );
 };

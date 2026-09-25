@@ -1,47 +1,32 @@
-"use client";
-import Hero from "@/components/about/Hero";
-import TeamMembers from "@/components/about/TeamMembers";
-import { SEO } from "@/components/shared/SEO";
-import React from "react";
-import { useQuery } from "react-query";
-import { client, urlFor } from "../../../../sanity/sanity-client";
-import { groq } from "next-sanity";
-import DataLoader from "@/components/shared/DataLoader";
-import Reveal from "@/components/shared/Reveal";
+import OurTeamPage from "@/components/about/OurTeamPage";
+import JsonLd from "@/components/seo/JsonLd";
+import { getTeamRouteData } from "@/lib/cms/fetchPages";
+import { buildBreadcrumbJsonLd, buildPageMetadataFromConfig } from "@/lib/seo";
+import type { Metadata } from "next";
 
-const OurTeam = () => {
-  const { data, isLoading } = useQuery("teamHero", async () => {
-    return client.fetch(groq`*[_type == "teamHero" ]`);
-  });
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const { page } = await getTeamRouteData();
+    return buildPageMetadataFromConfig("ourTeam", {
+      title: page?.hero?.title,
+      description: page?.hero?.description,
+    });
+  } catch {
+    return buildPageMetadataFromConfig("ourTeam");
+  }
+}
 
-  const heroContent = data?.[0];
+export default function Page() {
   return (
     <>
-      <SEO
-        title="Our Team"
-        description="Passionate musicians crafting boundary-breaking music."
-        path="/about-us/our-team"
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Who We Are", path: "/about-us" },
+          { name: "Our Team", path: "/about-us/our-team" },
+        ])}
       />
-      {isLoading ? (
-        <DataLoader />
-      ) : (
-        <>
-          <Reveal width="100%" height={{ base: "100%", xl: "28rem" }}>
-            <Hero
-              heading={heroContent?.title}
-              description={heroContent?.description}
-              image={
-                heroContent?.image &&
-                (urlFor(heroContent?.image?.asset?._ref) as unknown as string)
-              }
-              alt={heroContent?.image?.alt}
-            />
-          </Reveal>
-          <TeamMembers />
-        </>
-      )}
+      <OurTeamPage />
     </>
   );
-};
-
-export default OurTeam;
+}

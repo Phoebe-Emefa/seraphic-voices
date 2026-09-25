@@ -1,14 +1,30 @@
+"use client";
 
+import GallerySpotlight from "@/components/home/Hero/GallerySpotlight";
+import HeroSkeleton from "@/components/home/skeletons/HeroSkeleton";
+import { useFeaturedUpcomingEvents, useHomePage, useResolvedEvents } from "@/hooks/useCms";
+import { isAnyCmsLoading } from "@/hooks/useCmsLoading";
+import { Box } from "@chakra-ui/react";
 
-import DesktopHero from '@/components/home/Hero/DesktopHero';
-import MobileHero from '@/components/home/Hero/MobileHero';
-import { useMediaQuery } from '@chakra-ui/react';
-import React from 'react';
+const Hero = () => {
+  const homeQuery = useHomePage();
+  const { events, eventPage, pageQuery } = useResolvedEvents();
+  const featuredEvents = useFeaturedUpcomingEvents(events);
+  const detailsLabel = eventPage?.listing?.detailsLabel;
 
-const Hero = ({content}: {content: any;}) => {
-  const [isMobile] = useMediaQuery('(max-width: 750px)');
+  if (isAnyCmsLoading(homeQuery, pageQuery)) {
+    return <HeroSkeleton />;
+  }
 
-  return <>{isMobile ? <MobileHero content={content} /> : <DesktopHero content={content}  />}</>;
+  return (
+    <Box as="section" aria-label="Hero" width="100%" mt={-20} h="100dvh">
+      <GallerySpotlight
+        home={homeQuery.data ?? null}
+        featuredEvents={featuredEvents}
+        detailsLabel={detailsLabel}
+      />
+    </Box>
+  );
 };
 
 export default Hero;

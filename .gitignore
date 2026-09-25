@@ -14,6 +14,8 @@
 
 # production
 /build
+production.tar.gz
+*.tar.gz
 
 # misc
 .DS_Store
@@ -21,8 +23,10 @@
 
 # debug
 npm-debug.log*
+# yarn (legacy; this repo uses pnpm)
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
 
 # local env files
 .env*.local
