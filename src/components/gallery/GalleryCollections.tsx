@@ -10,6 +10,7 @@ import GalleryLightbox from "@/components/gallery/GalleryLightbox";
 import CustomButton from "@/components/shared/CustomButton";
 import { useGalleryPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
+import { clampListIndex } from "@/lib/clampListIndex";
 import type { GalleryAlbum } from "@/lib/galleryDisplay";
 import { normalizeGalleryPageData, resolveGalleryListing } from "@/lib/galleryPageContent";
 import {
@@ -40,15 +41,21 @@ const GalleryCollections = () => {
   const albums = listing?.albums ?? [];
 
   useEffect(() => {
-    if (activeIndex < albums.length) return;
-    setActiveIndex(0);
+    if (albums.length === 0) return;
+    const safeIndex = clampListIndex(activeIndex, albums.length);
+    if (activeIndex !== safeIndex) {
+      setActiveIndex(safeIndex);
+    }
   }, [activeIndex, albums.length]);
 
   const handleAlbumChange = (index: number) => {
-    if (index === activeIndex) return;
+    const currentIndex = clampListIndex(activeIndex, albums.length);
+    if (index === currentIndex) return;
     setActiveIndex(index);
     setGridLimit(GRID_BATCH);
     setIsSwitching(true);
+    setLightboxOpen(false);
+    setLightboxIndex(null);
   };
 
   useEffect(() => {
@@ -65,9 +72,10 @@ const GalleryCollections = () => {
     return null;
   }
 
-  const activeAlbum: GalleryAlbum | undefined = albums[activeIndex];
-  const featuredImage = activeAlbum?.cover;
-  const gridImages = activeAlbum?.images ?? [];
+  const safeIndex = clampListIndex(activeIndex, albums.length);
+  const activeAlbum: GalleryAlbum = albums[safeIndex];
+  const featuredImage = activeAlbum.cover;
+  const gridImages = activeAlbum.images ?? [];
   const lightboxImages = featuredImage ? [featuredImage, ...gridImages] : gridImages;
   const visibleGridImages = gridImages.slice(0, gridLimit);
   const hasMore = gridImages.length > gridLimit;
@@ -123,7 +131,7 @@ const GalleryCollections = () => {
           >
             <GalleryAlbumPicker
               albums={albums}
-              activeIndex={activeIndex}
+              activeIndex={safeIndex}
               onSelect={handleAlbumChange}
             />
           </Box>
@@ -132,7 +140,7 @@ const GalleryCollections = () => {
             <GalleryGridSkeleton />
           ) : (
             <VStack spacing={{ base: 6, md: 8 }} align="stretch" w="full" minW={0}>
-              {featuredImage && activeAlbum ? (
+              {featuredImage ? (
                 <GalleryFeatured
                   image={featuredImage}
                   collectionLabel={activeAlbum.label}
@@ -190,7 +198,7 @@ const GalleryCollections = () => {
         isOpen={lightboxOpen}
         images={lightboxImages}
         selectedIndex={lightboxIndex}
-        collectionLabel={activeAlbum?.label}
+        collectionLabel={activeAlbum.label}
         onClose={closeLightbox}
         onSelect={setLightboxIndex}
       />

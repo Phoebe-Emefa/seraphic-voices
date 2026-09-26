@@ -1,5 +1,6 @@
 "use client";
 
+import { clampListIndex } from "@/lib/clampListIndex";
 import type { GalleryImage } from "@/lib/galleryDisplay";
 import {
   Box,
@@ -83,7 +84,7 @@ const GalleryLightbox = ({
 }: GalleryLightboxProps) => {
   const reduceMotion = useReducedMotion();
   const thumbStripRef = useRef<HTMLDivElement>(null);
-  const active = selectedIndex ?? 0;
+  const active = clampListIndex(selectedIndex ?? 0, images.length);
   const current = images[active];
   const hasPrev = active > 0;
   const hasNext = active < images.length - 1;

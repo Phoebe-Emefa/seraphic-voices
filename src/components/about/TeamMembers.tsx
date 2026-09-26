@@ -6,6 +6,7 @@ import TeamGridSkeleton from "@/components/about/skeletons/TeamGridSkeleton";
 import TeamMembersSkeleton from "@/components/about/skeletons/TeamMembersSkeleton";
 import { useTeamPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
+import { clampListIndex } from "@/lib/clampListIndex";
 import { memberMatchesCategory } from "@/lib/teamCategories";
 import { normalizeTeamPageData, resolveTeamListing } from "@/lib/teamPageContent";
 import {
@@ -26,24 +27,33 @@ const TeamMembers = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSwitching, setIsSwitching] = useState(false);
 
-  const handleTabChange = (index: number) => {
-    if (index === activeIndex) return;
-    setActiveIndex(index);
-    setIsSwitching(true);
-  };
-
-  useEffect(() => {
-    if (!isSwitching) return;
-    const timer = window.setTimeout(() => setIsSwitching(false), 420);
-    return () => window.clearTimeout(timer);
-  }, [activeIndex, isSwitching]);
-
   const listing = useMemo(() => {
     const { page } = normalizeTeamPageData(pageQuery.data?.page);
     return resolveTeamListing(page);
   }, [pageQuery.data]);
 
   const voiceTabs = useMemo(() => listing?.categories ?? [], [listing]);
+
+  const handleTabChange = (index: number) => {
+    const currentIndex = clampListIndex(activeIndex, voiceTabs.length);
+    if (index === currentIndex) return;
+    setActiveIndex(index);
+    setIsSwitching(true);
+  };
+
+  useEffect(() => {
+    if (voiceTabs.length === 0) return;
+    const safeIndex = clampListIndex(activeIndex, voiceTabs.length);
+    if (activeIndex !== safeIndex) {
+      setActiveIndex(safeIndex);
+    }
+  }, [activeIndex, voiceTabs.length]);
+
+  useEffect(() => {
+    if (!isSwitching) return;
+    const timer = window.setTimeout(() => setIsSwitching(false), 420);
+    return () => window.clearTimeout(timer);
+  }, [activeIndex, isSwitching]);
 
   const membersByCategory = useMemo(() => {
     const map = new Map<string, NonNullable<typeof listing>["members"]>();
@@ -66,8 +76,9 @@ const TeamMembers = () => {
     return null;
   }
 
-  const activeVoice = voiceTabs[activeIndex];
-  const members = activeVoice ? membersByCategory.get(activeVoice.value) ?? [] : [];
+  const safeIndex = clampListIndex(activeIndex, voiceTabs.length);
+  const activeVoice = voiceTabs[safeIndex];
+  const members = membersByCategory.get(activeVoice.value) ?? [];
 
   return (
     <Box
@@ -120,7 +131,7 @@ const TeamMembers = () => {
             >
               {voiceTabs.map((voice, index) => {
                 const count = membersByCategory.get(voice.value)?.length ?? 0;
-                const isActive = index === activeIndex;
+                const isActive = index === safeIndex;
 
                 return (
                   <Button
@@ -197,7 +208,7 @@ const TeamMembers = () => {
               </Text>
               <Text fontSize="md" color="text" maxW="28rem" lineHeight={1.7}>
                 We are still updating this section. Check back soon to meet our{" "}
-                {activeVoice.label.toLowerCase()} voices.
+                {activeVoice?.label?.toLowerCase() ?? "our"} voices.
               </Text>
             </VStack>
           ) : (
