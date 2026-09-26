@@ -89,16 +89,29 @@ const EventsListing = () => {
   );
   const bookingHref = cmsHref(page?.bookingCta?.href);
 
-  const tabs = [
-    { key: "upcoming" as const, label: listing?.upcomingTab },
-    { key: "past" as const, label: listing?.pastTab },
-  ].filter((tab) => tab.label);
+  const tabs = useMemo(
+    () =>
+      [
+        { key: "upcoming" as const, label: listing?.upcomingTab },
+        { key: "past" as const, label: listing?.pastTab },
+      ].filter((tab) => tab.label),
+    [listing?.pastTab, listing?.upcomingTab],
+  );
+
+  const resolvedTab: "upcoming" | "past" = tabs.some((tab) => tab.key === activeTab)
+    ? activeTab
+    : (tabs[0]?.key ?? "upcoming");
 
   const handleTabChange = (key: "upcoming" | "past") => {
-    if (key === activeTab) return;
+    if (key === resolvedTab) return;
     setActiveTab(key);
     setIsSwitching(true);
   };
+
+  useEffect(() => {
+    if (tabs.some((tab) => tab.key === activeTab)) return;
+    setActiveTab(tabs[0]?.key ?? "upcoming");
+  }, [activeTab, tabs]);
 
   useEffect(() => {
     if (!isSwitching) return;
@@ -114,7 +127,7 @@ const EventsListing = () => {
   const pastCount = pastEvents.length;
 
   const tabContent =
-    activeTab === "upcoming" ? (
+    resolvedTab === "upcoming" ? (
       upcomingEvents.length === 0 ? (
         <UpcomingEventsEmpty {...EVENTS_UPCOMING_EMPTY} />
       ) : (
@@ -213,7 +226,7 @@ const EventsListing = () => {
               >
                 {tabs.map((tab) => {
                   const count = tab.key === "upcoming" ? upcomingCount : pastCount;
-                  const isActive = activeTab === tab.key;
+                  const isActive = resolvedTab === tab.key;
 
                   return (
                     <Button
