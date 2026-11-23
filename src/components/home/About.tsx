@@ -17,7 +17,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { imageSrc } from "../../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../../sanity/sanity-client";
 
 const About = () => {
   const homeQuery = useHomePage();
@@ -27,7 +27,7 @@ const About = () => {
   if (isCmsLoading(homeQuery)) {
     return <AboutSkeleton />;
   }
-  const imageUrl = imageSrc(about?.image?.asset?._ref);
+  const imageUrl = imageSrc(about?.image?.asset?._ref, SANITY_IMAGE_WIDTH.content);
   const objectPosition = resolveObjectPosition(about?.image);
   const ctaHref = cmsHref(about?.ctaHref);
 

@@ -3,6 +3,7 @@
 import CustomButton from "@/components/shared/CustomButton";
 import { eventMoment, isUpcomingEvent } from "@/lib/eventDates";
 import { EventDetail, resolveEventImage } from "@/lib/eventDisplay";
+import { SANITY_IMAGE_WIDTH } from "../../../sanity/sanity-client";
 import { eventPath } from "@/lib/eventPaths";
 import { httpsUrl } from "@/lib/httpsUrl";
 import {
@@ -49,7 +50,7 @@ const UpcomingEventCard = ({
   purchaseLabel,
   detailsLabel,
 }: UpcomingEventCardProps) => {
-  const image = resolveEventImage(event);
+  const image = resolveEventImage(event, SANITY_IMAGE_WIDTH.thumb);
   const badge = formatBadge(event.start_date);
   const isPast = tone === "past";
   const ticket = httpsUrl(event.ticket_url);

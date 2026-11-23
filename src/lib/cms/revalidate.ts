@@ -47,7 +47,7 @@ export function revalidateSanityDocument(document: SanityWebhookDocument) {
 
     const paths = pathsForSanityDocument(type);
     for (const path of paths) {
-      revalidatePath(path);
+      revalidatePath(path, path === "/events" ? "layout" : "page");
       revalidated.paths.push(path);
     }
   }

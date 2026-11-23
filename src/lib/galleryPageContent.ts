@@ -4,7 +4,7 @@ import type {
   GalleryPhotoDocument,
 } from "@/lib/cms/types";
 import type { GalleryAlbum, GalleryImage } from "@/lib/galleryDisplay";
-import { imageSrc } from "../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../sanity/sanity-client";
 
 export type GalleryHeroContent = {
   title: string;
@@ -36,12 +36,14 @@ function mapPhotoToGalleryImage(
   albumKey: string,
   index: number,
 ): GalleryImage | null {
-  const url = imageSrc(photo.image);
+  const url = imageSrc(photo.image, SANITY_IMAGE_WIDTH.thumb);
+  const fullUrl = imageSrc(photo.image, SANITY_IMAGE_WIDTH.content);
   if (!url) return null;
 
   return {
     _id: photo._key || `${albumKey}-photo-${index}`,
     url,
+    fullUrl,
     alt: photo.image?.alt || photo.caption || "Seraphic Voices gallery image",
     caption: photo.caption,
     albumKey,
@@ -59,7 +61,8 @@ function mapAlbumToGalleryAlbum(album: GalleryAlbumDocument, index: number): Gal
       .filter((photo): photo is GalleryImage => Boolean(photo)) ?? [];
 
   const coverSource = album.cover ?? album.coverImage ?? album.photos?.[0]?.image;
-  const coverUrl = imageSrc(coverSource);
+  const coverUrl = imageSrc(coverSource, SANITY_IMAGE_WIDTH.thumb);
+  const coverFullUrl = imageSrc(coverSource, SANITY_IMAGE_WIDTH.content);
 
   if (!coverUrl && images.length === 0) {
     return null;
@@ -69,6 +72,7 @@ function mapAlbumToGalleryAlbum(album: GalleryAlbumDocument, index: number): Gal
     ? {
         _id: `${key}-cover`,
         url: coverUrl,
+        fullUrl: coverFullUrl,
         alt:
           album.cover?.alt ||
           album.coverImage?.alt ||
@@ -94,7 +98,7 @@ export function resolveGalleryHero(page?: GalleryPageDocument | null): GalleryHe
   const hero = page?.hero;
   const title = hero?.title?.trim();
   const description = hero?.description?.trim();
-  const imageUrl = imageSrc(hero?.image);
+  const imageUrl = imageSrc(hero?.image, SANITY_IMAGE_WIDTH.hero);
 
   if (!title && !description && !imageUrl) {
     return null;

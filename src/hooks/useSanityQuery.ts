@@ -1,6 +1,6 @@
 "use client";
 
-import { SANITY_FETCH_OPTIONS } from "@/lib/cms/cache";
+import { isNonRetriableSanityError } from "@/lib/cms/sanityErrors";
 import { useQuery } from "@tanstack/react-query";
 import { client } from "../../sanity/sanity-client";
 
@@ -20,26 +20,27 @@ async function fetchWithTimeout<T>(promise: Promise<T>, ms: number): Promise<T> 
   }
 }
 
+type UseSanityQueryOptions = {
+  throwOnError?: boolean;
+};
+
 export function useSanityQuery<T>(
   queryKey: readonly unknown[],
   groq: string,
   params?: Record<string, unknown>,
+  options?: UseSanityQueryOptions,
 ) {
   return useQuery({
     queryKey,
     queryFn: () =>
       fetchWithTimeout(
-        client.fetch<T>(
-          groq,
-          (params ?? {}) as Record<string, string>,
-          SANITY_FETCH_OPTIONS,
-        ),
+        client.fetch<T>(groq, (params ?? {}) as Record<string, string>),
         QUERY_TIMEOUT_MS,
       ),
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
-    retry: 2,
+    throwOnError: options?.throwOnError ?? true,
+    retry: (failureCount, error) => {
+      if (isNonRetriableSanityError(error)) return false;
+      return failureCount < 2;
+    },
   });
 }

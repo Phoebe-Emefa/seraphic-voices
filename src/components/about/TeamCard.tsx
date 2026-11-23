@@ -3,7 +3,7 @@
 import { resolveTeamMemberDisplay } from "@/lib/teamMember";
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
-import { imageSrc } from "../../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../../sanity/sanity-client";
 
 const easeOut = [0.23, 1, 0.32, 1];
 
@@ -20,7 +20,7 @@ type TeamCardProps = {
 const TeamCard = ({ item, index = 0 }: TeamCardProps) => {
   const reduceMotion = useReducedMotion();
   const { name, role } = resolveTeamMemberDisplay(item);
-  const imageUrl = imageSrc(item?.image);
+  const imageUrl = imageSrc(item?.image, SANITY_IMAGE_WIDTH.thumb);
 
   return (
     <motion.div

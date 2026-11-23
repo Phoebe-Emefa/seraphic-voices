@@ -74,10 +74,12 @@ export function useTeamPage() {
   );
 }
 
-export function useContactPage() {
+export function useContactPage(options?: { throwOnError?: boolean }) {
   return useSanityQuery<ContactPageQueryResult | null>(
     queryKeys.contactPage,
     groqQueries.contactPage,
+    undefined,
+    options,
   );
 }
 

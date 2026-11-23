@@ -26,9 +26,9 @@ export function getSanityClient(): SanityClient {
     projectId,
     dataset,
     apiVersion,
-    useCdn: false,
+    useCdn: true,
     timeout: 30_000,
-    maxRetries: 5,
+    maxRetries: 1,
   });
 
   return clientInstance;
@@ -44,12 +44,24 @@ export const client: SanityClient = new Proxy({} as SanityClient, {
 
 const builder = () => imageUrlBuilder(getSanityClient());
 
+export const SANITY_IMAGE_WIDTH = {
+  thumb: 600,
+  content: 1600,
+  hero: 1920,
+} as const;
+
 export const urlFor = (source: any) => builder().image(source);
 
-export const imageSrc = (source: any) => {
+export const imageSrc = (source: any, width: number = SANITY_IMAGE_WIDTH.content) => {
   if (!source) return undefined;
   try {
-    return builder().image(source).url();
+    return builder()
+      .image(source)
+      .width(width)
+      .fit("max")
+      .auto("format")
+      .quality(75)
+      .url();
   } catch {
     return undefined;
   }

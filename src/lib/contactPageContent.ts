@@ -4,7 +4,7 @@ import type { IconType } from "react-icons";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { imageSrc } from "../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../sanity/sanity-client";
 
 export type ContactHeroContent = {
   title: string;
@@ -68,7 +68,7 @@ export function resolveContactHero(page?: ContactPageDocument | null): ContactHe
   const hero = page?.hero;
   const title = hero?.title?.trim();
   const description = hero?.description?.trim();
-  const imageUrl = imageSrc(hero?.image);
+  const imageUrl = imageSrc(hero?.image, SANITY_IMAGE_WIDTH.hero);
 
   if (!title && !description && !imageUrl) {
     return null;

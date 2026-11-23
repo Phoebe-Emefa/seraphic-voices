@@ -1,18 +1,20 @@
 /** Global Sanity cache tag — used by publish webhooks when on-demand revalidation is enabled. */
 export const SANITY_CACHE_TAG = "sanity";
 
-/** Always fetch fresh CMS data (server + client). */
-export const SANITY_FETCH_OPTIONS = {
-  cache: "no-store" as const,
+/** Next.js fetch cache for server-only `sanityFetch`. Do not pass this from the browser. */
+export const SANITY_SERVER_FETCH_OPTIONS = {
+  next: {
+    revalidate: 60,
+    tags: [SANITY_CACHE_TAG],
+  },
 };
 
 /**
  * Shared Next.js route segment config for CMS-backed pages.
- * Applied once in the root layout so every route stays dynamic.
+ * Literals must be copied into the layout file; Next.js does not accept imported values.
  */
 export const CMS_ROUTE_SEGMENT_CONFIG = {
-  dynamic: "force-dynamic" as const,
-  revalidate: 0,
+  revalidate: 60,
 };
 
 export const SANITY_TYPE_TAGS = {

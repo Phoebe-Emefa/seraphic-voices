@@ -3,7 +3,7 @@ import { cmsHref } from "@/lib/cmsHref";
 import { formatEventDate, formatEventTime } from "@/lib/eventDates";
 import { resolveEventImage } from "@/lib/eventDisplay";
 import { eventPath } from "@/lib/eventPaths";
-import { imageSrc } from "../../../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../../../sanity/sanity-client";
 
 export type HeroSlide = {
   id: string;
@@ -23,7 +23,7 @@ const DEFAULT_PHOTO_OBJECT_POSITION = "center top";
 
 function resolveImageUrl(image?: SanityImage): string | null {
   if (!image) return null;
-  const url = imageSrc(image.asset?._ref ?? image);
+  const url = imageSrc(image.asset?._ref ?? image, SANITY_IMAGE_WIDTH.hero);
   return url || null;
 }
 
@@ -47,7 +47,7 @@ export function buildHeroSlides(
   const slides: HeroSlide[] = [];
 
   featuredEvents.forEach((event) => {
-    const imageUrl = resolveEventImage(event);
+    const imageUrl = resolveEventImage(event, SANITY_IMAGE_WIDTH.hero);
     if (!imageUrl) return;
 
     const detailsHref = eventPath(event);
