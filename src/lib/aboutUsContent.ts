@@ -1,7 +1,7 @@
 import type { WhoWeArePageDocument } from "@/lib/cms/types";
 import { hasPortableText, type PortableBlock } from "@/lib/portableText";
 import { cleanMissionStatement, splitMissionLines } from "@/lib/missionText";
-import { imageSrc } from "../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../sanity/sanity-client";
 
 export type StoryBlockLayout = "textImage" | "fullWidth" | "imageText";
 
@@ -54,7 +54,7 @@ function resolveStoryBlock(block: StoryCmsBlock): AboutStoryBlock | null {
 
   const content = (block.content ?? []) as PortableBlock[];
   const taglines = (block.taglines ?? []) as PortableBlock[];
-  const imageUrl = imageSrc(block.image);
+  const imageUrl = imageSrc(block.image, SANITY_IMAGE_WIDTH.content);
 
   const hasContent = hasPortableText(content);
   const hasTaglines = hasPortableText(taglines);
@@ -78,7 +78,7 @@ export function resolveAboutHero(
   const hero = page?.hero;
   const title = hero?.title?.trim();
   const description = hero?.description?.trim();
-  const imageUrl = imageSrc(hero?.image);
+  const imageUrl = imageSrc(hero?.image, SANITY_IMAGE_WIDTH.hero);
 
   if (!title && !description && !imageUrl) {
     return null;
@@ -121,7 +121,7 @@ export function resolveAboutVision(
   const founderTitle = vision?.founderTitle?.trim();
   const content = (vision?.content ?? []) as PortableBlock[];
   const approach = (vision?.approachPassage ?? []) as PortableBlock[];
-  const imageUrl = imageSrc(vision?.founderImage);
+  const imageUrl = imageSrc(vision?.founderImage, SANITY_IMAGE_WIDTH.content);
   const hasContent = hasPortableText(content);
   const hasApproach = hasPortableText(approach);
 

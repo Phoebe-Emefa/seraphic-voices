@@ -1,6 +1,6 @@
 import type { TeamMemberDocument, TeamPageDocument } from "@/lib/cms/types";
 import { resolveTeamVoiceTabs, type TeamVoiceTab } from "@/lib/teamCategories";
-import { imageSrc } from "../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../sanity/sanity-client";
 
 export type TeamHeroContent = {
   title: string;
@@ -24,7 +24,7 @@ export function resolveTeamHero(page?: TeamPageDocument | null): TeamHeroContent
   const hero = page?.hero;
   const title = hero?.title?.trim();
   const description = hero?.description?.trim();
-  const imageUrl = imageSrc(hero?.image);
+  const imageUrl = imageSrc(hero?.image, SANITY_IMAGE_WIDTH.hero);
 
   if (!title && !description && !imageUrl) {
     return null;

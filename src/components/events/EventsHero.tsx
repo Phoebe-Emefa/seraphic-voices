@@ -4,13 +4,13 @@ import AboutHeroSkeleton from "@/components/about/skeletons/AboutHeroSkeleton";
 import PageHero from "@/components/shared/PageHero";
 import { useEventPage } from "@/hooks/useCms";
 import { isCmsLoading } from "@/hooks/useCmsLoading";
-import { imageSrc } from "../../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../../sanity/sanity-client";
 
 const EventsHero = () => {
   const heroQuery = useEventPage();
   const page = heroQuery.data;
   const hero = page?.hero;
-  const image = imageSrc(hero?.image?.asset?._ref);
+  const image = imageSrc(hero?.image?.asset?._ref, SANITY_IMAGE_WIDTH.hero);
 
   if (isCmsLoading(heroQuery)) {
     return <AboutHeroSkeleton />;

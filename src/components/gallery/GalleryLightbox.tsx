@@ -225,7 +225,7 @@ const GalleryLightbox = ({
                   }}
                 >
                   <Image
-                    src={current.url}
+                    src={current.fullUrl ?? current.url}
                     alt={current.alt}
                     maxH="100%"
                     maxW="100%"

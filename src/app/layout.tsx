@@ -11,9 +11,8 @@ import {
   SITE_URL,
 } from "@/lib/seo";
 
-/** CMS-backed routes must stay dynamic — literals required by Next.js segment config. */
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+/** ISR for CMS-backed routes — literals required by Next.js segment config. */
+export const revalidate = 60;
 
 const brandFont = Space_Grotesk({
   subsets: ["latin"],

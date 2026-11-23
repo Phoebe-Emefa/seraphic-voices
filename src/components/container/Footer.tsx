@@ -35,7 +35,7 @@ const contactStyles = {
 };
 
 const Footer = () => {
-  const { data } = useContactPage();
+  const { data } = useContactPage({ throwOnError: false });
   const { page } = normalizeContactPageData(data?.page);
   const footerContact = resolveFooterContact(page);
 

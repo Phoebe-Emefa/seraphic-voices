@@ -9,6 +9,7 @@ import {
   isUpcomingEvent,
 } from "@/lib/eventDates";
 import { EventDetail, resolveEventImage } from "@/lib/eventDisplay";
+import { SANITY_IMAGE_WIDTH } from "../../../sanity/sanity-client";
 import { httpsUrl } from "@/lib/httpsUrl";
 import {
   Box,
@@ -91,7 +92,7 @@ function DetailTile({
 }
 
 const EventDetailView = ({ event, purchaseLabel }: EventDetailViewProps) => {
-  const image = resolveEventImage(event);
+  const image = resolveEventImage(event, SANITY_IMAGE_WIDTH.hero);
   const ticket = httpsUrl(event.ticket_url);
   const upcoming = isUpcomingEvent(event);
   const duration = formatDuration(event.start_date, event.end_date);

@@ -16,6 +16,7 @@
 /build
 production.tar.gz
 *.tar.gz
+revamp-export.ndjson
 
 # misc
 .DS_Store

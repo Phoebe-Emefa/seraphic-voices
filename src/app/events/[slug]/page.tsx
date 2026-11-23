@@ -54,26 +54,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function EventDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const { event, page } = await getEventBySlug(slug);
 
-  if (!event || !resolveEventSlug(event)) {
-    notFound();
+  try {
+    const { event, page } = await getEventBySlug(slug);
+
+    if (!event || !resolveEventSlug(event)) {
+      notFound();
+    }
+
+    const path = eventPath(event);
+    const purchaseLabel = page?.listing?.ticketButtonLabel;
+
+    return (
+      <>
+        <JsonLd
+          data={buildBreadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Events", path: "/events" },
+            { name: event.title || "Concert", path },
+          ])}
+        />
+        <JsonLd data={buildEventJsonLd(event, path)} />
+        <EventDetailView event={event} purchaseLabel={purchaseLabel} />
+      </>
+    );
+  } catch (error) {
+    // Quota and other CMS failures must reach error.tsx, not the missing-event 404.
+    throw error;
   }
-
-  const path = eventPath(event);
-  const purchaseLabel = page?.listing?.ticketButtonLabel;
-
-  return (
-    <>
-      <JsonLd
-        data={buildBreadcrumbJsonLd([
-          { name: "Home", path: "/" },
-          { name: "Events", path: "/events" },
-          { name: event.title || "Concert", path },
-        ])}
-      />
-      <JsonLd data={buildEventJsonLd(event, path)} />
-      <EventDetailView event={event} purchaseLabel={purchaseLabel} />
-    </>
-  );
 }

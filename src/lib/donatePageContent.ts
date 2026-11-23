@@ -1,5 +1,5 @@
 import type { DonateInstructionDocument, DonatePageDocument } from "@/lib/cms/types";
-import { imageSrc } from "../../sanity/sanity-client";
+import { imageSrc, SANITY_IMAGE_WIDTH } from "../../sanity/sanity-client";
 
 export type DonateHeroContent = {
   title: string;
@@ -33,7 +33,7 @@ export function resolveDonateHero(page?: DonatePageDocument | null): DonateHeroC
   const hero = page?.hero;
   const title = hero?.title?.trim();
   const description = hero?.description?.trim();
-  const imageUrl = imageSrc(hero?.image);
+  const imageUrl = imageSrc(hero?.image, SANITY_IMAGE_WIDTH.hero);
 
   if (!title && !description && !imageUrl) {
     return null;
